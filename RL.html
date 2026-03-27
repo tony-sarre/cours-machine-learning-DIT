@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Régression Linéaire Simple</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #0f0f11;
+  --bg2: #16161a;
+  --bg3: #1e1e24;
+  --bg4: #26262e;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e6df;
+  --text2: #9e9b91;
+  --text3: #5e5c55;
+  --accent: #c8a96e;
+  --accent2: #8b6f3e;
+  --blue: #5b8dd9;
+  --blue-bg: rgba(91,141,217,0.1);
+  --blue-border: rgba(91,141,217,0.25);
+  --green: #5ba87a;
+  --green-bg: rgba(91,168,122,0.1);
+  --green-border: rgba(91,168,122,0.25);
+  --orange: #d9845b;
+  --orange-bg: rgba(217,132,91,0.1);
+  --orange-border: rgba(217,132,91,0.25);
+  --red: #d95b5b;
+  --red-bg: rgba(217,91,91,0.1);
+  --red-border: rgba(217,91,91,0.25);
+  --purple: #9d7fd4;
+  --purple-bg: rgba(157,127,212,0.1);
+  --sidebar-w: 260px;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 0 0 2rem;
+}
+
+.sidebar-brand {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+}
+.sidebar-brand .tag {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--mono);
+  margin-bottom: 6px;
+  display: block;
+}
+.sidebar-brand h1 {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.nav-section {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  font-family: var(--mono);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 1.25rem;
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(200,169,110,0.06); }
+.nav-item .num { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 20px; }
+
+/* ── MAIN ── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: calc(100% - var(--sidebar-w));
+}
+
+.section {
+  min-height: 100vh;
+  padding: 4rem 3.5rem 5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+
+/* ── TYPOGRAPHY ── */
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--mono);
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text);
+  margin: 2rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--mono);
+}
+
+p { color: var(--text2); margin-bottom: 0.75rem; max-width: 72ch; }
+p strong { color: var(--text); font-weight: 500; }
+
+/* ── FORMULA BLOCKS ── */
+.formula {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 2.2;
+  overflow-x: auto;
+}
+.formula .label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text3);
+  font-style: italic;
+  display: block;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+.formula .hi  { color: var(--blue); }
+.formula .hw  { color: var(--orange); }
+.formula .hg  { color: var(--green); }
+.formula .hr  { color: var(--red); }
+.formula .hp  { color: var(--purple); }
+.formula .ha  { color: var(--accent); }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.callout p { margin: 0; max-width: none; font-size: 13.5px; }
+.callout-info { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+.callout-info p { color: #8ab4f0; }
+.callout-warn { background: var(--orange-bg); border: 1px solid var(--orange-border); }
+.callout-warn p { color: #e8a87a; }
+.callout-ok   { background: var(--green-bg); border: 1px solid var(--green-border); }
+.callout-ok p { color: #7ec99a; }
+.callout-title { font-weight: 500; margin-bottom: 4px; display: block; }
+
+/* ── PROOF STEPS ── */
+.proof-step {
+  display: flex;
+  gap: 14px;
+  margin: 10px 0;
+  align-items: flex-start;
+}
+.proof-step .n {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.proof-step .body { font-family: var(--mono); font-size: 13px; line-height: 2; flex: 1; }
+
+/* ── GRID LAYOUTS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.25rem 0; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+.card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+.card .card-label { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 6px; }
+.card .card-val { font-size: 22px; font-weight: 300; color: var(--text); font-family: var(--serif); }
+.card .card-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
+
+/* ── DATA TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 1rem 0;
+  font-family: var(--mono);
+}
+.data-table th {
+  background: var(--bg3);
+  padding: 8px 14px;
+  text-align: center;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.data-table td {
+  padding: 7px 14px;
+  text-align: center;
+  border: 1px solid var(--border);
+  color: var(--text2);
+}
+.data-table tr:hover td { background: var(--bg3); color: var(--text); }
+.data-table tfoot td { background: var(--bg3); font-weight: 500; border-top: 2px solid var(--border2); }
+.hl-blue  td:nth-child(5) { color: var(--blue); }
+.hl-orange td:nth-child(6) { color: var(--orange); }
+
+/* ── CONTROLS ── */
+.ctrl { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.ctrl label { font-size: 13px; color: var(--text2); min-width: 150px; font-family: var(--sans); }
+.ctrl input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+.ctrl .val { font-family: var(--mono); font-size: 13px; color: var(--accent); min-width: 70px; text-align: right; }
+
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 1rem 0; }
+button {
+  padding: 8px 18px;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--sans);
+  transition: all 0.15s;
+}
+button:hover { background: var(--bg4); color: var(--text); border-color: var(--border2); }
+.btn-primary { background: rgba(200,169,110,0.12); color: var(--accent); border-color: rgba(200,169,110,0.3); }
+.btn-primary:hover { background: rgba(200,169,110,0.2); }
+.btn-danger { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+.btn-danger:hover { background: rgba(217,91,91,0.18); }
+
+/* ── STATUS BAR ── */
+.status-bar {
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin: 8px 0;
+  font-family: var(--mono);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text3);
+}
+.status-bar.ok  { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.status-bar.warn { background: var(--orange-bg); border-color: var(--orange-border); color: var(--orange); }
+
+/* ── LOG ── */
+.log-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  max-height: 160px;
+  overflow-y: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.log-box .log-head { color: var(--text3); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 4px; display: grid; grid-template-columns: 40px 1fr 1fr 1fr 1fr; gap: 8px; }
+.log-box .log-row  { display: grid; grid-template-columns: 40px 1fr 1fr 1fr 1fr; gap: 8px; color: var(--text2); }
+.log-box .log-row:hover { color: var(--text); }
+
+/* ── CANVAS ── */
+canvas { border-radius: 8px; max-width: 100%; display: block; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.tab-btn { padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; color: var(--text3); background: none; border: 1px solid transparent; transition: all 0.15s; }
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active { background: rgba(200,169,110,0.1); color: var(--accent); border-color: rgba(200,169,110,0.25); }
+.tab-panel { display: none; }
+.tab-panel.visible { display: block; }
+
+/* ── METRICS ROW ── */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 1rem 0; }
+
+/* ── STEP INDICATOR ── */
+.step-dots { display: flex; gap: 6px; margin-bottom: 1rem; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bg4); border: 1px solid var(--border2); transition: all 0.2s; }
+.step-dot.active { background: var(--accent); border-color: var(--accent); }
+.step-dot.done { background: var(--green); border-color: var(--green); }
+
+/* ── STEPPER NAV ── */
+.step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.step-counter { font-size: 12px; color: var(--text3); font-family: var(--mono); }
+
+/* ── ANIMATION ── */
+@keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+@keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+.animate-in { animation: fadeUp 0.4s ease both; }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* ── INTRO HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,169,110,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-family: var(--mono); margin-bottom: 1.5rem; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero-sub { font-size: 16px; color: var(--text2); max-width: 55ch; line-height: 1.7; margin-bottom: 2.5rem; }
+.hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; max-width: 600px; margin-bottom: 2.5rem; }
+.hero-stat { background: var(--bg2); padding: 1.25rem; }
+.hero-stat .n { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--accent); }
+.hero-stat .l { font-size: 12px; color: var(--text3); margin-top: 4px; }
+.hero-author { display: flex; align-items: center; gap: 12px; margin-top: 1rem; }
+.hero-author .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--bg4); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 14px; color: var(--accent); }
+.hero-author .info .name { font-size: 14px; color: var(--text); }
+.hero-author .info .role { font-size: 12px; color: var(--text3); }
+
+/* ── TOC ── */
+.toc-list { list-style: none; counter-reset: toc; }
+.toc-list li { counter-increment: toc; display: flex; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.toc-list li::before { content: counter(toc, decimal-leading-zero); font-family: var(--mono); font-size: 11px; color: var(--accent); min-width: 24px; }
+.toc-list a { color: var(--text2); text-decoration: none; font-size: 14px; transition: color 0.15s; }
+.toc-list a:hover { color: var(--text); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+@media (max-width: 900px) {
+  #sidebar { display: none; }
+  #main { margin-left: 0; max-width: 100%; }
+  .section { padding: 2.5rem 1.5rem 3rem; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .hero { padding: 2.5rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <span class="tag">DIT · Master 1</span>
+    <h1>Machine Learning<br>Régression Linéaire</h1>
+  </div>
+  <div class="nav-section">Introduction</div>
+  <a class="nav-item active" href="#intro" onclick="setActive(this)"><span class="num">00</span> Accueil</a>
+  <a class="nav-item" href="#concepts" onclick="setActive(this)"><span class="num">01</span> Concepts fondamentaux</a>
+
+  <div class="nav-section">Régression simple</div>
+  <a class="nav-item" href="#modele" onclick="setActive(this)"><span class="num">02</span> Le modèle ŷ = wx + b</a>
+  <a class="nav-item" href="#cout" onclick="setActive(this)"><span class="num">03</span> Fonction de coût J</a>
+  <a class="nav-item" href="#derivees" onclick="setActive(this)"><span class="num">04</span> Dérivées partielles</a>
+  <a class="nav-item" href="#gradient" onclick="setActive(this)"><span class="num">05</span> Descente de gradient</a>
+
+  <div class="nav-section">Régression multiple</div>
+  <a class="nav-item" href="#multiple" onclick="setActive(this)"><span class="num">06</span> Extension multivariée</a>
+  <a class="nav-item" href="#scaling" onclick="setActive(this)"><span class="num">07</span> Feature scaling</a>
+
+  <div class="nav-section">Évaluation</div>
+  <a class="nav-item" href="#evaluation" onclick="setActive(this)"><span class="num">08</span> Métriques MSE / R²</a>
+  <a class="nav-item" href="#simulateur" onclick="setActive(this)"><span class="num">09</span> Simulateur interactif</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+<!-- ══════════════════════════════════════════════
+     SECTION 0 — HERO
+══════════════════════════════════════════════ -->
+<section id="intro" class="hero">
+  <div class="hero-tag">Tony Sarre · AIMS Sénégal · Mars 2026</div>
+  <h1>Machine Learning<br><em>Régression Linéaire</em></h1>
+  <p class="hero-sub">Démonstrations mathématiques rigoureuses, exemples numériques pas à pas, et simulateurs interactifs pour comprendre la régression linéaire simple et multiple.</p>
+  <div class="hero-grid">
+    <div class="hero-stat"><div class="n">9</div><div class="l">sections</div></div>
+    <div class="hero-stat"><div class="n">∂J</div><div class="l">dérivées démontrées</div></div>
+    <div class="hero-stat"><div class="n">∞</div><div class="l">itérations simulées</div></div>
+  </div>
+  <div class="hero-author">
+    <div class="avatar">TS</div>
+    <div class="info">
+      <div class="name">Tony Sarre</div>
+      <div class="role">Data Scientist · Doctorante en Statistiques &amp; IA</div>
+    </div>
+  </div>
+
+  <hr class="divider" style="margin-top:2.5rem">
+  <h3 style="border:none;margin-top:1.5rem">Table des matières</h3>
+  <ul class="toc-list">
+    <li><a href="#concepts">Concepts fondamentaux — IA, ML, Deep Learning</a></li>
+    <li><a href="#modele">Le modèle linéaire — ŷ = wx + b, notation, interprétation</a></li>
+    <li><a href="#cout">Fonction de coût J(w,b) — définition, convexité, motivation</a></li>
+    <li><a href="#derivees">Dérivées partielles — calcul complet étape par étape</a></li>
+    <li><a href="#gradient">Descente de gradient — algorithme, convergence, taux α</a></li>
+    <li><a href="#multiple">Régression linéaire multiple — généralisation à n variables</a></li>
+    <li><a href="#scaling">Feature scaling — normalisation, standardisation</a></li>
+    <li><a href="#evaluation">Métriques — MSE, RMSE, R², interprétation</a></li>
+    <li><a href="#simulateur">Simulateur complet — expérimentez en temps réel</a></li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — CONCEPTS
+══════════════════════════════════════════════ -->
+<section id="concepts" class="section">
+  <div class="section-label">Section 01</div>
+  <h2>Concepts fondamentaux</h2>
+
+  <p>Le machine learning est une branche de l'intelligence artificielle permettant à une machine d'<strong>apprendre à partir de données</strong>, sans être explicitement programmée pour chaque tâche.</p>
+
+  <h3>Définition formelle (Tom Mitchell, 1998)</h3>
+  <div class="formula">
+    <span class="label">Définition formelle</span>
+    On dit qu'un programme informatique <span class="hi">apprend</span> à partir d'une expérience <span class="ha">E</span>
+    concernant une tâche <span class="hw">T</span> et une mesure de performance <span class="hg">P</span>,
+    si ses performances sur <span class="hw">T</span>, mesurées par <span class="hg">P</span>,
+    <span class="hi">s'améliorent</span> avec l'expérience <span class="ha">E</span>.
+  </div>
+
+  <h3>Les trois types d'apprentissage</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-label">Supervisé</div>
+      <div class="card-val">( X , y )</div>
+      <div class="card-sub">Données étiquetées. La machine apprend à partir de paires entrée/sortie connues.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Non supervisé</div>
+      <div class="card-val">( X )</div>
+      <div class="card-sub">Pas de labels. La machine découvre des structures cachées dans les données.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Par renforcement</div>
+      <div class="card-val">r ( s, a )</div>
+      <div class="card-sub">Apprentissage par récompense. L'agent apprend en interagissant avec un environnement.</div>
+    </div>
+  </div>
+
+  <h3>Exemple : jeu de dames (Arthur Samuel, 1959)</h3>
+  <div class="formula">
+    <span class="label">Application du cadre T–E–P</span>
+    Tâche     <span class="hw">T</span>  =  jouer au jeu de dames
+    Expérience <span class="ha">E</span>  =  le programme joue des milliers de parties contre lui-même
+    Performance <span class="hg">P</span> =  probabilité de gagner la prochaine partie
+
+    Si <span class="hg">P</span> augmente avec <span class="ha">E</span>  →  le programme <span class="hi">a appris</span>
+  </div>
+
+  <h3>Apprentissage supervisé — deux familles</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label">Régression</div>
+      <p style="margin:8px 0;font-size:13px">La sortie y est une <strong style="color:var(--blue)">valeur numérique continue</strong>.<br>Exemples : prix d'une maison, température, poids.</p>
+      <div class="formula" style="margin:0;padding:8px 12px;font-size:12px">ŷ ∈ ℝ  →  une valeur réelle quelconque</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Classification</div>
+      <p style="margin:8px 0;font-size:13px">La sortie y est une <strong style="color:var(--orange)">classe discrète</strong>.<br>Exemples : spam/non-spam, chat/chien, diagnostic.</p>
+      <div class="formula" style="margin:0;padding:8px 12px;font-size:12px">ŷ ∈ {0, 1, 2, ...}  →  une catégorie</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — LE MODÈLE
+══════════════════════════════════════════════ -->
+<section id="modele" class="section">
+  <div class="section-label">Section 02</div>
+  <h2>Le modèle linéaire</h2>
+
+  <p>La régression linéaire simple modélise la relation entre <strong>une variable d'entrée x</strong> et <strong>une variable de sortie y</strong> par une droite.</p>
+
+  <h3>Équation du modèle</h3>
+  <div class="formula">
+    <span class="label">Hypothèse — régression linéaire simple</span>
+    <span class="hi">ŷ</span> = <span class="hw">w</span> · x + <span class="hp">b</span>
+
+    où :
+      <span class="hi">ŷ</span>  =  prédiction du modèle (prix estimé, en k€)
+      x   =  variable d'entrée (surface, en m²)
+      <span class="hw">w</span>  =  coefficient directeur (pente) — influence de x sur ŷ
+      <span class="hp">b</span>  =  biais / ordonnée à l'origine — valeur de ŷ quand x = 0
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-title">Interprétation de w</span>
+    <p>Si w = 2.5, cela signifie que chaque m² supplémentaire prédit une hausse de <strong>2.5 k€</strong> du prix. C'est la "sensibilité" du prix à la surface.</p>
+  </div>
+
+  <h3>Données d'exemple</h3>
+  <p>Voici les 10 maisons connues sur lesquelles on va entraîner notre modèle. Chaque ligne est un exemple d'entraînement (x⁽ⁱ⁾, y⁽ⁱ⁾).</p>
+  <div style="overflow-x:auto">
+  <table class="data-table" id="data-table">
+    <thead><tr><th>i</th><th>x⁽ⁱ⁾ (surface m²)</th><th>y⁽ⁱ⁾ (prix k€)</th><th>ŷ⁽ⁱ⁾ = 1.73×x + 60</th><th>erreur = ŷ − y</th></tr></thead>
+    <tbody id="data-tbody"></tbody>
+  </table>
+  </div>
+  <div class="grid-3" id="data-stats"></div>
+
+  <h3>Visualisation interactive</h3>
+  <div class="ctrl">
+    <label>Pente w</label>
+    <input type="range" id="w-slider" min="-1" max="4" step="0.05" value="1.73">
+    <span class="val" id="w-val">1.73</span>
+  </div>
+  <div class="ctrl">
+    <label>Biais b</label>
+    <input type="range" id="b-slider" min="-100" max="200" step="1" value="60">
+    <span class="val" id="b-val">60</span>
+  </div>
+  <canvas id="chart-model" height="280"></canvas>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — FONCTION DE COÛT
+══════════════════════════════════════════════ -->
+<section id="cout" class="section">
+  <div class="section-label">Section 03</div>
+  <h2>La fonction de coût J(w, b)</h2>
+
+  <p>Pour mesurer la qualité d'un modèle, on a besoin d'une <strong>fonction de coût</strong> J qui quantifie l'écart total entre les prédictions ŷ et les valeurs réelles y. L'objectif est de trouver w et b qui <strong>minimisent</strong> J.</p>
+
+  <h3>Pourquoi l'erreur au carré ?</h3>
+  <div class="formula">
+    <span class="label">Comparaison des critères d'erreur</span>
+    Option 1 — erreur absolue  :  Σ|ŷ⁽ⁱ⁾ − y⁽ⁱ⁾|
+        <span style="color:var(--red)">Problème</span> : non dérivable en 0 → impossible d'utiliser le gradient
+
+    Option 2 — erreur au carré  :  Σ(<span class="hw">ŷ⁽ⁱ⁾ − y⁽ⁱ⁾</span>)²
+        <span style="color:var(--green)">Avantages</span> : différentiable partout, pénalise davantage les grandes erreurs,
+                   donne une surface convexe avec un minimum global unique
+  </div>
+
+  <h3>Définition formelle de J</h3>
+  <div class="formula">
+    <span class="label">MSE — Mean Squared Error (Erreur Quadratique Moyenne)</span>
+    J(w, b) = <span class="hi">1/(2m)</span> · <span class="hp">Σᵢ₌₁ᵐ</span> ( <span class="hw">ŷ⁽ⁱ⁾ − y⁽ⁱ⁾</span> )²
+
+    En substituant ŷ⁽ⁱ⁾ = wx⁽ⁱ⁾ + b :
+
+    J(w, b) = <span class="hi">1/(2m)</span> · <span class="hp">Σᵢ₌₁ᵐ</span> ( <span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span> )²
+
+    où  m = nombre d'exemples d'entraînement
+        ŷ⁽ⁱ⁾ = wx⁽ⁱ⁾ + b  est la prédiction pour l'exemple i
+        y⁽ⁱ⁾  est la vraie valeur pour l'exemple i
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-title">Pourquoi 1/(2m) et non 1/m ?</span>
+    <p>Le facteur 2 au dénominateur est une <strong>convention de commodité</strong> : lors du calcul des dérivées, la règle de dérivation du carré fait apparaître un facteur 2 au numérateur. Ce 2 se simplifie avec le 2 du dénominateur, rendant les formules plus propres. La valeur minimale de J change, mais le <em>point</em> où ce minimum est atteint (les valeurs optimales de w et b) reste identique.</p>
+  </div>
+
+  <h3>Propriété fondamentale : convexité de J</h3>
+  <div class="formula">
+    <span class="label">Preuve de la convexité</span>
+    J(w,b) = (1/2m) · Σᵢ ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ )²
+
+    Chaque terme fᵢ(w,b) = ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ )² est <span class="hi">convexe</span>
+    car c'est le carré d'une fonction <span class="hw">affine</span> de (w,b).
+
+    La somme de fonctions convexes est convexe  →  <span class="hi">J est convexe</span>.
+
+    La matrice Hessienne de J est semi-définie positive (H ≽ 0)
+    →  J a exactement <span class="hg">un seul minimum global</span>, aucun minimum local.
+    →  La descente de gradient <span class="hg">converge toujours</span> vers ce minimum.
+  </div>
+
+  <div class="callout callout-ok">
+    <span class="callout-title">Conséquence importante</span>
+    <p>Parce que J est convexe, quelle que soit l'initialisation de w et b, la descente de gradient atteindra <strong>le même minimum global</strong>. Cette propriété disparaît pour les réseaux de neurones profonds, où J n'est plus convexe.</p>
+  </div>
+
+  <h3>Calcul numérique de J sur nos données</h3>
+  <div style="overflow-x:auto">
+  <table class="data-table">
+    <thead><tr><th>i</th><th>xᵢ</th><th>yᵢ</th><th>ŷᵢ = 1.73x + 60</th><th>erreur = ŷ−y</th><th style="color:var(--blue)">(erreur)²</th></tr></thead>
+    <tbody id="cost-tbody"></tbody>
+    <tfoot><tr><td colspan="5" style="text-align:right;color:var(--text2)">J(w,b) = (1/2m) · Σ =</td><td id="cost-total" style="color:var(--blue)"></td></tr></tfoot>
+  </table>
+  </div>
+
+  <h3>Visualisation de J en fonction de w (avec b fixe)</h3>
+  <canvas id="chart-cost-curve" height="240"></canvas>
+  <p style="font-size:12px;color:var(--text3);margin-top:6px">La courbe en forme de parabole confirme la convexité. Le minimum global correspond aux valeurs optimales w* et b*.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4 — DÉRIVÉES
+══════════════════════════════════════════════ -->
+<section id="derivees" class="section">
+  <div class="section-label">Section 04</div>
+  <h2>Calcul des dérivées partielles</h2>
+
+  <p>Pour minimiser J(w,b), on a besoin de savoir dans quelle direction se déplacer. Le <strong>gradient</strong> de J nous donne cette information : c'est le vecteur des dérivées partielles ∂J/∂w et ∂J/∂b.</p>
+
+  <h3>Outil mathématique : règle de dérivation composée (chain rule)</h3>
+  <div class="formula">
+    <span class="label">Rappel — règle des fonctions composées</span>
+    Si f(u) = u²  et  u = g(w)  alors :
+    d/dw [ f(g(w)) ] = f'(g(w)) · g'(w) = <span class="hi">2·g(w)</span> · <span class="hw">g'(w)</span>
+
+    Appliqué ici : f(u) = u²,  u = uᵢ = wx⁽ⁱ⁾ + b − y⁽ⁱ⁾
+    d/dw [ uᵢ² ] = 2·uᵢ · (∂uᵢ/∂w)
+  </div>
+
+  <h3>Dérivée partielle par rapport à w — démonstration complète</h3>
+
+  <div class="proof-step">
+    <div class="n">1</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Point de départ :</span><br>
+      J(w,b) = <span class="hi">(1/2m)</span> · Σᵢ ( <span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span> )²
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">2</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">On pose uᵢ = wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ (l'erreur du modèle sur l'exemple i) :</span><br>
+      J = <span class="hi">(1/2m)</span> · Σᵢ <span class="hw">uᵢ²</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">3</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">La dérivée d'une somme = somme des dérivées :</span><br>
+      ∂J/∂w = <span class="hi">(1/2m)</span> · Σᵢ <span style="color:var(--orange)">∂/∂w [uᵢ²]</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">4</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Appliquer la rule de dérivation du carré (chain rule) :</span><br>
+      ∂/∂w [uᵢ²] = <span class="hw">2·uᵢ</span> · <span class="hg">∂uᵢ/∂w</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">5</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Calculer ∂uᵢ/∂w (b et y⁽ⁱ⁾ sont constants par rapport à w) :</span><br>
+      uᵢ = <span class="hw">w</span>·x⁽ⁱ⁾ + b − y⁽ⁱ⁾  →  ∂uᵢ/∂w = <span class="hg">x⁽ⁱ⁾</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">6</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Substituer et simplifier (le 2 se compense avec le 2 du dénominateur) :</span><br>
+      ∂J/∂w = (1/<span class="hg">2</span>m) · Σᵢ <span class="hg">2</span>·uᵢ·x⁽ⁱ⁾  =  <span class="hi">(1/m)</span> · Σᵢ ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ ) · <span class="hw">x⁽ⁱ⁾</span>
+    </div>
+  </div>
+
+  <div class="callout callout-ok">
+    <p><strong>Résultat final :</strong> &nbsp; ∂J/∂w = (1/m) · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ ) · x⁽ⁱ⁾</p>
+  </div>
+
+  <h3>Dérivée partielle par rapport à b — démonstration complète</h3>
+
+  <div class="proof-step">
+    <div class="n">1</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Même point de départ, même développement jusqu'à :</span><br>
+      ∂J/∂b = <span class="hi">(1/2m)</span> · Σᵢ <span class="hw">2·uᵢ</span> · <span class="hg">∂uᵢ/∂b</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">2</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Calculer ∂uᵢ/∂b (wx⁽ⁱ⁾ et y⁽ⁱ⁾ sont constants par rapport à b) :</span><br>
+      uᵢ = wx⁽ⁱ⁾ + <span class="hp">b</span> − y⁽ⁱ⁾  →  ∂uᵢ/∂b = <span class="hg">1</span>
+    </div>
+  </div>
+
+  <div class="proof-step">
+    <div class="n">3</div>
+    <div class="body">
+      <span style="color:var(--text3);font-size:12px">Substituer et simplifier :</span><br>
+      ∂J/∂b = (1/<span class="hg">2</span>m) · Σᵢ <span class="hg">2</span>·uᵢ · 1  =  <span class="hi">(1/m)</span> · Σᵢ ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ )
+    </div>
+  </div>
+
+  <div class="callout callout-ok">
+    <p><strong>Résultat final :</strong> &nbsp; ∂J/∂b = (1/m) · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ )</p>
+  </div>
+
+  <h3>Application numérique des gradients</h3>
+  <p>Calculons les gradients pour nos données avec w = 0 et b = 0 (initialisation à zéro) :</p>
+  <div class="formula" id="grad-numeric">
+    <span class="label">Calcul numérique — itération 0, w=0, b=0</span>
+  </div>
+
+  <h3>Interprétation géométrique du signe du gradient</h3>
+  <div class="formula">
+    <span class="label">Que nous dit le signe de ∂J/∂w ?</span>
+    ∂J/∂w <span class="hr">&gt; 0</span>  →  J croît quand w augmente  →  il faut <span class="hr">diminuer</span> w
+    ∂J/∂w <span class="hg">&lt; 0</span>  →  J décroît quand w augmente  →  il faut <span class="hg">augmenter</span> w
+    ∂J/∂w <span class="hi">= 0</span>  →  on est au <span class="hi">minimum</span> par rapport à w  →  convergé ✓
+
+    Même raisonnement symétrique pour ∂J/∂b.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5 — DESCENTE DE GRADIENT
+══════════════════════════════════════════════ -->
+<section id="gradient" class="section">
+  <div class="section-label">Section 05</div>
+  <h2>Algorithme de descente de gradient</h2>
+
+  <p>La descente de gradient est la méthode qui permet de trouver w et b de façon <strong>itérative</strong>, en se déplaçant toujours dans la direction qui fait <strong>descendre J le plus vite</strong>.</p>
+
+  <h3>Analogie intuitive</h3>
+  <div class="callout callout-info">
+    <p>Imaginez-vous dans le brouillard sur une montagne. Vous voulez atteindre la vallée (le minimum de J). Vous ne voyez pas loin, mais vous sentez la pente sous vos pieds. Vous n'avez qu'à toujours faire un pas dans la direction <strong>la plus raide vers le bas</strong>. En répétant cela assez de fois, vous atteignez la vallée. C'est exactement ça, la descente de gradient.</p>
+  </div>
+
+  <h3>Règle de mise à jour — forme complète</h3>
+  <div class="formula">
+    <span class="label">Mise à jour SIMULTANÉE à chaque itération t</span>
+    w_new = w − <span class="ha">α</span> · <span class="hi">∂J/∂w</span>
+    b_new = b − <span class="ha">α</span> · <span class="hi">∂J/∂b</span>
+    <br>
+    w ← w_new   (mise à jour après avoir calculé les deux gradients)
+    b ← b_new
+
+    En développant les gradients (calculés en Section 04) :
+
+    w ← w − <span class="ha">α</span> · <span class="hi">(1/m) · Σᵢ ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ ) · x⁽ⁱ⁾</span>
+
+    b ← b − <span class="ha">α</span> · <span class="hi">(1/m) · Σᵢ ( wx⁽ⁱ⁾ + b − y⁽ⁱ⁾ )</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-title">Attention — la simultanéité est obligatoire</span>
+    <p>On calcule les deux gradients avec les <em>anciennes</em> valeurs de w et b, puis on met à jour les deux ensemble. Si on mettait à jour w d'abord et utilisait le nouveau w pour calculer le gradient de b, on minimiserait une fonction différente de J — l'algorithme serait incorrect.</p>
+  </div>
+
+  <h3>Le taux d'apprentissage α — rôle et choix</h3>
+  <div class="formula">
+    <span class="label">Impact de α sur la convergence</span>
+    α <span class="hr">trop grand</span>  →  le pas dépasse le minimum → divergence (J augmente)
+    α <span class="hw">trop petit</span>  →  convergence très lente (des milliers d'itérations)
+    α <span class="hg">optimal</span>    →  J décroît régulièrement, convergence en ~100–1000 itérations
+
+    Valeurs typiques à tester :  0.001,  0.003,  0.01,  0.03,  0.1  (progression ×3)
+  </div>
+
+  <h3>Critère d'arrêt</h3>
+  <div class="formula">
+    <span class="label">Deux conditions équivalentes de convergence</span>
+    Condition 1 — sur le coût :
+      | J⁽ᵗ⁾ − J⁽ᵗ⁻¹⁾ | &lt; <span class="ha">ε</span>   avec ε ≈ 10⁻⁵
+
+    Condition 2 — sur le gradient :
+      ||∇J|| = √( (∂J/∂w)² + (∂J/∂b)² ) → <span class="hi">0</span>
+
+    La convexité de J garantit que ces conditions sont atteintes.
+  </div>
+
+  <h3>Preuve de convergence (esquisse)</h3>
+  <div class="formula">
+    <span class="label">Théorème de convergence pour fonctions convexes Lipschitz-continues</span>
+    J est convexe et ∇J est L-Lipschitz continue.
+    Pour α &lt; 1/L, on peut montrer que :
+
+    J(w_{t+1}, b_{t+1}) ≤ J(w_t, b_t) − <span class="hi">(α/2) · ||∇J(w_t, b_t)||²</span>
+
+    →  J décroît <span class="hg">strictement</span> à chaque itération tant que ||∇J|| ≠ 0
+    →  J est minorée par 0  →  la suite des J_t <span class="hg">converge</span>
+    →  (w_t, b_t) converge vers le minimiseur global <span class="hg">(w*, b*)</span>
+
+    <span style="color:var(--red)">Honnêteté importante :</span> cette garantie suppose la convexité de J.
+    Pour les réseaux de neurones (non convexes), on converge vers un
+    minimum local, non nécessairement global.
+  </div>
+
+  <h3>Démonstration numérique pas à pas</h3>
+  <p>Simulons manuellement les 3 premières itérations avec α = 0.0032, w₀ = 0, b₀ = 0 :</p>
+  <div id="manual-steps"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 6 — RÉGRESSION MULTIPLE
+══════════════════════════════════════════════ -->
+<section id="multiple" class="section">
+  <div class="section-label">Section 06</div>
+  <h2>Régression linéaire multiple</h2>
+
+  <p>La régression multiple généralise la régression simple à <strong>n variables explicatives</strong>. Au lieu d'une droite, on ajuste un hyperplan dans un espace à n dimensions.</p>
+
+  <h3>Modèle général</h3>
+  <div class="formula">
+    <span class="label">Hypothèse — régression linéaire multiple</span>
+    hθ(x⁽ⁱ⁾) = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·x₁⁽ⁱ⁾ + <span class="hi">θ₂</span>·x₂⁽ⁱ⁾ + ... + <span class="hi">θₙ</span>·xₙ⁽ⁱ⁾
+
+    Notation vectorielle compacte :
+    hθ(x) = <span class="hw">θᵀ · x</span>  avec  x₀ = 1 (pour absorber le biais θ₀)
+
+    Il y a <span class="ha">n + 1</span> paramètres à apprendre : θ₀, θ₁, ..., θₙ
+  </div>
+
+  <h3>Généralisation de la descente de gradient</h3>
+  <div class="formula">
+    <span class="label">Mise à jour pour chaque paramètre θⱼ (j = 0, 1, ..., n)</span>
+    θⱼ ← θⱼ − <span class="ha">α</span> · <span class="hi">∂J(θ)/∂θⱼ</span>
+
+    où la dérivée partielle est :
+    ∂J(θ)/∂θⱼ = <span class="hi">(1/m)</span> · Σᵢ₌₁ᵐ ( hθ(x⁽ⁱ⁾) − y⁽ⁱ⁾ ) · <span class="hw">xⱼ⁽ⁱ⁾</span>
+
+    Convention : x₀⁽ⁱ⁾ = 1 pour tous les exemples i (pour le biais θ₀)
+    La mise à jour de θ₀ donne :  ∂J/∂θ₀ = (1/m) · Σᵢ ( hθ(x⁽ⁱ⁾) − y⁽ⁱ⁾ )
+    ← identique à ∂J/∂b en régression simple.
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-title">La forme des gradients est la même</span>
+    <p>Remarquez que ∂J/∂θⱼ = (1/m) · Σᵢ (erreur⁽ⁱ⁾) · xⱼ⁽ⁱ⁾. C'est exactement la même structure que ∂J/∂w en régression simple — seul l'indice j change. <strong>Un seul algorithme couvre tous les cas.</strong></p>
+  </div>
+
+  <h3>Exemple — prédiction du prix avec 4 variables</h3>
+  <div class="formula">
+    <span class="label">Exemple concret — 4 features</span>
+    x = [ surface (m²),  chambres,  distance centre-ville (km),  ancienneté (ans) ]
+
+    hθ(x) = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·surface + <span class="hi">θ₂</span>·chambres + <span class="hi">θ₃</span>·distance + <span class="hi">θ₄</span>·ancienneté
+
+    Valeurs apprises hypothétiques :
+      <span class="hp">θ₀</span> = 50.0   (base)
+      <span class="hi">θ₁</span> = 2.5    (2.5 k€ par m² supplémentaire)
+      <span class="hi">θ₂</span> = 15.0   (15 k€ par chambre supplémentaire)
+      <span class="hi">θ₃</span> = −4.0   (−4 k€ par km éloigné du centre)
+      <span class="hi">θ₄</span> = −1.2   (−1.2 k€ par an d'ancienneté)
+
+    Prédiction pour (80m², 3 chambres, 5km, 10 ans) :
+    ŷ = 50 + 2.5×80 + 15×3 + (−4)×5 + (−1.2)×10 = <span class="hg">263 k€</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 7 — FEATURE SCALING
+══════════════════════════════════════════════ -->
+<section id="scaling" class="section">
+  <div class="section-label">Section 07</div>
+  <h2>Feature Scaling — mise à l'échelle</h2>
+
+  <p>Quand les variables ont des ordres de grandeur très différents (ex : surface en m² entre 40 et 150, vs ancienneté entre 0 et 50), la descente de gradient converge <strong>lentement et de façon irrégulière</strong>.</p>
+
+  <h3>Pourquoi le scaling est nécessaire</h3>
+  <div class="formula">
+    <span class="label">Problème sans scaling — courbes de niveau elliptiques</span>
+    Si x₁ ∈ [10 000 ; 100 000]  et  x₂ ∈ [1 ; 10]
+
+    θ₁ doit être très petit (ex : 0.001) pour que θ₁·x₁ reste raisonnable
+    θ₂ peut être grand (ex : 10)
+
+    →  Les courbes de niveau de J forment une <span class="hr">ellipse très allongée</span>
+    →  La descente de gradient oscille et converge lentement
+    →  Avec scaling : les courbes deviennent <span class="hg">quasi-circulaires</span>
+    →  La descente converge en ligne droite, beaucoup plus vite
+  </div>
+
+  <h3>Normalisation min-max</h3>
+  <div class="formula">
+    <span class="label">Min-max scaling — ramène toutes les valeurs entre 0 et 1</span>
+    x' = ( x − <span class="hr">min(x)</span> ) / ( <span class="hg">max(x)</span> − <span class="hr">min(x)</span> )
+
+    Résultat : x' ∈ [0, 1] pour tous les exemples
+    Avantage : préserve la forme de la distribution
+    Inconvénient : sensible aux valeurs aberrantes (outliers)
+
+    Exemple : surface ∈ [40, 130]
+    x' = (x − 40) / (130 − 40) = (x − 40) / 90
+    →  40m² →  0.0
+    →  85m² →  0.5
+    → 130m² →  1.0
+  </div>
+
+  <h3>Standardisation (z-score)</h3>
+  <div class="formula">
+    <span class="label">Standardisation — centre réduit (moyenne 0, écart-type 1)</span>
+    x' = ( x − <span class="hi">μ</span> ) / <span class="hw">σ</span>
+
+    où  μ = moyenne de x  sur le dataset d'entraînement
+        σ = écart-type de x  sur le dataset d'entraînement
+
+    Résultat : μ' = 0,  σ' = 1  pour chaque feature standardisée
+    Avantage : robuste aux outliers, efficace si la distribution est normale
+
+    <span style="color:var(--red)">Règle critique :</span> calculer μ et σ <span class="hr">uniquement sur le training set</span>,
+    puis appliquer ces mêmes μ et σ au validation et test set.
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-title">Erreur fréquente à éviter</span>
+    <p>Ne jamais calculer μ et σ sur l'ensemble complet (training + test) avant de scaler. Cela constitue une <strong>fuite de données</strong> (data leakage) : les statistiques du test contaminent l'entraînement, ce qui fausse l'évaluation des performances réelles.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 8 — ÉVALUATION
+══════════════════════════════════════════════ -->
+<section id="evaluation" class="section">
+  <div class="section-label">Section 08</div>
+  <h2>Métriques d'évaluation</h2>
+
+  <p>Une fois le modèle entraîné, on mesure sa qualité avec des métriques standardisées. Ces métriques sont calculées sur des <strong>données de test jamais vues pendant l'entraînement</strong>.</p>
+
+  <h3>MSE — Mean Squared Error</h3>
+  <div class="formula">
+    <span class="label">Erreur quadratique moyenne</span>
+    <span class="hi">MSE</span> = (1/n) · Σᵢ ( yᵢ − ŷᵢ )²
+
+    Propriétés :
+    →  Toujours ≥ 0
+    →  MSE = 0  ↔  prédictions parfaites
+    →  Pénalise fortement les grandes erreurs (carré)
+    →  Unité : (unité de y)²  →  difficile à interpréter directement
+  </div>
+
+  <h3>RMSE — Root Mean Squared Error</h3>
+  <div class="formula">
+    <span class="label">Racine de la MSE — dans la même unité que y</span>
+    <span class="hi">RMSE</span> = √MSE = √[ (1/n) · Σᵢ ( yᵢ − ŷᵢ )² ]
+
+    Avantage : même unité que y → interprétable directement
+    Si RMSE = 12 k€  →  en moyenne, nos prédictions s'écartent de ±12 k€ du prix réel
+  </div>
+
+  <h3>R² — Coefficient de détermination</h3>
+  <div class="formula">
+    <span class="label">Proportion de variance expliquée par le modèle</span>
+    <span class="hi">R²</span> = 1 − [ Σᵢ(yᵢ − ŷᵢ)² ] / [ Σᵢ(yᵢ − ȳ)² ]
+        = 1 − SS_res / SS_tot
+
+    où  SS_res = Σ(yᵢ − ŷᵢ)²  (variance résiduelle — erreurs du modèle)
+        SS_tot = Σ(yᵢ − ȳ)²   (variance totale — de la variable cible)
+
+    Interprétation :
+    R² = <span class="hg">1.0</span>  →  prédictions parfaites (0% de variance inexpliquée)
+    R² = <span class="hw">0.0</span>  →  le modèle ne fait pas mieux que prédire ȳ constamment
+    R² = <span class="hr">0.85</span> →  le modèle explique 85% de la variance de y
+    R² <span class="hr">&lt; 0</span>  →  le modèle est pire que prédire la moyenne (underfitting sévère)
+  </div>
+
+  <h3>Résultats sur nos données</h3>
+  <div class="grid-3" id="eval-metrics"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 9 — SIMULATEUR
+══════════════════════════════════════════════ -->
+<section id="simulateur" class="section">
+  <div class="section-label">Section 09</div>
+  <h2>Simulateur interactif</h2>
+
+  <p>Expérimentez la descente de gradient en temps réel. Modifiez le taux d'apprentissage, changez les valeurs initiales, et observez la convergence sous trois angles simultanément.</p>
+
+  <div class="ctrl">
+    <label>Taux d'apprentissage α</label>
+    <input type="range" id="sim-alpha" min="-4" max="-1" step="0.1" value="-2.5" oninput="onSimAlpha()">
+    <span class="val" id="sim-alpha-val">0.0032</span>
+  </div>
+  <div class="ctrl">
+    <label>w initial</label>
+    <input type="range" id="sim-w0" min="-2" max="5" step="0.5" value="0" oninput="onSimW0()">
+    <span class="val" id="sim-w0-val">0.0</span>
+  </div>
+  <div class="ctrl">
+    <label>b initial</label>
+    <input type="range" id="sim-b0" min="-100" max="200" step="10" value="0" oninput="onSimB0()">
+    <span class="val" id="sim-b0-val">0</span>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="simStep(1)">Itération +1</button>
+    <button onclick="simStep(10)">+10 itérations</button>
+    <button onclick="simStep(100)">+100 itérations</button>
+    <button id="sim-auto-btn" onclick="simToggleAuto()">Démarrer auto</button>
+    <button class="btn-danger" onclick="simReset()">Réinitialiser</button>
+  </div>
+
+  <div class="status-bar" id="sim-status">Prêt — configurez les paramètres et lancez la simulation.</div>
+
+  <div class="metrics">
+    <div class="card"><div class="card-label">Itération</div><div class="card-val" id="sim-iter">0</div></div>
+    <div class="card"><div class="card-label">w courant</div><div class="card-val" id="sim-w">0.0000</div></div>
+    <div class="card"><div class="card-label">b courant</div><div class="card-val" id="sim-b">0.00</div></div>
+    <div class="card"><div class="card-label">J(w,b)</div><div class="card-val" id="sim-j">—</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showSimTab('sim-tab-reg',this)">Droite de régression</button>
+    <button class="tab-btn" onclick="showSimTab('sim-tab-cost',this)">Convergence de J</button>
+    <button class="tab-btn" onclick="showSimTab('sim-tab-parab',this)">Parabole J(w)</button>
+  </div>
+  <div class="tab-panel visible" id="sim-tab-reg"><canvas id="sim-chart-reg" height="260"></canvas></div>
+  <div class="tab-panel" id="sim-tab-cost"><canvas id="sim-chart-cost" height="260"></canvas></div>
+  <div class="tab-panel" id="sim-tab-parab"><canvas id="sim-chart-parab" height="260"></canvas></div>
+
+  <h4 style="margin-top:1.5rem">Journal des itérations</h4>
+  <div class="log-box" id="sim-log">
+    <div class="log-head"><span>iter</span><span>w</span><span>b</span><span>∂J/∂w</span><span>J</span></div>
+  </div>
+
+  <hr class="divider">
+  <h3>Récapitulatif — les trois formules essentielles</h3>
+  <div class="formula">
+    <span class="label">À retenir — régression linéaire simple</span>
+    <span style="color:var(--text3);font-size:11px">1. Le modèle :</span>
+    ŷ = <span class="hw">w</span>·x + <span class="hp">b</span>
+
+    <span style="color:var(--text3);font-size:11px">2. La fonction de coût :</span>
+    J(w,b) = <span class="hi">(1/2m)</span> · Σᵢ ( <span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span> )²
+
+    <span style="color:var(--text3);font-size:11px">3. Les gradients :</span>
+    <span class="hi">∂J/∂w</span> = (1/m) · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ ) · <span class="hw">x⁽ⁱ⁾</span>
+    <span class="hi">∂J/∂b</span> = (1/m) · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ )
+
+    <span style="color:var(--text3);font-size:11px">4. Les mises à jour (SIMULTANÉES) :</span>
+    <span class="hg">w</span> ← w − <span class="ha">α</span> · ∂J/∂w
+    <span class="hg">b</span> ← b − <span class="ha">α</span> · ∂J/∂b
+  </div>
+</section>
+
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DATA = [
+  {x:40,y:130},{x:50,y:155},{x:60,y:162},{x:70,y:185},
+  {x:80,y:200},{x:90,y:218},{x:100,y:240},{x:110,y:260},
+  {x:120,y:270},{x:130,y:295}
+];
+const m = DATA.length;
+const mx = DATA.reduce((s,d)=>s+d.x,0)/m;
+const my = DATA.reduce((s,d)=>s+d.y,0)/m;
+const W_OPT = DATA.reduce((s,d)=>s+(d.x-mx)*(d.y-my),0)/DATA.reduce((s,d)=>s+(d.x-mx)**2,0);
+const B_OPT = my - W_OPT*mx;
+
+function cost(w,b){ return DATA.reduce((s,d)=>s+(w*d.x+b-d.y)**2,0)/(2*m); }
+function gradW(w,b){ return DATA.reduce((s,d)=>s+(w*d.x+b-d.y)*d.x,0)/m; }
+function gradB(w,b){ return DATA.reduce((s,d)=>s+(w*d.x+b-d.y),0)/m; }
+function calcR2(w,b){
+  const ss_res=DATA.reduce((s,d)=>s+(d.y-(w*d.x+b))**2,0);
+  const ss_tot=DATA.reduce((s,d)=>s+(d.y-my)**2,0);
+  return 1-ss_res/ss_tot;
+}
+
+// ── CHART DEFAULTS ────────────────────────────────────────────────────────────
+const CH_OPTS = {
+  responsive:true, animation:{duration:0},
+  plugins:{legend:{display:false}},
+  scales:{
+    x:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.05)'},title:{display:true,color:'#5e5c55',font:{size:11}}},
+    y:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.05)'},title:{display:true,color:'#5e5c55',font:{size:11}}}
+  }
+};
+
+function mkOpts(xl,yl){ return JSON.parse(JSON.stringify({...CH_OPTS,scales:{
+  x:{...CH_OPTS.scales.x,title:{display:true,text:xl,color:'#5e5c55',font:{size:11}}},
+  y:{...CH_OPTS.scales.y,title:{display:true,text:yl,color:'#5e5c55',font:{size:11}}}
+}})); }
+
+// ── SECTION 2 — DATA TABLE ────────────────────────────────────────────────────
+(function initDataTable(){
+  const tbody = document.getElementById('data-tbody');
+  tbody.innerHTML = DATA.map((d,i)=>{
+    const yhat = W_OPT*d.x+B_OPT;
+    const err = yhat-d.y;
+    const col = Math.abs(err)<10 ? '#5ba87a' : '#d9845b';
+    return `<tr><td>${i+1}</td><td>${d.x}</td><td>${d.y}</td><td>${yhat.toFixed(1)}</td><td style="color:${col}">${err>0?'+':''}${err.toFixed(1)}</td></tr>`;
+  }).join('');
+  const mse = cost(W_OPT,B_OPT)*2;
+  const r2 = calcR2(W_OPT,B_OPT);
+  document.getElementById('data-stats').innerHTML = `
+    <div class="card"><div class="card-label">w optimal</div><div class="card-val">${W_OPT.toFixed(4)}</div></div>
+    <div class="card"><div class="card-label">b optimal</div><div class="card-val">${B_OPT.toFixed(2)}</div></div>
+    <div class="card"><div class="card-label">R²</div><div class="card-val">${r2.toFixed(4)}</div></div>`;
+})();
+
+// ── SECTION 2 — INTERACTIVE CHART ─────────────────────────────────────────────
+let chartModel = null;
+(function initModelChart(){
+  const ctx = document.getElementById('chart-model');
+  chartModel = new Chart(ctx, {
+    data:{datasets:[
+      {type:'scatter',data:DATA.map(d=>({x:d.x,y:d.y})),backgroundColor:'#5b8dd9',pointRadius:6,pointHoverRadius:8},
+      {type:'line',data:[{x:30,y:1.73*30+60},{x:150,y:1.73*150+60}],borderColor:'#c8a96e',borderWidth:2,pointRadius:0},
+      {type:'line',data:[{x:30,y:W_OPT*30+B_OPT},{x:150,y:W_OPT*150+B_OPT}],borderColor:'#5ba87a',borderWidth:1.5,borderDash:[6,4],pointRadius:0}
+    ]},
+    options:mkOpts('Surface (m²)','Prix (k€)')
+  });
+  function update(){
+    const w=parseFloat(document.getElementById('w-slider').value);
+    const b=parseFloat(document.getElementById('b-slider').value);
+    document.getElementById('w-val').textContent=w.toFixed(2);
+    document.getElementById('b-val').textContent=b;
+    chartModel.data.datasets[1].data=[{x:30,y:w*30+b},{x:150,y:w*150+b}];
+    chartModel.update('none');
+  }
+  document.getElementById('w-slider').oninput=update;
+  document.getElementById('b-slider').oninput=update;
+})();
+
+// ── SECTION 3 — COST TABLE ────────────────────────────────────────────────────
+(function initCostTable(){
+  const tbody = document.getElementById('cost-tbody');
+  let sumSq=0;
+  tbody.innerHTML = DATA.map(d=>{
+    const yhat = W_OPT*d.x+B_OPT;
+    const err = yhat-d.y;
+    const sq = err*err;
+    sumSq += sq;
+    return `<tr><td>${DATA.indexOf(d)+1}</td><td>${d.x}</td><td>${d.y}</td><td>${yhat.toFixed(2)}</td><td style="color:${Math.abs(err)<12?'#5ba87a':'#d9845b'}">${(err>0?'+':'')+err.toFixed(2)}</td><td style="color:#5b8dd9">${sq.toFixed(2)}</td></tr>`;
+  }).join('');
+  document.getElementById('cost-total').textContent = (sumSq/(2*m)).toFixed(4);
+})();
+
+// ── SECTION 3 — COST CURVE ────────────────────────────────────────────────────
+(function initCostCurve(){
+  const pts=[];
+  for(let w=-1;w<=5;w+=0.1) pts.push({x:+w.toFixed(2),y:+cost(w,B_OPT).toFixed(2)});
+  const ctx=document.getElementById('chart-cost-curve');
+  new Chart(ctx,{
+    data:{datasets:[
+      {type:'line',data:pts,borderColor:'#9d7fd4',borderWidth:2,pointRadius:0,tension:0.3,fill:{target:'origin',above:'rgba(157,127,212,0.05)'}},
+      {type:'scatter',data:[{x:+W_OPT.toFixed(3),y:+cost(W_OPT,B_OPT).toFixed(3)}],backgroundColor:'#c8a96e',pointRadius:8}
+    ]},
+    options:{...mkOpts('w','J(w, b fixe)'),plugins:{legend:{display:false},annotation:{}}}
+  });
+})();
+
+// ── SECTION 4 — GRADIENT NUMERIC ──────────────────────────────────────────────
+(function initGradNumeric(){
+  const w=0,b=0;
+  const gw = gradW(w,b).toFixed(4);
+  const gb = gradB(w,b).toFixed(4);
+  const j  = cost(w,b).toFixed(2);
+  const lines = DATA.map(d=>{
+    const err=(w*d.x+b-d.y);
+    return `  i=${DATA.indexOf(d)+1}: (${w}×${d.x}+${b}−${d.y})×${d.x} = ${err}×${d.x} = ${(err*d.x).toFixed(0)}`;
+  }).join('\n');
+  document.getElementById('grad-numeric').innerHTML = `<span class="label">Calcul numérique — w=0, b=0</span>
+∂J/∂w = (1/${m}) · Σᵢ (wx⁽ⁱ⁾ + b − y⁽ⁱ⁾) · x⁽ⁱ⁾
+${lines}
+         = (1/${m}) × ${(gradW(w,b)*m).toFixed(0)}  =  <span class="hr">${gw}</span>
+
+∂J/∂b = (1/${m}) · Σᵢ (wx⁽ⁱ⁾ + b − y⁽ⁱ⁾)
+       = (1/${m}) × ${(gradB(w,b)*m).toFixed(0)}  =  <span class="hr">${gb}</span>
+
+J(0,0) = <span class="hw">${j}</span>   →  très élevé, le modèle prédit 0 pour tout
+
+Conclusion : ∂J/∂w = ${gw} > 0  →  w doit <span class="hr">diminuer</span>
+             ∂J/∂b = ${gb} > 0  →  b doit <span class="hr">diminuer</span>`;
+})();
+
+// ── SECTION 5 — MANUAL STEPS ──────────────────────────────────────────────────
+(function initManualSteps(){
+  const alpha=0.0032;
+  let w=0,b=0;
+  let html='';
+  for(let t=0;t<3;t++){
+    const j=cost(w,b);
+    const gw=gradW(w,b);
+    const gb=gradB(w,b);
+    const nw=w-alpha*gw;
+    const nb=b-alpha*gb;
+    html+=`<div class="formula" style="margin:0.75rem 0"><span class="label">Itération ${t+1} — w=${w.toFixed(4)}, b=${b.toFixed(2)}</span>
+J(w,b)  = <span class="hw">${j.toFixed(2)}</span>
+∂J/∂w   = <span class="hi">${gw.toFixed(4)}</span>
+∂J/∂b   = <span class="hi">${gb.toFixed(4)}</span>
+
+w_new = ${w.toFixed(4)} − ${alpha} × ${gw.toFixed(4)} = <span class="hg">${nw.toFixed(4)}</span>
+b_new = ${b.toFixed(2)} − ${alpha} × ${gb.toFixed(4)} = <span class="hg">${nb.toFixed(4)}</span>
+</div>`;
+    w=nw; b=nb;
+  }
+  document.getElementById('manual-steps').innerHTML=html;
+})();
+
+// ── SECTION 8 — EVAL METRICS ─────────────────────────────────────────────────
+(function initEvalMetrics(){
+  const mse=DATA.reduce((s,d)=>s+(d.y-(W_OPT*d.x+B_OPT))**2,0)/m;
+  const rmse=Math.sqrt(mse);
+  const r2=calcR2(W_OPT,B_OPT);
+  document.getElementById('eval-metrics').innerHTML=`
+    <div class="card"><div class="card-label">MSE</div><div class="card-val">${mse.toFixed(2)}</div><div class="card-sub">(k€)²</div></div>
+    <div class="card"><div class="card-label">RMSE</div><div class="card-val">${rmse.toFixed(2)}</div><div class="card-sub">k€ d'erreur moyenne</div></div>
+    <div class="card"><div class="card-label">R²</div><div class="card-val">${r2.toFixed(4)}</div><div class="card-sub">${(r2*100).toFixed(1)}% variance expliquée</div></div>`;
+})();
+
+// ── SECTION 9 — SIMULATOR ────────────────────────────────────────────────────
+let sim = {w:0,b:0,iter:0,hist:[],running:false,timer:null};
+let simCharts = {};
+
+function simAlpha(){ return Math.pow(10,parseFloat(document.getElementById('sim-alpha').value)); }
+function simW0(){    return parseFloat(document.getElementById('sim-w0').value); }
+function simB0(){    return parseFloat(document.getElementById('sim-b0').value); }
+
+function onSimAlpha(){ document.getElementById('sim-alpha-val').textContent=simAlpha()<0.01?simAlpha().toExponential(2):simAlpha().toFixed(4); if(sim.iter>0)simReset(); }
+function onSimW0(){    document.getElementById('sim-w0-val').textContent=simW0().toFixed(1); if(sim.iter>0)simReset(); }
+function onSimB0(){    document.getElementById('sim-b0-val').textContent=simB0(); if(sim.iter>0)simReset(); }
+
+function simDoStep(){
+  const a=simAlpha();
+  const gw=gradW(sim.w,sim.b), gb=gradB(sim.w,sim.b);
+  const j=cost(sim.w,sim.b);
+  sim.hist.push({iter:sim.iter,w:sim.w,b:sim.b,j,gw});
+  sim.w=sim.w-a*gw; sim.b=sim.b-a*gb; sim.iter++;
+}
+function simDiverging(){ return !isFinite(sim.w)||!isFinite(sim.b)||Math.abs(sim.w)>1e6; }
+function simConverged(){
+  if(sim.hist.length<2) return false;
+  const last=sim.hist[sim.hist.length-1], prev=sim.hist[sim.hist.length-2];
+  return Math.abs(last.j-prev.j)<1e-4 && sim.iter>5;
+}
+
+function simStep(n){
+  for(let i=0;i<n;i++){ if(!simDiverging()) simDoStep(); }
+  simUpdateUI();
+}
+
+function simToggleAuto(){
+  if(sim.running){
+    clearInterval(sim.timer); sim.running=false;
+    document.getElementById('sim-auto-btn').textContent='Démarrer auto';
+    return;
+  }
+  sim.running=true;
+  document.getElementById('sim-auto-btn').textContent='Arrêter';
+  sim.timer=setInterval(()=>{
+    if(simDiverging()||simConverged()){
+      clearInterval(sim.timer); sim.running=false;
+      document.getElementById('sim-auto-btn').textContent='Démarrer auto';
+    } else { simDoStep(); simUpdateUI(); }
+  },60);
+}
+
+function simReset(){
+  if(sim.timer) clearInterval(sim.timer);
+  sim={w:simW0(),b:simB0(),iter:0,hist:[],running:false,timer:null};
+  document.getElementById('sim-auto-btn').textContent='Démarrer auto';
+  document.getElementById('sim-log').innerHTML='<div class="log-head"><span>iter</span><span>w</span><span>b</span><span>∂J/∂w</span><span>J</span></div>';
+  simUpdateUI();
+}
+
+function simUpdateUI(){
+  const j=cost(sim.w,sim.b);
+  document.getElementById('sim-iter').textContent=sim.iter;
+  document.getElementById('sim-w').textContent=isFinite(sim.w)?sim.w.toFixed(4):'∞';
+  document.getElementById('sim-b').textContent=isFinite(sim.b)?sim.b.toFixed(2):'∞';
+  document.getElementById('sim-j').textContent=isFinite(j)?j.toFixed(2):'∞';
+  const sb=document.getElementById('sim-status');
+  if(simDiverging()){sb.textContent='Divergence ! α est trop grand — réinitialisez et réduisez α.';sb.className='status-bar warn';}
+  else if(simConverged()){sb.textContent=`Convergé en ${sim.iter} itérations — w≈${sim.w.toFixed(3)}, b≈${sim.b.toFixed(1)} (optimal: w=${W_OPT.toFixed(3)}, b=${B_OPT.toFixed(1)})`;sb.className='status-bar ok';}
+  else if(sim.iter===0){sb.textContent='Prêt — configurez les paramètres et lancez la simulation.';sb.className='status-bar';}
+  else{sb.textContent=`Itération ${sim.iter} — J=${j.toFixed(2)} | Δw=${Math.abs(sim.w-W_OPT).toFixed(3)}`;sb.className='status-bar';}
+  simUpdateLog();
+  simUpdateCharts();
+}
+
+function simUpdateLog(){
+  const log=document.getElementById('sim-log');
+  const rows=sim.hist.slice(-10).reverse();
+  let h='<div class="log-head"><span>iter</span><span>w</span><span>b</span><span style="color:#d9845b">∂J/∂w</span><span>J</span></div>';
+  rows.forEach(r=>{h+=`<div class="log-row"><span>${r.iter}</span><span>${r.w.toFixed(3)}</span><span>${r.b.toFixed(1)}</span><span style="color:#d9845b">${r.gw.toFixed(2)}</span><span>${r.j.toFixed(1)}</span></div>`;});
+  log.innerHTML=h;
+}
+
+function simInitCharts(){
+  const ro=mkOpts('Surface (m²)','Prix (k€)');
+  const co=mkOpts('Itération','J(w,b)');
+  const po={...mkOpts('w','J(w, b fixe)'),scales:{...mkOpts('w','J').scales,x:{...mkOpts('w','J').scales.x,min:-1,max:5}}};
+
+  simCharts.reg=new Chart(document.getElementById('sim-chart-reg'),{
+    data:{datasets:[
+      {type:'scatter',data:DATA.map(d=>({x:d.x,y:d.y})),backgroundColor:'#5b8dd9',pointRadius:5},
+      {type:'line',data:[{x:30,y:sim.w*30+sim.b},{x:150,y:sim.w*150+sim.b}],borderColor:'#c8a96e',borderWidth:2,pointRadius:0},
+      {type:'line',data:[{x:30,y:W_OPT*30+B_OPT},{x:150,y:W_OPT*150+B_OPT}],borderColor:'#5ba87a',borderWidth:1.5,borderDash:[5,5],pointRadius:0}
+    ]},options:ro
+  });
+
+  simCharts.cost=new Chart(document.getElementById('sim-chart-cost'),{
+    data:{datasets:[{type:'line',data:[],borderColor:'#9d7fd4',borderWidth:2,pointRadius:2,tension:0.3,fill:{target:'origin',above:'rgba(157,127,212,0.06)'}}]},
+    options:co
+  });
+
+  const parabPts=[];
+  for(let w=-1;w<=5;w+=0.1) parabPts.push({x:+w.toFixed(2),y:+cost(w,B_OPT).toFixed(2)});
+  simCharts.parab=new Chart(document.getElementById('sim-chart-parab'),{
+    data:{datasets:[
+      {type:'line',data:parabPts,borderColor:'#9d7fd4',borderWidth:2,pointRadius:0,tension:0.3},
+      {type:'scatter',data:[{x:+sim.w.toFixed(3),y:+cost(sim.w,B_OPT).toFixed(2)}],backgroundColor:'#c8a96e',pointRadius:9}
+    ]},options:po
+  });
+}
+
+function simUpdateCharts(){
+  if(!simCharts.reg) return;
+  simCharts.reg.data.datasets[1].data=[{x:30,y:sim.w*30+sim.b},{x:150,y:sim.w*150+sim.b}];
+  simCharts.reg.update('none');
+  simCharts.cost.data.datasets[0].data=sim.hist.map(h=>({x:h.iter,y:+h.j.toFixed(2)}));
+  simCharts.cost.update('none');
+  simCharts.parab.data.datasets[1].data=[{x:+sim.w.toFixed(3),y:+cost(sim.w,B_OPT).toFixed(2)}];
+  simCharts.parab.update('none');
+}
+
+function showSimTab(id,btn){
+  document.querySelectorAll('#simulateur .tab-panel').forEach(p=>p.classList.remove('visible'));
+  document.querySelectorAll('#simulateur .tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  btn.classList.add('active');
+}
+
+setTimeout(()=>{ simReset(); simInitCharts(); simUpdateUI(); },300);
+
+// ── NAV ACTIVE STATE ──────────────────────────────────────────────────────────
+function setActive(el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      document.querySelectorAll('.nav-item').forEach(n=>{
+        n.classList.toggle('active', n.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:0.25});
+document.querySelectorAll('section[id]').forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
