@@ -449,7 +449,7 @@ canvas { border-radius: 8px; max-width: 100%; display: block; }
   <a class="nav-item" href="#gradient" onclick="setActive(this)"><span class="num">05</span> Descente de gradient</a>
 
   <div class="nav-section">Régression multiple</div>
-  <a class="nav-item" href="#multiple" onclick="setActive(this)"><span class="num">06</span> Extension multivariée</a>
+  <a class="nav-item" href="#multiple" onclick="setActive(this)"><span class="num">06</span> Régression multiple</a>
   <a class="nav-item" href="#scaling" onclick="setActive(this)"><span class="num">07</span> Feature scaling</a>
 
   <div class="nav-section">Évaluation</div>
@@ -488,7 +488,7 @@ canvas { border-radius: 8px; max-width: 100%; display: block; }
     <li><a href="#cout">Fonction de coût J(w,b) — définition, convexité, motivation</a></li>
     <li><a href="#derivees">Dérivées partielles — calcul complet étape par étape</a></li>
     <li><a href="#gradient">Descente de gradient — algorithme, convergence, taux α</a></li>
-    <li><a href="#multiple">Régression linéaire multiple — généralisation à n variables</a></li>
+    <li><a href="#multiple">Régression multiple — données, modèle, 3 gradients, calcul numérique, simulateur</a></li>
     <li><a href="#scaling">Feature scaling — normalisation, standardisation</a></li>
     <li><a href="#evaluation">Métriques — MSE, RMSE, R², interprétation</a></li>
     <li><a href="#simulateur">Simulateur complet — expérimentez en temps réel</a></li>
@@ -886,53 +886,318 @@ canvas { border-radius: 8px; max-width: 100%; display: block; }
   <div class="section-label">Section 06</div>
   <h2>Régression linéaire multiple</h2>
 
-  <p>La régression multiple généralise la régression simple à <strong>n variables explicatives</strong>. Au lieu d'une droite, on ajuste un hyperplan dans un espace à n dimensions.</p>
+  <p>En régression simple, une seule variable x explique y. En régression multiple, <strong>plusieurs variables</strong> x₁, x₂, …, xₙ expliquent y ensemble. On suit exactement le même raisonnement — modèle, coût, gradients, mise à jour — en généralisant chaque étape.</p>
 
-  <h3>Modèle général</h3>
-  <div class="formula">
-    <span class="label">Hypothèse — régression linéaire multiple</span>
-    hθ(x⁽ⁱ⁾) = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·x₁⁽ⁱ⁾ + <span class="hi">θ₂</span>·x₂⁽ⁱ⁾ + ... + <span class="hi">θₙ</span>·xₙ⁽ⁱ⁾
-
-    Notation vectorielle compacte :
-    hθ(x) = <span class="hw">θᵀ · x</span>  avec  x₀ = 1 (pour absorber le biais θ₀)
-
-    Il y a <span class="ha">n + 1</span> paramètres à apprendre : θ₀, θ₁, ..., θₙ
+  <div class="callout callout-info">
+    <span class="callout-title">Ce qui change et ce qui reste identique</span>
+    <p>Ce qui <strong>change</strong> : il y a maintenant n+1 paramètres à apprendre au lieu de 2. Ce qui <strong>reste identique</strong> : la fonction de coût J, la forme des gradients, et la règle de mise à jour. L'algorithme est le même.</p>
   </div>
 
-  <h3>Généralisation de la descente de gradient</h3>
+  <!-- ÉTAPE 1 -->
+  <h3>Étape 1 — Le jeu de données à 2 variables</h3>
+  <p>On part d'un exemple concret avec <strong>2 variables explicatives</strong> (surface et nombre de chambres) pour prédire le prix. On a 6 maisons connues.</p>
+
+  <div style="overflow-x:auto">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>i</th>
+        <th>x₁⁽ⁱ⁾ surface (m²)</th>
+        <th>x₂⁽ⁱ⁾ chambres</th>
+        <th>y⁽ⁱ⁾ prix (k€)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>50</td><td>1</td><td>155</td></tr>
+      <tr><td>2</td><td>70</td><td>2</td><td>190</td></tr>
+      <tr><td>3</td><td>90</td><td>2</td><td>220</td></tr>
+      <tr><td>4</td><td>100</td><td>3</td><td>260</td></tr>
+      <tr><td>5</td><td>110</td><td>3</td><td>275</td></tr>
+      <tr><td>6</td><td>130</td><td>4</td><td>310</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>On a m = 6 exemples et n = 2 variables. Chaque exemple i est un vecteur x⁽ⁱ⁾ = (x₁⁽ⁱ⁾, x₂⁽ⁱ⁾).</p>
+
+  <!-- ÉTAPE 2 -->
+  <h3>Étape 2 — Le modèle avec 2 variables</h3>
+  <p>Avec une seule variable, le modèle était une <em>droite</em> : ŷ = wx + b. Avec deux variables, le modèle est un <em>plan</em> :</p>
+
   <div class="formula">
-    <span class="label">Mise à jour pour chaque paramètre θⱼ (j = 0, 1, ..., n)</span>
-    θⱼ ← θⱼ − <span class="ha">α</span> · <span class="hi">∂J(θ)/∂θⱼ</span>
+    <span class="label">Modèle à 2 variables explicatives</span>
+    ŷ = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·x₁ + <span class="hi">θ₂</span>·x₂
 
-    où la dérivée partielle est :
-    ∂J(θ)/∂θⱼ = <span class="hi">(1/m)</span> · Σᵢ₌₁ᵐ ( hθ(x⁽ⁱ⁾) − y⁽ⁱ⁾ ) · <span class="hw">xⱼ⁽ⁱ⁾</span>
+    où :
+      <span class="hp">θ₀</span>  =  biais (constante) — remplace b de la régression simple
+      <span class="hi">θ₁</span>  =  coefficient de x₁ (surface) — remplace w
+      <span class="hi">θ₂</span>  =  coefficient de x₂ (chambres)
 
-    Convention : x₀⁽ⁱ⁾ = 1 pour tous les exemples i (pour le biais θ₀)
-    La mise à jour de θ₀ donne :  ∂J/∂θ₀ = (1/m) · Σᵢ ( hθ(x⁽ⁱ⁾) − y⁽ⁱ⁾ )
-    ← identique à ∂J/∂b en régression simple.
+    Il y a maintenant <span class="ha">3 paramètres</span> à apprendre : θ₀, θ₁, θ₂
   </div>
 
   <div class="callout callout-info">
-    <span class="callout-title">La forme des gradients est la même</span>
-    <p>Remarquez que ∂J/∂θⱼ = (1/m) · Σᵢ (erreur⁽ⁱ⁾) · xⱼ⁽ⁱ⁾. C'est exactement la même structure que ∂J/∂w en régression simple — seul l'indice j change. <strong>Un seul algorithme couvre tous les cas.</strong></p>
+    <span class="callout-title">Lien avec la régression simple</span>
+    <p>La régression simple est un cas particulier où n = 1 : on avait θ₁ = w et θ₀ = b. La régression multiple avec n = 2 ajoute simplement θ₂·x₂. La logique est identique.</p>
   </div>
 
-  <h3>Exemple — prédiction du prix avec 4 variables</h3>
+  <!-- ÉTAPE 3 -->
+  <h3>Étape 3 — La fonction de coût J(θ₀, θ₁, θ₂)</h3>
+  <p>La fonction de coût a exactement la même forme qu'en régression simple. Seul le calcul de ŷ⁽ⁱ⁾ change : il utilise maintenant les deux variables.</p>
+
   <div class="formula">
-    <span class="label">Exemple concret — 4 features</span>
-    x = [ surface (m²),  chambres,  distance centre-ville (km),  ancienneté (ans) ]
+    <span class="label">Fonction de coût — régression multiple à 2 variables</span>
+    J(θ₀, θ₁, θ₂) = <span class="hi">1/(2m)</span> · Σᵢ₌₁ᵐ ( <span class="hw">ŷ⁽ⁱ⁾ − y⁽ⁱ⁾</span> )²
 
-    hθ(x) = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·surface + <span class="hi">θ₂</span>·chambres + <span class="hi">θ₃</span>·distance + <span class="hi">θ₄</span>·ancienneté
+    avec  <span class="hw">ŷ⁽ⁱ⁾</span> = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·x₁⁽ⁱ⁾ + <span class="hi">θ₂</span>·x₂⁽ⁱ⁾
 
-    Valeurs apprises hypothétiques :
-      <span class="hp">θ₀</span> = 50.0   (base)
-      <span class="hi">θ₁</span> = 2.5    (2.5 k€ par m² supplémentaire)
-      <span class="hi">θ₂</span> = 15.0   (15 k€ par chambre supplémentaire)
-      <span class="hi">θ₃</span> = −4.0   (−4 k€ par km éloigné du centre)
-      <span class="hi">θ₄</span> = −1.2   (−1.2 k€ par an d'ancienneté)
+    C'est <span class="hg">exactement la même formule</span> qu'en régression simple.
+    La différence est uniquement dans le calcul de ŷ⁽ⁱ⁾.
+  </div>
 
-    Prédiction pour (80m², 3 chambres, 5km, 10 ans) :
-    ŷ = 50 + 2.5×80 + 15×3 + (−4)×5 + (−1.2)×10 = <span class="hg">263 k€</span>
+  <h4>Calcul numérique de J — initialisation θ₀ = 0, θ₁ = 0, θ₂ = 0</h4>
+  <div style="overflow-x:auto">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>i</th>
+        <th>x₁⁽ⁱ⁾</th>
+        <th>x₂⁽ⁱ⁾</th>
+        <th>y⁽ⁱ⁾</th>
+        <th>ŷ⁽ⁱ⁾ = 0+0·x₁+0·x₂</th>
+        <th>erreur = ŷ−y</th>
+        <th style="color:var(--blue)">(erreur)²</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>50</td><td>1</td><td>155</td><td>0</td><td style="color:var(--red)">−155</td><td style="color:var(--blue)">24025</td></tr>
+      <tr><td>2</td><td>70</td><td>2</td><td>190</td><td>0</td><td style="color:var(--red)">−190</td><td style="color:var(--blue)">36100</td></tr>
+      <tr><td>3</td><td>90</td><td>2</td><td>220</td><td>0</td><td style="color:var(--red)">−220</td><td style="color:var(--blue)">48400</td></tr>
+      <tr><td>4</td><td>100</td><td>3</td><td>260</td><td>0</td><td style="color:var(--red)">−260</td><td style="color:var(--blue)">67600</td></tr>
+      <tr><td>5</td><td>110</td><td>3</td><td>275</td><td>0</td><td style="color:var(--red)">−275</td><td style="color:var(--blue)">75625</td></tr>
+      <tr><td>6</td><td>130</td><td>4</td><td>310</td><td>0</td><td style="color:var(--red)">−310</td><td style="color:var(--blue)">96100</td></tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6" style="text-align:right;color:var(--text2)">J(0,0,0) = (1/2×6) × (24025+36100+48400+67600+75625+96100) =</td>
+        <td style="color:var(--blue)">29154.2</td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+  <p>J = 29 154. C'est très élevé — le modèle prédit 0 pour tout. Il faut minimiser J en ajustant θ₀, θ₁ et θ₂.</p>
+
+  <!-- ÉTAPE 4 -->
+  <h3>Étape 4 — Les trois dérivées partielles</h3>
+  <p>On doit maintenant calculer <strong>trois gradients</strong> : un pour chaque paramètre θ₀, θ₁, θ₂. Le calcul est identique à celui de la régression simple — on applique la même chain rule.</p>
+
+  <div class="formula">
+    <span class="label">Dérivée par rapport à θ₀ (le biais)</span>
+    ∂J/∂θ₀ = <span class="hi">(1/m)</span> · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ )
+
+    C'est <span class="hg">exactement ∂J/∂b</span> de la régression simple.
+    Le biais θ₀ est multiplié par 1 dans le modèle → sa dérivée vaut 1.
+  </div>
+
+  <div class="formula">
+    <span class="label">Dérivée par rapport à θ₁ (coefficient de x₁ — surface)</span>
+    ∂J/∂θ₁ = <span class="hi">(1/m)</span> · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ ) · <span class="hw">x₁⁽ⁱ⁾</span>
+
+    C'est <span class="hg">exactement ∂J/∂w</span> de la régression simple, avec x₁ à la place de x.
+    θ₁ est multiplié par x₁ dans le modèle → sa dérivée vaut x₁.
+  </div>
+
+  <div class="formula">
+    <span class="label">Dérivée par rapport à θ₂ (coefficient de x₂ — chambres)</span>
+    ∂J/∂θ₂ = <span class="hi">(1/m)</span> · Σᵢ ( ŷ⁽ⁱ⁾ − y⁽ⁱ⁾ ) · <span class="hw">x₂⁽ⁱ⁾</span>
+
+    Même structure que ∂J/∂θ₁, avec x₂ à la place de x₁.
+    θ₂ est multiplié par x₂ dans le modèle → sa dérivée vaut x₂.
+  </div>
+
+  <div class="callout callout-ok">
+    <span class="callout-title">Règle générale à retenir</span>
+    <p>Pour tout paramètre θⱼ qui multiplie la variable xⱼ dans le modèle, le gradient est : <strong>∂J/∂θⱼ = (1/m) · Σᵢ (erreur⁽ⁱ⁾) · xⱼ⁽ⁱ⁾</strong>. Cette structure est universelle — elle s'applique quel que soit n.</p>
+  </div>
+
+  <!-- ÉTAPE 5 -->
+  <h3>Étape 5 — Calcul numérique des trois gradients</h3>
+  <p>Calculons ∂J/∂θ₀, ∂J/∂θ₁ et ∂J/∂θ₂ à l'itération 0, avec θ₀ = θ₁ = θ₂ = 0.</p>
+  <p>À cette itération, ŷ⁽ⁱ⁾ = 0 pour tous les exemples, donc erreur⁽ⁱ⁾ = 0 − y⁽ⁱ⁾ = −y⁽ⁱ⁾.</p>
+
+  <div style="overflow-x:auto">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>i</th>
+        <th>erreur⁽ⁱ⁾</th>
+        <th>erreur·1 (pour θ₀)</th>
+        <th style="color:var(--orange)">erreur·x₁⁽ⁱ⁾ (pour θ₁)</th>
+        <th style="color:var(--purple)">erreur·x₂⁽ⁱ⁾ (pour θ₂)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>−155</td><td>−155</td><td style="color:var(--orange)">−155×50 = −7750</td><td style="color:var(--purple)">−155×1 = −155</td></tr>
+      <tr><td>2</td><td>−190</td><td>−190</td><td style="color:var(--orange)">−190×70 = −13300</td><td style="color:var(--purple)">−190×2 = −380</td></tr>
+      <tr><td>3</td><td>−220</td><td>−220</td><td style="color:var(--orange)">−220×90 = −19800</td><td style="color:var(--purple)">−220×2 = −440</td></tr>
+      <tr><td>4</td><td>−260</td><td>−260</td><td style="color:var(--orange)">−260×100 = −26000</td><td style="color:var(--purple)">−260×3 = −780</td></tr>
+      <tr><td>5</td><td>−275</td><td>−275</td><td style="color:var(--orange)">−275×110 = −30250</td><td style="color:var(--purple)">−275×3 = −825</td></tr>
+      <tr><td>6</td><td>−310</td><td>−310</td><td style="color:var(--orange)">−310×130 = −40300</td><td style="color:var(--purple)">−310×4 = −1240</td></tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2" style="text-align:right;color:var(--text2)">Sommes →</td>
+        <td>−1410</td>
+        <td style="color:var(--orange)">−137400</td>
+        <td style="color:var(--purple)">−3820</td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+
+  <div class="formula">
+    <span class="label">Résultat des trois gradients — itération 0</span>
+    ∂J/∂θ₀ = (1/6) × (−1410)  = <span class="hr">−235.00</span>
+    ∂J/∂θ₁ = (1/6) × (−137400) = <span class="hr">−22900.00</span>
+    ∂J/∂θ₂ = (1/6) × (−3820)  = <span class="hr">−636.67</span>
+
+    Les trois gradients sont <span class="hr">négatifs</span>  →  J décroît quand θ₀, θ₁, θ₂ augmentent
+    →  il faut <span class="hg">augmenter</span> les trois paramètres
+  </div>
+
+  <!-- ÉTAPE 6 -->
+  <h3>Étape 6 — Mise à jour des trois paramètres</h3>
+  <p>On applique la règle de descente de gradient pour chacun des trois paramètres, <strong>simultanément</strong>, avec α = 0.0001.</p>
+
+  <div class="callout callout-warn">
+    <span class="callout-title">Pourquoi α = 0.0001 et non 0.0032 ?</span>
+    <p>Les variables x₁ (surface, de 50 à 130) ont des valeurs bien plus grandes que x (surface seule, même ordre). Le gradient ∂J/∂θ₁ est lui aussi beaucoup plus grand (−22900 vs −235). Avec α = 0.0032, le pas serait gigantesque et le modèle divergerait. C'est pourquoi le <strong>feature scaling</strong> (section 07) est indispensable en régression multiple.</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">Itération 1 — mise à jour simultanée, α = 0.0001</span>
+    θ₀_new = 0 − 0.0001 × (−235.00) = <span class="hg">0.02350</span>
+    θ₁_new = 0 − 0.0001 × (−22900.00) = <span class="hg">2.29000</span>
+    θ₂_new = 0 − 0.0001 × (−636.67) = <span class="hg">0.06367</span>
+
+    Vérification : ŷ⁽¹⁾ après mise à jour :
+    ŷ⁽¹⁾ = 0.0235 + 2.29×50 + 0.0637×1 = 0.0235 + 114.5 + 0.0637 = <span class="hw">114.59 k€</span>
+    y⁽¹⁾ = 155 k€  →  erreur résiduelle = −40.41 k€  (contre −155 k€ avant)
+    J a <span class="hg">bien diminué</span> après une seule itération.
+  </div>
+
+  <!-- ÉTAPE 7 -->
+  <h3>Étape 7 — L'algorithme complet</h3>
+  <p>On répète les étapes 4, 5 et 6 jusqu'à convergence. À chaque itération, on recalcule les ŷ⁽ⁱ⁾ avec les paramètres courants, on calcule les trois gradients, puis on met à jour simultanément θ₀, θ₁ et θ₂.</p>
+
+  <div class="formula">
+    <span class="label">Algorithme complet — régression multiple à n variables</span>
+    Initialiser :  θ₀ = 0,  θ₁ = 0,  θ₂ = 0,  …,  θₙ = 0
+
+    Répéter jusqu'à convergence :
+
+      1. Calculer toutes les prédictions :
+         ŷ⁽ⁱ⁾ = θ₀ + θ₁·x₁⁽ⁱ⁾ + θ₂·x₂⁽ⁱ⁾ + … + θₙ·xₙ⁽ⁱ⁾    pour i = 1 … m
+
+      2. Calculer J :
+         J = (1/2m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾)²
+
+      3. Calculer les <span class="ha">n+1</span> gradients simultanément :
+         ∂J/∂θⱼ = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · xⱼ⁽ⁱ⁾    pour j = 0 … n
+         (avec x₀⁽ⁱ⁾ = 1 pour tous les i)
+
+      4. Mettre à jour <span class="ha">simultanément</span> tous les θⱼ :
+         θⱼ ← θⱼ − <span class="ha">α</span> · ∂J/∂θⱼ    pour j = 0 … n
+
+    Arrêter quand |J⁽ᵗ⁾ − J⁽ᵗ⁻¹⁾| &lt; ε
+  </div>
+
+  <!-- ÉTAPE 8 -->
+  <h3>Étape 8 — Résultat après convergence et prédiction</h3>
+  <p>Après convergence, on obtient les valeurs optimales de θ₀, θ₁ et θ₂. On peut alors faire des prédictions sur de nouvelles maisons.</p>
+
+  <div class="formula">
+    <span class="label">Valeurs convergées sur notre jeu de données (calculées analytiquement)</span>
+    θ₀ ≈  <span class="hg">40.0</span>   (base)
+    θ₁ ≈  <span class="hg">1.85</span>   k€ par m² supplémentaire
+    θ₂ ≈  <span class="hg">10.0</span>   k€ par chambre supplémentaire
+
+    Modèle final :  ŷ = 40.0 + 1.85·x₁ + 10.0·x₂
+  </div>
+
+  <div id="mult-pred-table"></div>
+
+  <div class="callout callout-ok">
+    <span class="callout-title">Interprétation des coefficients</span>
+    <p>θ₁ = 1.85 signifie : <strong>toutes choses égales par ailleurs</strong> (même nombre de chambres), chaque m² supplémentaire ajoute 1.85 k€. θ₂ = 10.0 signifie : à surface égale, chaque chambre supplémentaire ajoute 10 k€. Cette interprétation "toutes choses égales par ailleurs" est la force de la régression multiple par rapport à des comparaisons brutes.</p>
+  </div>
+
+  <!-- ÉTAPE 9 — GÉNÉRALISATION -->
+  <h3>Étape 9 — Généralisation à n variables quelconques</h3>
+  <p>Tout ce qui précède s'applique sans modification pour n = 3, 4, 100, 1000 variables. La seule différence est le nombre de paramètres θ et de gradients à calculer.</p>
+
+  <div class="formula">
+    <span class="label">Tableau comparatif — régression simple vs multiple</span>
+                      <span class="ha">Régression simple</span>       <span class="ha">Régression multiple (n vars)</span>
+
+    Modèle          ŷ = w·x + b            ŷ = θ₀ + θ₁·x₁ + … + θₙ·xₙ
+    Nb paramètres   <span class="hi">2</span>  (w, b)              <span class="hi">n + 1</span>  (θ₀, θ₁, …, θₙ)
+    Coût J          (1/2m)·Σ(ŷ−y)²        <span class="hg">identique</span>
+    Gradient        ∂J/∂w, ∂J/∂b           ∂J/∂θⱼ  pour j = 0…n
+    Forme gradient  (1/m)·Σ(erreur)·x      <span class="hg">identique</span>, avec xⱼ
+    Mise à jour     w←w−α·∂J/∂w            <span class="hg">identique</span>, pour chaque θⱼ
+    Simultanéité    obligatoire             <span class="hg">identique, toujours obligatoire</span>
+  </div>
+
+  <!-- SIMULATEUR MULTIPLE -->
+  <h3>Simulateur — régression multiple à 2 variables</h3>
+  <p>Observez la descente de gradient sur les 6 maisons, avec les 3 paramètres θ₀, θ₁, θ₂ évoluant simultanément.</p>
+
+  <div class="ctrl">
+    <label>Taux d'apprentissage α</label>
+    <input type="range" id="mult-alpha" min="-5" max="-2" step="0.1" value="-4" oninput="onMultAlpha()">
+    <span class="val" id="mult-alpha-val">0.0001</span>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="multStep(1)">Itération +1</button>
+    <button onclick="multStep(20)">+20 itérations</button>
+    <button id="mult-auto-btn" onclick="multToggleAuto()">Démarrer auto</button>
+    <button class="btn-danger" onclick="multReset()">Réinitialiser</button>
+  </div>
+
+  <div class="status-bar" id="mult-status">Prêt.</div>
+
+  <div class="grid-2" style="margin:1rem 0">
+    <div>
+      <div class="metrics" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 0 10px">
+        <div class="card"><div class="card-label">θ₀ (biais)</div><div class="card-val" id="mult-t0">0.000</div></div>
+        <div class="card"><div class="card-label">θ₁ (surface)</div><div class="card-val" id="mult-t1">0.000</div></div>
+        <div class="card"><div class="card-label">θ₂ (chambres)</div><div class="card-val" id="mult-t2">0.000</div></div>
+      </div>
+      <div class="metrics" style="grid-template-columns:1fr 1fr;gap:8px;margin:0">
+        <div class="card"><div class="card-label">Itération</div><div class="card-val" id="mult-iter">0</div></div>
+        <div class="card"><div class="card-label">J(θ)</div><div class="card-val" id="mult-j">—</div></div>
+      </div>
+    </div>
+    <div>
+      <canvas id="mult-chart-cost" height="180"></canvas>
+    </div>
+  </div>
+
+  <h4>Prédictions courantes vs valeurs réelles</h4>
+  <div style="overflow-x:auto">
+  <table class="data-table" id="mult-pred-live">
+    <thead><tr><th>i</th><th>x₁</th><th>x₂</th><th>y réel</th><th>ŷ prédit</th><th>erreur</th></tr></thead>
+    <tbody id="mult-pred-tbody"></tbody>
+  </table>
+  </div>
+
+  <h4 style="margin-top:1.5rem">Journal des gradients</h4>
+  <div class="log-box" id="mult-log">
+    <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr 1fr;gap:6px;color:var(--text3);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:4px;font-size:12px">
+      <span>iter</span><span>θ₀</span><span>θ₁</span><span>θ₂</span><span>J</span><span>∂J/∂θ₁</span>
+    </div>
   </div>
 </section>
 
@@ -1413,6 +1678,151 @@ function showSimTab(id,btn){
 }
 
 setTimeout(()=>{ simReset(); simInitCharts(); simUpdateUI(); },300);
+
+// ── SECTION 6 — MULTIPLE REGRESSION DATA & HELPERS ───────────────────────────
+const MDATA = [
+  {x1:50, x2:1, y:155},
+  {x1:70, x2:2, y:190},
+  {x1:90, x2:2, y:220},
+  {x1:100,x2:3, y:260},
+  {x1:110,x2:3, y:275},
+  {x1:130,x2:4, y:310}
+];
+const MM = MDATA.length;
+// Optimal values (analytically computed for this dataset)
+const TH0_OPT = 40.0, TH1_OPT = 1.85, TH2_OPT = 10.0;
+
+function mPred(t0,t1,t2,d){ return t0 + t1*d.x1 + t2*d.x2; }
+function mCost(t0,t1,t2){
+  return MDATA.reduce((s,d)=>s+(mPred(t0,t1,t2,d)-d.y)**2,0)/(2*MM);
+}
+function mGrad0(t0,t1,t2){ return MDATA.reduce((s,d)=>s+(mPred(t0,t1,t2,d)-d.y),0)/MM; }
+function mGrad1(t0,t1,t2){ return MDATA.reduce((s,d)=>s+(mPred(t0,t1,t2,d)-d.y)*d.x1,0)/MM; }
+function mGrad2(t0,t1,t2){ return MDATA.reduce((s,d)=>s+(mPred(t0,t1,t2,d)-d.y)*d.x2,0)/MM; }
+
+// Static prediction table after convergence
+(function initMultPredTable(){
+  const t0=TH0_OPT,t1=TH1_OPT,t2=TH2_OPT;
+  let html=`<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr><th>i</th><th>x₁ (m²)</th><th>x₂ (ch.)</th><th>y réel (k€)</th><th>ŷ prédit (k€)</th><th>erreur (k€)</th></tr></thead><tbody>`;
+  MDATA.forEach((d,i)=>{
+    const yh=+(t0+t1*d.x1+t2*d.x2).toFixed(1);
+    const e=+(yh-d.y).toFixed(1);
+    const c=Math.abs(e)<15?'var(--green)':'var(--orange)';
+    html+=`<tr><td>${i+1}</td><td>${d.x1}</td><td>${d.x2}</td><td>${d.y}</td><td>${yh}</td><td style="color:${c}">${e>0?'+':''}${e}</td></tr>`;
+  });
+  html+=`</tbody><tfoot><tr><td colspan="4" style="text-align:right;color:var(--text2)">ŷ = ${t0} + ${t1}·x₁ + ${t2}·x₂</td><td colspan="2" style="color:var(--green)">Modèle convergé ✓</td></tr></tfoot></table></div>`;
+  const el=document.getElementById('mult-pred-table');
+  if(el) el.innerHTML=html;
+})();
+
+// ── SECTION 6 — MULTIPLE REGRESSION SIMULATOR ────────────────────────────────
+let mult = {t0:0,t1:0,t2:0,iter:0,hist:[],running:false,timer:null};
+let multChart = null;
+
+function multAlpha(){ return Math.pow(10,parseFloat(document.getElementById('mult-alpha').value)); }
+function onMultAlpha(){
+  const a=multAlpha();
+  document.getElementById('mult-alpha-val').textContent=a<0.001?a.toExponential(2):a.toFixed(4);
+  if(mult.iter>0) multReset();
+}
+
+function multDoStep(){
+  const a=multAlpha();
+  const g0=mGrad0(mult.t0,mult.t1,mult.t2);
+  const g1=mGrad1(mult.t0,mult.t1,mult.t2);
+  const g2=mGrad2(mult.t0,mult.t1,mult.t2);
+  const j=mCost(mult.t0,mult.t1,mult.t2);
+  mult.hist.push({iter:mult.iter,t0:mult.t0,t1:mult.t1,t2:mult.t2,j,g1});
+  mult.t0=mult.t0-a*g0;
+  mult.t1=mult.t1-a*g1;
+  mult.t2=mult.t2-a*g2;
+  mult.iter++;
+}
+function multDiverging(){ return !isFinite(mult.t0)||!isFinite(mult.t1)||Math.abs(mult.t1)>1e6; }
+function multConverged(){
+  if(mult.hist.length<3) return false;
+  const last=mult.hist[mult.hist.length-1],prev=mult.hist[mult.hist.length-2];
+  return Math.abs(last.j-prev.j)<0.01 && mult.iter>10;
+}
+
+function multStep(n){
+  for(let i=0;i<n;i++){ if(!multDiverging()) multDoStep(); }
+  multUpdateUI();
+}
+function multToggleAuto(){
+  if(mult.running){
+    clearInterval(mult.timer); mult.running=false;
+    document.getElementById('mult-auto-btn').textContent='Démarrer auto'; return;
+  }
+  mult.running=true;
+  document.getElementById('mult-auto-btn').textContent='Arrêter';
+  mult.timer=setInterval(()=>{
+    if(multDiverging()||multConverged()){
+      clearInterval(mult.timer); mult.running=false;
+      document.getElementById('mult-auto-btn').textContent='Démarrer auto';
+    } else { multDoStep(); multUpdateUI(); }
+  },50);
+}
+function multReset(){
+  if(mult.timer) clearInterval(mult.timer);
+  mult={t0:0,t1:0,t2:0,iter:0,hist:[],running:false,timer:null};
+  document.getElementById('mult-auto-btn').textContent='Démarrer auto';
+  document.getElementById('mult-log').innerHTML=`<div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr 1fr;gap:6px;color:var(--text3);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:4px;font-size:12px"><span>iter</span><span>θ₀</span><span>θ₁</span><span>θ₂</span><span>J</span><span style="color:#d9845b">∂J/∂θ₁</span></div>`;
+  multUpdateUI();
+}
+function multUpdateUI(){
+  const j=mCost(mult.t0,mult.t1,mult.t2);
+  document.getElementById('mult-t0').textContent=isFinite(mult.t0)?mult.t0.toFixed(3):'∞';
+  document.getElementById('mult-t1').textContent=isFinite(mult.t1)?mult.t1.toFixed(4):'∞';
+  document.getElementById('mult-t2').textContent=isFinite(mult.t2)?mult.t2.toFixed(4):'∞';
+  document.getElementById('mult-iter').textContent=mult.iter;
+  document.getElementById('mult-j').textContent=isFinite(j)?j.toFixed(1):'∞';
+  const sb=document.getElementById('mult-status');
+  if(multDiverging()){sb.textContent='Divergence ! Réduisez α.';sb.className='status-bar warn';}
+  else if(multConverged()){sb.textContent=`Convergé en ${mult.iter} itérations — θ₀≈${mult.t0.toFixed(1)}, θ₁≈${mult.t1.toFixed(3)}, θ₂≈${mult.t2.toFixed(3)} (cibles: θ₀=40, θ₁=1.85, θ₂=10)`;sb.className='status-bar ok';}
+  else if(mult.iter===0){sb.textContent='Prêt.';sb.className='status-bar';}
+  else{sb.textContent=`Itération ${mult.iter} — J=${j.toFixed(1)} | θ₁=${mult.t1.toFixed(4)}`;sb.className='status-bar';}
+  multUpdatePredTable();
+  multUpdateLog();
+  multUpdateChart();
+}
+function multUpdatePredTable(){
+  const tbody=document.getElementById('mult-pred-tbody');
+  if(!tbody) return;
+  tbody.innerHTML=MDATA.map((d,i)=>{
+    const yh=mPred(mult.t0,mult.t1,mult.t2,d);
+    const e=yh-d.y;
+    const c=Math.abs(e)<20?'var(--green)':'var(--orange)';
+    return `<tr><td>${i+1}</td><td>${d.x1}</td><td>${d.x2}</td><td>${d.y}</td><td>${isFinite(yh)?yh.toFixed(1):'∞'}</td><td style="color:${c}">${isFinite(e)?(e>0?'+':'')+e.toFixed(1):'∞'}</td></tr>`;
+  }).join('');
+}
+function multUpdateLog(){
+  const log=document.getElementById('mult-log');
+  if(!log) return;
+  const rows=mult.hist.slice(-8).reverse();
+  let h=`<div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr 1fr;gap:6px;color:var(--text3);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:4px;font-size:12px"><span>iter</span><span>θ₀</span><span>θ₁</span><span>θ₂</span><span>J</span><span style="color:#d9845b">∂J/∂θ₁</span></div>`;
+  rows.forEach(r=>{
+    h+=`<div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr 1fr;gap:6px;color:var(--text2);font-size:12px"><span>${r.iter}</span><span>${r.t0.toFixed(2)}</span><span>${r.t1.toFixed(4)}</span><span>${r.t2.toFixed(4)}</span><span>${r.j.toFixed(1)}</span><span style="color:#d9845b">${r.g1.toFixed(1)}</span></div>`;
+  });
+  log.innerHTML=h;
+}
+function multUpdateChart(){
+  if(!multChart) return;
+  multChart.data.datasets[0].data=mult.hist.map(h=>({x:h.iter,y:+h.j.toFixed(1)}));
+  multChart.update('none');
+}
+setTimeout(()=>{
+  const ctx=document.getElementById('mult-chart-cost');
+  if(ctx){
+    multChart=new Chart(ctx,{
+      data:{datasets:[{type:'line',data:[],borderColor:'#c8a96e',borderWidth:2,pointRadius:0,tension:0.3,fill:{target:'origin',above:'rgba(200,169,110,0.06)'}}]},
+      options:mkOpts('Itération','J(θ₀,θ₁,θ₂)')
+    });
+  }
+  multReset();
+  multUpdateUI();
+},400);
 
 // ── NAV ACTIVE STATE ──────────────────────────────────────────────────────────
 function setActive(el){
