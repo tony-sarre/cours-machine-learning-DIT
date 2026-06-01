@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Machine Learning — Cours Complet · DIT Master 1</title>
+<title>Machine Learning - Cours Complet · DIT Master 1</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
@@ -18,6 +18,7 @@
   --red:#d95b5b;--red-bg:rgba(217,91,91,0.1);--red-bd:rgba(217,91,91,0.25);
   --purple:#9d7fd4;--purple-bg:rgba(157,127,212,0.1);--purple-bd:rgba(157,127,212,0.25);
   --teal:#5bc8c8;--teal-bg:rgba(91,200,200,0.1);--teal-bd:rgba(91,200,200,0.25);
+  --pink:#d97ab5;
   --sw:262px;
   --serif:'Source Serif 4',Georgia,serif;
   --sans:'DM Sans',sans-serif;
@@ -251,6 +252,48 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   .grid-2,.roc-wrap{grid-template-columns:1fr;}
   .grid-3,.grid-4,.metrics,.metric-pills{grid-template-columns:1fr 1fr;}
 }
+
+.ni{display:flex;align-items:center;gap:8px;padding:6px 1.25rem;font-size:12.5px;color:var(--text2);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer;}
+.ni:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.ni.active{color:var(--teal);border-left-color:var(--teal);background:rgba(91,200,200,0.06);}
+.ni .num{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:22px;}
+/* CHAPTER IV - Non supervisé */
+.chb{padding:2.5rem 3.5rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.5rem;position:relative;overflow:hidden;}
+.chb::before{content:'';position:absolute;right:-50px;top:50%;transform:translateY(-50%);width:200px;height:200px;border-radius:50%;pointer-events:none;}
+.chb4::before{background:radial-gradient(circle,rgba(91,200,200,.06) 0%,transparent 70%);}
+.chb .chnum{font-family:var(--serif);font-size:4rem;font-weight:300;line-height:1;flex-shrink:0;opacity:.15;}
+.chb .chinfo .chtag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);margin-bottom:4px;}
+.chb .chinfo h2{font-family:var(--serif);font-size:1.6rem;font-weight:300;margin:0;}
+.chb4 .chtag,.chb4 h2{color:var(--teal);}
+.exob{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:2rem 0;}
+.extitle{font-family:var(--serif);font-size:1rem;color:var(--teal);margin-bottom:1.1rem;}
+.exrow{display:flex;align-items:center;gap:12px;margin:.5rem 0;}
+.exrow label{font-size:13px;color:var(--text2);min-width:130px;}
+.exrow input[type=number]{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 12px;color:var(--text);font-family:var(--mono);font-size:13px;width:100px;outline:none;}
+.exrow input:focus{border-color:var(--teal);}
+.exres{background:var(--bg3);border-radius:7px;padding:.9rem 1.1rem;margin-top:1rem;font-family:var(--mono);font-size:13px;line-height:2;color:var(--text2);display:none;white-space:pre-line;}
+.exres.show{display:block;}
+.exres.ok{background:var(--green-bg);border:1px solid var(--green-bd);color:var(--green);}
+.exres.bad{background:var(--red-bg);border:1px solid var(--red-bd);color:#e88888;}
+.alg-step{display:flex;gap:14px;margin:10px 0;align-items:flex-start;}
+.alg-step .an{width:28px;height:28px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);font-size:12px;font-family:var(--mono);color:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.alg-step .ab{font-size:14px;line-height:1.7;flex:1;color:var(--text2);}
+.alg-step .ab strong{color:var(--text);}
+.dendro-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow-x:auto;padding:1rem;margin:1rem 0;}
+.ct3{border-left:3px solid var(--teal);}
+.cpk{border-left:3px solid var(--pink,#d97ab5);}
+.hpk{color:var(--pink,#d97ab5);}
+.bpr{background:rgba(91,200,200,.12);color:var(--teal);border-color:rgba(91,200,200,.3);}
+.bpr:hover{background:rgba(91,200,200,.2);}
+.bpb{background:rgba(91,141,217,.12);color:var(--blue);border-color:rgba(91,141,217,.3);}
+.clbl{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:5px;}
+.csub{font-size:12px;color:var(--text3);margin-top:4px;line-height:1.5;}
+.cb{border-left:3px solid var(--blue);}.cg{border-left:3px solid var(--green);}
+.co2{border-left:3px solid var(--orange);}.cpb{border-left:3px solid var(--purple);}
+.ca{border-left:3px solid var(--accent);}
+.fu{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s;}
+.fu.vis{opacity:1;transform:translateY(0);}
+
 </style>
 </head>
 <body>
@@ -260,7 +303,7 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 <!-- ═══ SIDEBAR ═══ -->
 <nav id="sidebar">
   <div class="sidebar-brand">
-    <span class="tag">DIT · Master 1 · 2026</span>
+    <span class="tag">UIDT Thies · DIT Master 1 · 2026</span>
     <h1>Machine Learning<br>Cours Complet</h1>
     <div class="sidebar-progress">
       <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
@@ -269,9 +312,9 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   </div>
   <div class="nav-section">Accueil</div>
   <a class="nav-item active" href="#intro"><span class="num">00</span>Accueil</a>
-  <div class="nav-section">Chapitre I — Fondements</div>
+  <div class="nav-section">Chapitre I - Fondements</div>
   <a class="nav-item" href="#concepts"><span class="num">01</span>Définitions &amp; types</a>
-  <div class="nav-section">Chapitre II — Régression</div>
+  <div class="nav-section">Chapitre II - Régression</div>
   <a class="nav-item" href="#modele"><span class="num">02</span>Modèle ŷ = wx + b</a>
   <a class="nav-item" href="#cout"><span class="num">03</span>Fonction de coût J</a>
   <a class="nav-item" href="#derivees"><span class="num">04</span>Dérivées partielles</a>
@@ -280,7 +323,7 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   <a class="nav-item" href="#scaling"><span class="num">07</span>Feature scaling</a>
   <a class="nav-item" href="#evaluation"><span class="num">08</span>Métriques MSE / R²</a>
   <a class="nav-item" href="#simulateur"><span class="num">09</span>Simulateur ✦</a>
-  <div class="nav-section">Chapitre III — Classification</div>
+  <div class="nav-section">Chapitre III - Classification</div>
   <a class="nav-item" href="#cls-intro"><span class="num">10</span>Introduction</a>
   <a class="nav-item" href="#cls-logistic"><span class="num">11</span>Régression logistique</a>
   <a class="nav-item" href="#cls-sigmoid"><span class="num">12</span>Sigmoïde</a>
@@ -294,6 +337,19 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   <div class="nav-section">Exercices</div>
   <a class="nav-item" href="#exo-reg"><span class="num">20</span>Exercices régression</a>
   <a class="nav-item" href="#exo-cls"><span class="num">21</span>Exercices classif.</a>
+
+  <div class="nav-section">Ch. IV - Non Supervisé</div>
+  <a class="ni" href="#uns-intro"><span class="num">22</span>Introduction</a>
+  <a class="ni" href="#pca"><span class="num">23</span>ACP</a>
+  <a class="ni" href="#kmeans"><span class="num">24</span>K-Means</a>
+  <a class="ni" href="#cah"><span class="num">25</span>CAH</a>
+  <a class="ni" href="#gmm"><span class="num">26</span>GMM</a>
+  <a class="ni" href="#dbscan"><span class="num">27</span>DBSCAN</a>
+  <a class="ni" href="#compare"><span class="num">28</span>Comparaison</a>
+  <a class="ni" href="#eval-uns"><span class="num">29</span>Évaluation clusters</a>
+  <a class="ni" href="#quiz-uns"><span class="num">30</span>Quiz</a>
+  <a class="ni" href="#exo-uns"><span class="num">31</span>Exercices</a>
+  <a class="ni" href="#tp-uns"><span class="num">32</span>TP Segmentation</a>
 </nav>
 
 <!-- ═══ MAIN ═══ -->
@@ -301,11 +357,11 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 
 <!-- S00 HERO -->
 <section id="intro" class="hero">
-  <div class="hero-tag">Tony Sarre · AIMS Sénégal · DIT Master 1 · 2026</div>
+  <div class="hero-tag">Tony Sarre · UIDT Thies · DIT Master 1 · 2026</div>
   <h1>Machine Learning<br><em>Cours Complet</em></h1>
-  <p class="hero-sub">Définitions rigoureuses, démonstrations pas à pas, simulateurs interactifs et exercices corrigés — du fondement du ML jusqu'aux méthodes d'ensemble.</p>
+  <p class="hero-sub">Définitions rigoureuses, démonstrations pas à pas, simulateurs interactifs et exercices corrigés - du fondement du ML jusqu'aux méthodes d'ensemble.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="n">22</div><div class="l">sections</div></div>
+    <div class="hero-stat"><div class="n">32</div><div class="l">sections</div></div>
     <div class="hero-stat"><div class="n">∂J</div><div class="l">preuves démontrées</div></div>
     <div class="hero-stat"><div class="n">✦</div><div class="l">simulateurs interactifs</div></div>
   </div>
@@ -313,28 +369,36 @@ canvas{border-radius:8px;max-width:100%;display:block;}
     <div class="av">TS</div>
     <div class="info">
       <div class="name">Tony Sarre</div>
-      <div class="role">Data Scientist · Doctorante Statistiques &amp; IA · AIMS Sénégal</div>
+      <div class="role">Data Scientist · Doctorante Statistiques &amp; IA · UIDT Thies</div>
     </div>
   </div>
   <hr class="divider" style="margin-top:2.5rem">
   <h3 style="border:none;margin-top:1.5rem">Table des matières</h3>
   <ul class="toc-list" style="columns:2;column-gap:2rem">
     <li><a href="#concepts">Définition Mitchell · types d'apprentissage</a></li>
-    <li><a href="#modele">Modèle ŷ = wx + b — notation, interprétation</a></li>
-    <li><a href="#cout">Fonction J(w,b) — MSE, convexité</a></li>
-    <li><a href="#derivees">Dérivées ∂J/∂w et ∂J/∂b — chain rule</a></li>
-    <li><a href="#gradient">Descente de gradient — α, critère d'arrêt</a></li>
-    <li><a href="#multiple">Régression multiple — n variables</a></li>
-    <li><a href="#scaling">Feature scaling — normalisation, z-score</a></li>
+    <li><a href="#modele">Modèle ŷ = wx + b - notation, interprétation</a></li>
+    <li><a href="#cout">Fonction J(w,b) - MSE, convexité</a></li>
+    <li><a href="#derivees">Dérivées ∂J/∂w et ∂J/∂b - chain rule</a></li>
+    <li><a href="#gradient">Descente de gradient - α, critère d'arrêt</a></li>
+    <li><a href="#multiple">Régression multiple - n variables</a></li>
+    <li><a href="#scaling">Feature scaling - normalisation, z-score</a></li>
     <li><a href="#evaluation">MSE · RMSE · R²</a></li>
-    <li><a href="#cls-logistic">Régression logistique — modèle complet</a></li>
-    <li><a href="#cls-sigmoid">Sigmoïde — propriétés, démo interactive</a></li>
-    <li><a href="#cls-logloss">Log Loss — entropie croisée binaire</a></li>
+    <li><a href="#cls-logistic">Régression logistique - modèle complet</a></li>
+    <li><a href="#cls-sigmoid">Sigmoïde - propriétés, démo interactive</a></li>
+    <li><a href="#cls-logloss">Log Loss - entropie croisée binaire</a></li>
     <li><a href="#cls-metrics">Matrice de confusion · Précision · Rappel · AUC</a></li>
-    <li><a href="#cls-trees">Arbres CART — impureté de Gini</a></li>
+    <li><a href="#cls-trees">Arbres CART - impureté de Gini</a></li>
     <li><a href="#cls-ensemble">Random Forest · Bagging · Boosting</a></li>
     <li><a href="#exo-reg">Exercices régression (5 exercices)</a></li>
     <li><a href="#exo-cls">Exercices classification (5 exercices)</a></li>
+    <li><a href="#uns-intro">Apprentissage non supervisé - principes</a></li>
+    <li><a href="#pca">ACP - composantes, scree plot</a></li>
+    <li><a href="#kmeans">K-Means - Lloyd, inertie, méthode du coude</a></li>
+    <li><a href="#cah">CAH - linkages, dendrogramme</a></li>
+    <li><a href="#gmm">GMM - algorithme EM, BIC</a></li>
+    <li><a href="#dbscan">DBSCAN - cœur, bord, bruit</a></li>
+    <li><a href="#exo-uns">Exercices non supervisé auto-corrigés</a></li>
+    <li><a href="#tp-uns">TP segmentation clients</a></li>
   </ul>
 </section>
 
@@ -353,38 +417,38 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   <h2>Concepts fondamentaux</h2>
   <p>Le machine learning est une branche de l'intelligence artificielle qui permet à une machine d'<strong>apprendre à partir de données</strong> sans être explicitement programmée pour chaque tâche. Au lieu de coder des règles à la main, on laisse la machine les inférer à partir d'exemples.</p>
 
-  <h3>Définition formelle — Tom Mitchell (1998)</h3>
+  <h3>Définition formelle - Tom Mitchell (1998)</h3>
   <div class="formula fade-up"><span class="lbl">Définition officielle</span>On dit qu'un programme informatique <span class="hi">apprend</span> à partir d'une expérience <span class="ha">E</span>
 concernant une tâche <span class="hw">T</span> et une mesure de performance <span class="hg">P</span>,
 si ses performances sur <span class="hw">T</span>, mesurées par <span class="hg">P</span>,
 <span class="hi">s'améliorent</span> avec l'expérience <span class="ha">E</span>.</div>
 
   <div class="grid-3 fade-up">
-    <div class="card card-gold"><div class="card-label">T — Tâche</div><div class="card-sub" style="margin-top:6px;font-size:14px">Ce que le système doit accomplir : classer, prédire, jouer, filtrer...</div></div>
-    <div class="card card-orange"><div class="card-label">E — Expérience</div><div class="card-sub" style="margin-top:6px;font-size:14px">Les données sur lesquelles le système s'entraîne. Sans données, pas d'apprentissage.</div></div>
-    <div class="card card-green"><div class="card-label">P — Performance</div><div class="card-sub" style="margin-top:6px;font-size:14px">Mesure objective. Doit être calculée sur de <strong>nouvelles données</strong> jamais vues.</div></div>
+    <div class="card card-gold"><div class="card-label">T - Tâche</div><div class="card-sub" style="margin-top:6px;font-size:14px">Ce que le système doit accomplir : classer, prédire, jouer, filtrer...</div></div>
+    <div class="card card-orange"><div class="card-label">E - Expérience</div><div class="card-sub" style="margin-top:6px;font-size:14px">Les données sur lesquelles le système s'entraîne. Sans données, pas d'apprentissage.</div></div>
+    <div class="card card-green"><div class="card-label">P - Performance</div><div class="card-sub" style="margin-top:6px;font-size:14px">Mesure objective. Doit être calculée sur de <strong>nouvelles données</strong> jamais vues.</div></div>
   </div>
 
   <h3>Les trois types d'apprentissage</h3>
   <div class="grid-3 fade-up">
     <div class="card card-blue">
-      <div class="card-label">Supervisé — (X, y)</div>
+      <div class="card-label">Supervisé - (X, y)</div>
       <div class="card-val" style="font-size:16px;margin:.5rem 0">ŷ = f(x)</div>
       <div class="card-sub">Données étiquetées. On apprend à prédire y à partir de x.<br><br>Exemples : prix, spam, diagnostic.</div>
     </div>
     <div class="card card-green">
-      <div class="card-label">Non supervisé — (X)</div>
+      <div class="card-label">Non supervisé - (X)</div>
       <div class="card-val" style="font-size:16px;margin:.5rem 0">clusters(X)</div>
       <div class="card-sub">Pas de labels. La machine découvre des structures cachées.<br><br>Exemples : segmentation, compression.</div>
     </div>
     <div class="card card-orange">
-      <div class="card-label">Par renforcement — r(s,a)</div>
+      <div class="card-label">Par renforcement - r(s,a)</div>
       <div class="card-val" style="font-size:16px;margin:.5rem 0">max r</div>
       <div class="card-sub">Apprentissage par récompense. L'agent interagit avec son environnement.<br><br>Exemples : AlphaGo, robots.</div>
     </div>
   </div>
 
-  <h3>Supervisé — deux familles de problèmes</h3>
+  <h3>Supervisé - deux familles de problèmes</h3>
   <div class="grid-2 fade-up">
     <div class="card card-blue">
       <div class="card-label">Régression</div>
@@ -399,7 +463,7 @@ si ses performances sur <span class="hw">T</span>, mesurées par <span class="hg
   </div>
 
   <div class="quiz-block fade-up">
-    <div class="quiz-title">Quiz — Cadre T, E, P</div>
+    <div class="quiz-title">Quiz - Cadre T, E, P</div>
     <div class="quiz-q">Un algorithme apprend à jouer aux échecs en disputant des milliers de parties. Quelle est la mesure de performance P la plus appropriée ?</div>
     <div class="quiz-opts" id="q01o">
       <div class="qopt" onclick="cq('q01',0,1,'q01f')"><span class="qletter">A</span>Le nombre de parties jouées</div>
@@ -426,19 +490,19 @@ si ses performances sur <span class="hw">T</span>, mesurées par <span class="hg
   <h2>Le modèle linéaire ŷ = wx + b</h2>
   <p>La régression linéaire simple modélise la relation entre une variable d'entrée x et une variable de sortie y par une droite. C'est le modèle supervisé le plus fondamental.</p>
 
-  <div class="formula fade-up"><span class="lbl">Hypothèse — régression linéaire simple</span><span class="hi">ŷ</span> = <span class="hw">w</span> · x + <span class="hp">b</span>
+  <div class="formula fade-up"><span class="lbl">Hypothèse - régression linéaire simple</span><span class="hi">ŷ</span> = <span class="hw">w</span> · x + <span class="hp">b</span>
 
 <span class="hi">ŷ</span>  =  prédiction du modèle  (≠ y, la vraie valeur)
 x   =  variable d'entrée  (ex : surface en m²)
-<span class="hw">w</span>  =  pente  —  variation de ŷ par unité de x
-<span class="hp">b</span>  =  biais  —  valeur de ŷ quand x = 0</div>
+<span class="hw">w</span>  =  pente  -  variation de ŷ par unité de x
+<span class="hp">b</span>  =  biais  -  valeur de ŷ quand x = 0</div>
 
   <div class="callout callout-info fade-up">
     <span class="callout-title">Interprétation concrète</span>
-    <p>Si w = 2.5 et b = 40, pour une maison de 80 m² : ŷ = 2.5 × 80 + 40 = <strong>240 k€</strong>. Chaque m² supplémentaire ajoute 2.5 k€ — c'est w, la "sensibilité" du prix à la surface.</p>
+    <p>Si w = 2.5 et b = 40, pour une maison de 80 m² : ŷ = 2.5 × 80 + 40 = <strong>240 k€</strong>. Chaque m² supplémentaire ajoute 2.5 k€ - c'est w, la "sensibilité" du prix à la surface.</p>
   </div>
 
-  <h3>Données d'exemple — 10 maisons</h3>
+  <h3>Données d'exemple - 10 maisons</h3>
   <div style="overflow-x:auto" class="fade-up">
     <table class="data-table">
       <thead><tr><th>i</th><th>x⁽ⁱ⁾ surface (m²)</th><th>y⁽ⁱ⁾ prix (k€)</th><th>ŷ⁽ⁱ⁾ = 1.73x + 60</th><th>erreur = ŷ − y</th></tr></thead>
@@ -453,7 +517,7 @@ x   =  variable d'entrée  (ex : surface en m²)
   <canvas id="chart-model" height="280"></canvas>
 
   <div class="quiz-block fade-up">
-    <div class="quiz-title">Quiz — Lire le modèle</div>
+    <div class="quiz-title">Quiz - Lire le modèle</div>
     <div class="quiz-q">Le modèle appris est ŷ = 1.5x + 30. Quelle est la prédiction pour une maison de 100 m² ?</div>
     <div class="quiz-opts" id="q02o">
       <div class="qopt" onclick="cq('q02',0,2,'q02f')"><span class="qletter">A</span>130 k€</div>
@@ -471,7 +535,7 @@ x   =  variable d'entrée  (ex : surface en m²)
   <h2>La fonction de coût J(w, b)</h2>
   <p>Pour mesurer la qualité d'un modèle, on définit une <strong>fonction de coût J</strong> qui quantifie l'écart entre les prédictions ŷ et les valeurs réelles y. L'objectif est de trouver w et b qui <strong>minimisent J</strong>.</p>
 
-  <div class="formula fade-up"><span class="lbl">MSE — Mean Squared Error (avec convention 1/2m)</span>J(w, b) = <span class="hi">1/(2m)</span> · <span class="hp">Σᵢ₌₁ᵐ</span> ( <span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span> )²
+  <div class="formula fade-up"><span class="lbl">MSE - Mean Squared Error (avec convention 1/2m)</span>J(w, b) = <span class="hi">1/(2m)</span> · <span class="hp">Σᵢ₌₁ᵐ</span> ( <span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span> )²
 
 m = nombre d'exemples  ·  le ½ simplifie les calculs de dérivées
 <span class="hg">Convexité</span> : J est une parabole  →  un seul minimum global  →  gradient converge toujours</div>
@@ -481,7 +545,7 @@ m = nombre d'exemples  ·  le ½ simplifie les calculs de dérivées
     <p>L'erreur absolue |ŷ−y| n'est pas dérivable en 0, ce qui rend le gradient inutilisable. L'erreur au carré est dérivable partout, pénalise davantage les grandes erreurs, et produit une surface <strong>convexe</strong> avec un unique minimum global garanti.</p>
   </div>
 
-  <h3>Parabole J(w) — convexité visuelle</h3>
+  <h3>Parabole J(w) - convexité visuelle</h3>
   <canvas id="chart-parab" height="230" class="fade-up"></canvas>
 </section>
 
@@ -489,7 +553,7 @@ m = nombre d'exemples  ·  le ½ simplifie les calculs de dérivées
 <section id="derivees" class="section">
   <div class="section-label">Section 04</div>
   <h2>Calcul des dérivées partielles</h2>
-  <p>Pour descendre vers le minimum de J, il faut savoir dans quelle direction se déplacer. Le <strong>gradient</strong> — vecteur des dérivées partielles — donne cette information.</p>
+  <p>Pour descendre vers le minimum de J, il faut savoir dans quelle direction se déplacer. Le <strong>gradient</strong> - vecteur des dérivées partielles - donne cette information.</p>
 
   <h3>Démonstration de ∂J/∂w</h3>
   <div class="proof-step fade-up"><div class="n">1</div><div class="body">Départ : J(w,b) = <span class="hi">(1/2m)</span> · Σᵢ (<span class="hw">wx⁽ⁱ⁾ + b − y⁽ⁱ⁾</span>)²</div></div>
@@ -499,8 +563,8 @@ m = nombre d'exemples  ·  le ½ simplifie les calculs de dérivées
 
   <div class="callout callout-ok fade-up"><p><strong>Résultats :</strong><br>∂J/∂w = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · x⁽ⁱ⁾<br>∂J/∂b = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾)</p></div>
 
-  <h3>Calcul numérique — itération 0</h3>
-  <div class="formula fade-up" id="grad-numeric"><span class="lbl">Calcul numérique — w=0, b=0</span></div>
+  <h3>Calcul numérique - itération 0</h3>
+  <div class="formula fade-up" id="grad-numeric"><span class="lbl">Calcul numérique - w=0, b=0</span></div>
 
   <div class="formula fade-up"><span class="lbl">Interprétation du signe du gradient</span>∂J/∂w <span class="hr">&gt; 0</span>  →  J croît quand w augmente  →  il faut <span class="hr">diminuer</span> w
 ∂J/∂w <span class="hg">&lt; 0</span>  →  J décroît quand w augmente  →  il faut <span class="hg">augmenter</span> w
@@ -514,7 +578,7 @@ m = nombre d'exemples  ·  le ½ simplifie les calculs de dérivées
   <p>La descente de gradient trouve w et b de façon <strong>itérative</strong>, en se déplaçant à chaque étape dans la direction qui fait baisser J le plus vite.</p>
 
   <div class="callout callout-info fade-up">
-    <span class="callout-title">Analogie — descendre dans le brouillard</span>
+    <span class="callout-title">Analogie - descendre dans le brouillard</span>
     <p>Imaginez-vous sur une colline dans le brouillard, cherchant la vallée. Vous ne voyez pas loin, mais vous sentez la pente sous vos pieds. Vous faites un petit pas dans la direction la plus raide vers le bas, et vous recommencez. En répétant cela, vous atteignez la vallée. C'est la descente de gradient.</p>
   </div>
 
@@ -525,16 +589,16 @@ w ← w_new  ;  b ← b_new   (après avoir calculé les deux)</div>
 
   <div class="callout callout-warn fade-up">
     <span class="callout-title">La simultanéité est obligatoire</span>
-    <p>On calcule les deux gradients avec les <em>anciennes</em> valeurs de w et b, puis on met à jour les deux ensemble. Mettre à jour w en premier et l'utiliser pour calculer le gradient de b produirait un algorithme incorrect — on minimiserait une autre fonction que J.</p>
+    <p>On calcule les deux gradients avec les <em>anciennes</em> valeurs de w et b, puis on met à jour les deux ensemble. Mettre à jour w en premier et l'utiliser pour calculer le gradient de b produirait un algorithme incorrect - on minimiserait une autre fonction que J.</p>
   </div>
 
-  <div class="formula fade-up"><span class="lbl">Impact de α — taux d'apprentissage</span>α <span class="hr">trop grand</span>  →  le pas dépasse le minimum  →  J diverge
+  <div class="formula fade-up"><span class="lbl">Impact de α - taux d'apprentissage</span>α <span class="hr">trop grand</span>  →  le pas dépasse le minimum  →  J diverge
 α <span class="hw">trop petit</span>  →  convergence très lente (milliers d'itérations)
 α <span class="hg">optimal</span>    →  J décroît régulièrement et se stabilise
 
 Valeurs typiques à tester :  0.001  →  0.003  →  0.01  →  0.03  →  0.1  (×3 à chaque fois)</div>
 
-  <h3>Démonstration numérique — 3 premières itérations</h3>
+  <h3>Démonstration numérique - 3 premières itérations</h3>
   <p>Avec α = 0.0032, w₀ = 0, b₀ = 0 :</p>
   <div id="manual-steps" class="fade-up"></div>
 </section>
@@ -556,7 +620,7 @@ Gradients :  ∂J/∂θⱼ = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · <spa
     <p>Pour tout paramètre θⱼ : <strong>∂J/∂θⱼ = (1/m) · Σᵢ(erreur)·xⱼ</strong>. Cette structure est identique quel que soit n. Comprendre la régression simple suffit pour généraliser à n dimensions.</p>
   </div>
 
-  <h3>Simulateur — régression multiple (2 variables)</h3>
+  <h3>Simulateur - régression multiple (2 variables)</h3>
   <p>Surface et chambres pour prédire le prix. Les 3 paramètres θ₀, θ₁, θ₂ évoluent simultanément.</p>
   <div class="ctrl fade-up"><label>Taux d'apprentissage α</label><input type="range" id="mult-alpha" min="-5" max="-2" step="0.1" value="-4" oninput="onMultAlpha()"><span class="val" id="mult-alpha-val">0.0001</span></div>
   <div class="btn-row fade-up">
@@ -575,7 +639,7 @@ Gradients :  ∂J/∂θⱼ = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · <spa
       </div>
       <div class="metrics" style="grid-template-columns:1fr 1fr;gap:8px;margin:0">
         <div class="card"><div class="card-label">Itération</div><div class="card-val" id="m-iter">0</div></div>
-        <div class="card"><div class="card-label">J(θ)</div><div class="card-val" id="m-j">—</div></div>
+        <div class="card"><div class="card-label">J(θ)</div><div class="card-val" id="m-j">-</div></div>
       </div>
     </div>
     <div><canvas id="mult-chart" height="180"></canvas></div>
@@ -603,7 +667,7 @@ Gradients :  ∂J/∂θⱼ = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · <spa
   </div>
 
   <div class="callout callout-warn fade-up">
-    <span class="callout-title">Data leakage — erreur critique à éviter</span>
+    <span class="callout-title">Data leakage - erreur critique à éviter</span>
     <p>Ne jamais calculer μ et σ sur l'ensemble complet (train + test) avant de scaler. Les statistiques du test contamineraient l'entraînement, ce qui fausse l'évaluation des performances réelles. On appelle ça une <strong>fuite de données</strong>.</p>
   </div>
 </section>
@@ -611,10 +675,10 @@ Gradients :  ∂J/∂θⱼ = (1/m) · Σᵢ (ŷ⁽ⁱ⁾ − y⁽ⁱ⁾) · <spa
 <!-- S08 EVALUATION -->
 <section id="evaluation" class="section">
   <div class="section-label">Section 08</div>
-  <h2>Métriques d'évaluation — Régression</h2>
+  <h2>Métriques d'évaluation - Régression</h2>
 
-  <div class="formula fade-up"><span class="lbl">MSE · RMSE · R²</span><span class="hi">MSE</span>  = (1/n) · Σᵢ(yᵢ − ŷᵢ)²           →  unité : (k€)²  — difficile à interpréter
-<span class="hi">RMSE</span> = √MSE                          →  même unité que y  — interprétable directement
+  <div class="formula fade-up"><span class="lbl">MSE · RMSE · R²</span><span class="hi">MSE</span>  = (1/n) · Σᵢ(yᵢ − ŷᵢ)²           →  unité : (k€)²  - difficile à interpréter
+<span class="hi">RMSE</span> = √MSE                          →  même unité que y  - interprétable directement
 <span class="hi">R²</span>   = 1 − SS_res / SS_tot           →  proportion de variance expliquée
 
 R² = <span class="hg">1.0</span>  →  prédictions parfaites
@@ -624,11 +688,11 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
   <div class="grid-3 fade-up" id="eval-metrics"></div>
 
   <div class="quiz-block fade-up">
-    <div class="quiz-title">Quiz — Interpréter R²</div>
+    <div class="quiz-title">Quiz - Interpréter R²</div>
     <div class="quiz-q">Un modèle de prédiction de prix immobiliers obtient R² = 0.82. Quelle est la bonne interprétation ?</div>
     <div class="quiz-opts" id="q03o">
       <div class="qopt" onclick="cq('q03',0,3,'q03f')"><span class="qletter">A</span>82 % des prédictions sont exactes à 1 k€ près</div>
-      <div class="qopt" onclick="cq('q03',1,3,'q03f')"><span class="qletter">B</span>Le modèle explique 82 % de la variance des prix — 18 % reste inexpliqué</div>
+      <div class="qopt" onclick="cq('q03',1,3,'q03f')"><span class="qletter">B</span>Le modèle explique 82 % de la variance des prix - 18 % reste inexpliqué</div>
       <div class="qopt" onclick="cq('q03',2,3,'q03f')"><span class="qletter">C</span>RMSE = 82 k€</div>
       <div class="qopt" onclick="cq('q03',3,3,'q03f')"><span class="qletter">D</span>Le modèle a 82 % de chances d'être correct</div>
     </div>
@@ -638,8 +702,8 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
 
 <!-- S09 SIMULATEUR RÉGRESSION -->
 <section id="simulateur" class="section">
-  <div class="section-label">Section 09 — Simulateur interactif</div>
-  <h2>Simulateur — Descente de Gradient</h2>
+  <div class="section-label">Section 09 - Simulateur interactif</div>
+  <h2>Simulateur - Descente de Gradient</h2>
   <p>Expérimentez en temps réel. Modifiez α, changez les valeurs initiales, et observez la convergence sous trois angles simultanément.</p>
 
   <div class="ctrl fade-up"><label>Taux d'apprentissage α</label><input type="range" id="sim-alpha" min="-4" max="-1" step="0.1" value="-2.5" oninput="onSimAlpha()"><span class="val" id="sim-alpha-val">0.0032</span></div>
@@ -660,7 +724,7 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
     <div class="card"><div class="card-label">Itération</div><div class="card-val" id="sim-iter">0</div></div>
     <div class="card"><div class="card-label">w courant</div><div class="card-val" id="sim-w">0.0000</div></div>
     <div class="card"><div class="card-label">b courant</div><div class="card-val" id="sim-b">0.00</div></div>
-    <div class="card"><div class="card-label">J(w,b)</div><div class="card-val" id="sim-j">—</div></div>
+    <div class="card"><div class="card-label">J(w,b)</div><div class="card-val" id="sim-j">-</div></div>
   </div>
 
   <div class="tabs fade-up">
@@ -678,12 +742,13 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
   <div class="log-box" id="sim-log"><div style="color:var(--text3)">iter · w · b · ∂J/∂w · J</div></div>
 
   <hr class="divider">
-  <h3>Récapitulatif — les équations essentielles</h3>
-  <div class="formula fade-up"><span class="lbl">Régression linéaire simple — à retenir</span>1. Modèle :    ŷ = <span class="hw">w</span>·x + <span class="hp">b</span>
+  <h3>Récapitulatif - les équations essentielles</h3>
+  <div class="formula fade-up"><span class="lbl">Régression linéaire simple - à retenir</span>1. Modèle :    ŷ = <span class="hw">w</span>·x + <span class="hp">b</span>
 2. Coût :      J(w,b) = <span class="hi">(1/2m)</span>·Σᵢ(<span class="hw">wx⁽ⁱ⁾+b−y⁽ⁱ⁾</span>)²
 3. Gradients : ∂J/∂w = (1/m)·Σᵢ(<span class="hw">ŷ⁽ⁱ⁾−y⁽ⁱ⁾</span>)·x⁽ⁱ⁾  |  ∂J/∂b = (1/m)·Σᵢ(<span class="hw">ŷ⁽ⁱ⁾−y⁽ⁱ⁾</span>)
 4. MàJ (simultanée) : w ← w − <span class="ha">α</span>·∂J/∂w  |  b ← b − <span class="ha">α</span>·∂J/∂b</div>
 </section>
+
 <!-- CH III BANNER -->
 <div class="chbanner chbanner-3 fade-up">
   <div class="ch-num">III</div>
@@ -701,11 +766,11 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
 
   <div class="grid-2 fade-up">
     <div class="card card-orange">
-      <div class="card-label">Binaire — y ∈ {0, 1}</div>
+      <div class="card-label">Binaire - y ∈ {0, 1}</div>
       <div class="card-sub" style="font-size:14px;margin-top:6px">Deux classes uniquement. Spam/légitime · Fraude/normal · Malade/sain.</div>
     </div>
     <div class="card card-purple">
-      <div class="card-label">Multi-classes — y ∈ {c₁, c₂, …, cₖ}</div>
+      <div class="card-label">Multi-classes - y ∈ {c₁, c₂, …, cₖ}</div>
       <div class="card-sub" style="font-size:14px;margin-top:6px">k classes. Chiffres 0–9 · Type de tumeur · Sentiment pos/neu/neg.</div>
     </div>
   </div>
@@ -724,7 +789,7 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
   <h2>Régression logistique</h2>
   <p>Malgré son nom, la régression logistique est un modèle de <strong>classification</strong>. Elle prédit la <em>probabilité</em> qu'un exemple appartienne à la classe 1, puis décide selon un seuil.</p>
 
-  <div class="formula fade-up"><span class="lbl">Modèle complet — deux étapes</span>Étape 1 : combinaison linéaire  (comme la régression)
+  <div class="formula fade-up"><span class="lbl">Modèle complet - deux étapes</span>Étape 1 : combinaison linéaire  (comme la régression)
   z = <span class="hp">θ₀</span> + <span class="hi">θ₁</span>·x₁ + <span class="hi">θ₂</span>·x₂ + …  =  <span class="ha">θᵀx</span>
 
 Étape 2 : sigmoïde  →  probabilité bornée dans (0, 1)
@@ -733,12 +798,12 @@ R² <span class="hr">&lt; 0</span>   →  pire que prédire la moyenne  (underfi
 Étape 3 : décision (seuil par défaut = 0.5)
   ŷ = <span class="hg">1</span>  si  hθ(x) ≥ 0.5   |   ŷ = <span class="hr">0</span>  si  hθ(x) &lt; 0.5</div>
 
-  <h3>Exemple numérique complet — diagnostic diabète</h3>
-  <div class="formula fade-up"><span class="lbl">θ₀ = −8,  θ₁ = 4 (glycémie g/L),  θ₂ = 0.2 (IMC)</span>Patient A — glycémie = 1.2 g/L,  IMC = 24
+  <h3>Exemple numérique complet - diagnostic diabète</h3>
+  <div class="formula fade-up"><span class="lbl">θ₀ = −8,  θ₁ = 4 (glycémie g/L),  θ₂ = 0.2 (IMC)</span>Patient A - glycémie = 1.2 g/L,  IMC = 24
   z = −8 + 4×1.2 + 0.2×24 = −8 + 4.8 + 4.8 = <span class="hw">+1.6</span>
   hθ(x) = 1/(1+e⁻¹·⁶) = <span class="hg">0.832</span>  →  ŷ = <span class="hg">1  (diabétique, 83 % de confiance)</span>
 
-Patient B — glycémie = 0.8 g/L,  IMC = 20
+Patient B - glycémie = 0.8 g/L,  IMC = 20
   z = −8 + 4×0.8 + 0.2×20 = <span class="hw">−0.8</span>
   hθ(x) = 1/(1+e⁰·⁸) = <span class="hr">0.310</span>  →  ŷ = <span class="hr">0  (non diabétique)</span></div>
 
@@ -792,10 +857,10 @@ De l'autre : z &lt; 0 → σ &lt; 0.5 → classe <span class="hr">0</span></div>
 <!-- S14 LOG LOSS -->
 <section id="cls-logloss" class="section">
   <div class="section-label">Section 14</div>
-  <h2>Fonction de coût — Log Loss</h2>
+  <h2>Fonction de coût - Log Loss</h2>
   <p>On ne peut pas utiliser la MSE avec la sigmoïde car la fonction résultante n'est plus convexe. On utilise l'<strong>entropie croisée binaire</strong> (log loss), qui est convexe et pénalise fortement les erreurs confiantes.</p>
 
-  <div class="formula fade-up"><span class="lbl">Log Loss — Binary Cross-Entropy</span>J(θ) = −<span class="hi">(1/m)</span> · Σᵢ [ <span class="hg">y⁽ⁱ⁾</span> · log(<span class="ht">hθ(x⁽ⁱ⁾)</span>) + (<span class="hr">1−y⁽ⁱ⁾</span>) · log(1−<span class="ht">hθ(x⁽ⁱ⁾)</span>) ]
+  <div class="formula fade-up"><span class="lbl">Log Loss - Binary Cross-Entropy</span>J(θ) = −<span class="hi">(1/m)</span> · Σᵢ [ <span class="hg">y⁽ⁱ⁾</span> · log(<span class="ht">hθ(x⁽ⁱ⁾)</span>) + (<span class="hr">1−y⁽ⁱ⁾</span>) · log(1−<span class="ht">hθ(x⁽ⁱ⁾)</span>) ]
 
 Quand y = 1 : coût actif = −log(hθ)    →  punit si hθ est proche de 0
 Quand y = 0 : coût actif = −log(1−hθ)  →  punit si hθ est proche de 1</div>
@@ -816,7 +881,7 @@ hθ=0.95  →  −log(0.05) = <span class="hr">2.996</span>  ✗ fort</div>
   </div>
 
   <div class="callout callout-ok fade-up">
-    <span class="callout-title">Propriété clé — convexité</span>
+    <span class="callout-title">Propriété clé - convexité</span>
     <p>La log loss est <strong>convexe</strong> avec la sigmoïde → un seul minimum global → la descente de gradient converge toujours. Le gradient a la même forme qu'en régression : ∂J/∂θⱼ = (1/m)·Σᵢ(hθ(x⁽ⁱ⁾)−y⁽ⁱ⁾)·xⱼ⁽ⁱ⁾.</p>
   </div>
 
@@ -828,7 +893,7 @@ Mise à jour : θⱼ ← θⱼ − α · ∂J/∂θⱼ   (simultanément pour to
 <!-- S15 METRIQUES CLASSIF -->
 <section id="cls-metrics" class="section">
   <div class="section-label">Section 15</div>
-  <h2>Métriques d'évaluation — Classification</h2>
+  <h2>Métriques d'évaluation - Classification</h2>
 
   <div class="callout callout-warn fade-up">
     <span class="callout-title">Le piège de l'accuracy sur données déséquilibrées</span>
@@ -852,10 +917,10 @@ Mise à jour : θⱼ ← θⱼ − α · ∂J/∂θⱼ   (simultanément pour to
 
   <h3>Les 4 métriques essentielles</h3>
   <div class="metric-pills fade-up">
-    <div class="mpill"><div class="mp-name">Accuracy</div><div class="mp-formula">(TP+TN)/Total</div><div class="mp-val" id="mp-acc">—</div><div class="mp-desc">% total de bonnes prédictions</div></div>
-    <div class="mpill"><div class="mp-name">Précision</div><div class="mp-formula">TP/(TP+FP)</div><div class="mp-val" id="mp-prec">—</div><div class="mp-desc">Parmi les prédit positifs, vrais positifs</div></div>
-    <div class="mpill"><div class="mp-name">Rappel</div><div class="mp-formula">TP/(TP+FN)</div><div class="mp-val" id="mp-rec">—</div><div class="mp-desc">Parmi les vrais positifs, combien détectés</div></div>
-    <div class="mpill"><div class="mp-name">F1-Score</div><div class="mp-formula">2·P·R/(P+R)</div><div class="mp-val" id="mp-f1">—</div><div class="mp-desc">Moyenne harmonique de P et R</div></div>
+    <div class="mpill"><div class="mp-name">Accuracy</div><div class="mp-formula">(TP+TN)/Total</div><div class="mp-val" id="mp-acc">-</div><div class="mp-desc">% total de bonnes prédictions</div></div>
+    <div class="mpill"><div class="mp-name">Précision</div><div class="mp-formula">TP/(TP+FP)</div><div class="mp-val" id="mp-prec">-</div><div class="mp-desc">Parmi les prédit positifs, vrais positifs</div></div>
+    <div class="mpill"><div class="mp-name">Rappel</div><div class="mp-formula">TP/(TP+FN)</div><div class="mp-val" id="mp-rec">-</div><div class="mp-desc">Parmi les vrais positifs, combien détectés</div></div>
+    <div class="mpill"><div class="mp-name">F1-Score</div><div class="mp-formula">2·P·R/(P+R)</div><div class="mp-val" id="mp-f1">-</div><div class="mp-desc">Moyenne harmonique de P et R</div></div>
   </div>
 
   <h3>Calculateur interactif</h3>
@@ -873,7 +938,7 @@ Mise à jour : θⱼ ← θⱼ − α · ∂J/∂θⱼ   (simultanément pour to
   <h3>Courbe ROC et AUC</h3>
   <div class="roc-wrap fade-up">
     <div>
-      <div class="formula" style="font-size:13px"><span class="lbl">ROC — Receiver Operating Characteristic</span>Trace <span class="hg">TPR</span> (Rappel) vs <span class="hr">FPR</span> pour tous les seuils
+      <div class="formula" style="font-size:13px"><span class="lbl">ROC - Receiver Operating Characteristic</span>Trace <span class="hg">TPR</span> (Rappel) vs <span class="hr">FPR</span> pour tous les seuils
 
 TPR = TP/(TP+FN)  ← Rappel
 FPR = FP/(FP+TN)  ← Taux de fausses alarmes
@@ -888,7 +953,7 @@ AUC &gt; <span class="hw">0.85</span>  =  bon modèle en pratique</div>
   </div>
 
   <div class="quiz-block fade-up">
-    <div class="quiz-title">Quiz — Choisir la bonne métrique</div>
+    <div class="quiz-title">Quiz - Choisir la bonne métrique</div>
     <div class="quiz-q">Un système de dépistage de cancer veut minimiser le risque de rater un vrai cas. Quelle métrique maximiser en priorité ?</div>
     <div class="quiz-opts" id="q04o">
       <div class="qopt" onclick="cq('q04',0,4,'q04f')"><span class="qletter">A</span>Accuracy</div>
@@ -919,7 +984,7 @@ AUC &gt; <span class="hw">0.85</span>  =  bon modèle en pratique</div>
     </div>
   </div>
 
-  <div class="formula fade-up"><span class="lbl">Exemple Softmax — email en 3 classes (Spam / Promo / Légitime)</span>θ₀ᵀx=2.1 → e²·¹=8.17  |  θ₁ᵀx=0.5 → e⁰·⁵=1.65  |  θ₂ᵀx=−0.3 → e⁻⁰·³=0.74
+  <div class="formula fade-up"><span class="lbl">Exemple Softmax - email en 3 classes (Spam / Promo / Légitime)</span>θ₀ᵀx=2.1 → e²·¹=8.17  |  θ₁ᵀx=0.5 → e⁰·⁵=1.65  |  θ₂ᵀx=−0.3 → e⁻⁰·³=0.74
 Somme = 10.56
 
 P(Spam)   = 8.17/10.56 = <span class="hr">0.774</span>  (77.4 %)
@@ -931,10 +996,10 @@ P(Légit.) = 0.74/10.56 = <span class="ht">0.070</span>  (7.0 %)
 <!-- S17 ARBRES -->
 <section id="cls-trees" class="section">
   <div class="section-label">Section 17</div>
-  <h2>Arbres de décision — CART</h2>
+  <h2>Arbres de décision - CART</h2>
   <p>Les arbres de décision apprennent une suite de <strong>règles hiérarchiques</strong>. À chaque nœud, on choisit la variable et le seuil qui séparent le mieux les classes selon l'<em>impureté de Gini</em>.</p>
 
-  <div class="formula fade-up"><span class="lbl">Indice de Gini — mesure d'impureté d'un nœud t</span>Gini(t) = 1 − <span class="hp">Σₖ pₖ²</span>
+  <div class="formula fade-up"><span class="lbl">Indice de Gini - mesure d'impureté d'un nœud t</span>Gini(t) = 1 − <span class="hp">Σₖ pₖ²</span>
 
 pₖ = proportion d'exemples de classe k dans le nœud
 Gini = <span class="hg">0</span>   →  nœud pur (une seule classe)
@@ -943,7 +1008,7 @@ Gini = <span class="hr">(C−1)/C</span>  →  maximum (classes équiréparties)
 On choisit la coupure (variable xⱼ, seuil tⱼ) qui minimise :
 Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
 
-  <h3>Visualisation — arbre sur données diabète</h3>
+  <h3>Visualisation - arbre sur données diabète</h3>
   <div class="tree-wrap fade-up"><svg id="tree-svg" width="680" height="320" viewBox="0 0 680 320"></svg></div>
 
   <div class="callout callout-warn fade-up">
@@ -952,7 +1017,7 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
   </div>
 
   <div class="quiz-block fade-up">
-    <div class="quiz-title">Quiz — Calcul de Gini</div>
+    <div class="quiz-title">Quiz - Calcul de Gini</div>
     <div class="quiz-q">Un nœud contient 8 exemples : 6 de classe 0 et 2 de classe 1. Calculez Gini(t).</div>
     <div class="quiz-opts" id="q05o">
       <div class="qopt" onclick="cq('q05',0,5,'q05f')"><span class="qletter">A</span>Gini = 0.25</div>
@@ -972,13 +1037,13 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
 
   <div class="grid-2 fade-up">
     <div class="card card-green">
-      <div class="card-label">Bagging — Random Forest</div>
+      <div class="card-label">Bagging - Random Forest</div>
       <p style="font-size:13.5px;margin:.5rem 0;color:var(--text2)"><strong style="color:var(--text)">Construction parallèle</strong> d'arbres indépendants. Chaque arbre est entraîné sur un sous-échantillon bootstrap + sous-ensemble aléatoire de variables.</p>
       <div class="formula" style="margin:.75rem 0;padding:10px 12px;font-size:12px">ŷ = mode(h₁(x), h₂(x), …, hT(x))  ← vote majoritaire</div>
       <div style="font-size:12px;color:var(--text3)">But : réduire la variance · Robuste au bruit</div>
     </div>
     <div class="card card-orange">
-      <div class="card-label">Boosting — Gradient Boosting</div>
+      <div class="card-label">Boosting - Gradient Boosting</div>
       <p style="font-size:13.5px;margin:.5rem 0;color:var(--text2)"><strong style="color:var(--text)">Construction séquentielle</strong> : chaque arbre corrige les erreurs du précédent en s'entraînant sur les résidus.</p>
       <div class="formula" style="margin:.75rem 0;padding:10px 12px;font-size:12px">fm(x) = fm−1(x) + <span class="ha">η</span>·hm(x)   ← η = learning rate</div>
       <div style="font-size:12px;color:var(--text3)">But : réduire le biais · XGBoost, LightGBM</div>
@@ -1001,8 +1066,8 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
 
 <!-- S19 SIMULATEUR LOGISTIQUE -->
 <section id="cls-sim" class="section">
-  <div class="section-label">Section 19 — Simulateur</div>
-  <h2>Simulateur — Régression Logistique</h2>
+  <div class="section-label">Section 19 - Simulateur</div>
+  <h2>Simulateur - Régression Logistique</h2>
   <p>Entraînez une régression logistique sur des données binaires générées aléatoirement et observez la frontière de décision évoluer en temps réel.</p>
 
   <div class="ctrl fade-up"><label>Taux d'apprentissage α</label><input type="range" id="lg-a" min="-3" max="-0.5" step="0.1" value="-1.5" oninput="onLgA()"><span class="val" id="lg-av">0.032</span></div>
@@ -1018,7 +1083,7 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
     <div class="card"><div class="card-label">Itération</div><div class="card-val" id="lg-it">0</div></div>
     <div class="card"><div class="card-label">θ₀</div><div class="card-val" id="lg-t0">0.000</div></div>
     <div class="card"><div class="card-label">θ₁</div><div class="card-val" id="lg-t1">0.000</div></div>
-    <div class="card"><div class="card-label">Log Loss J</div><div class="card-val" id="lg-j">—</div></div>
+    <div class="card"><div class="card-label">Log Loss J</div><div class="card-val" id="lg-j">-</div></div>
   </div>
 
   <div class="tabs fade-up">
@@ -1046,38 +1111,38 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
 <!-- S20 EXERCICES REGRESSION -->
 <section id="exo-reg" class="section">
   <div class="section-label">Section 20</div>
-  <h2>Exercices — Régression</h2>
+  <h2>Exercices - Régression</h2>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 1 — Calcul d'une prédiction</div>
+    <div class="exo-title">Exercice 1 - Calcul d'une prédiction</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Le modèle appris est ŷ = 2x + 10. Quelle est la prédiction pour x = 15 ?</p>
     <div class="exo-row"><label>ŷ =</label><input type="number" id="e1a" step="0.1" placeholder="ex: 40"><button class="btn-primary" onclick="cE(1)">Vérifier</button></div>
     <div class="exo-res" id="e1r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 2 — Calcul du coût J</div>
+    <div class="exo-title">Exercice 2 - Calcul du coût J</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Avec w=2, b=10, calculez J pour les 3 exemples suivants : (x=5, y=20), (x=10, y=30), (x=15, y=40). Utilisez la formule J = 1/(2m)·Σ(ŷ−y)².</p>
     <div class="exo-row"><label>J =</label><input type="number" id="e2a" step="0.01" placeholder="ex: 0.00"><button class="btn-primary" onclick="cE(2)">Vérifier</button></div>
     <div class="exo-res" id="e2r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 3 — Une étape de gradient descent</div>
+    <div class="exo-title">Exercice 3 - Une étape de gradient descent</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">On a ∂J/∂w = 5.0, w = 2.0, α = 0.1. Calculez w après une mise à jour.</p>
     <div class="exo-row"><label>w_new =</label><input type="number" id="e3a" step="0.01" placeholder="ex: 1.5"><button class="btn-primary" onclick="cE(3)">Vérifier</button></div>
     <div class="exo-res" id="e3r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 4 — Feature scaling (z-score)</div>
+    <div class="exo-title">Exercice 4 - Feature scaling (z-score)</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">La variable "revenu" a μ = 3000 et σ = 800. Calculez le z-score pour x = 4200.</p>
     <div class="exo-row"><label>z-score =</label><input type="number" id="e4a" step="0.01" placeholder="ex: 1.50"><button class="btn-primary" onclick="cE(4)">Vérifier</button></div>
     <div class="exo-res" id="e4r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 5 — Interpréter R²</div>
+    <div class="exo-title">Exercice 5 - Interpréter R²</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">SS_res = 180, SS_tot = 1000. Calculez R².</p>
     <div class="exo-row"><label>R² =</label><input type="number" id="e5a" step="0.01" placeholder="ex: 0.82"><button class="btn-primary" onclick="cE(5)">Vérifier</button></div>
     <div class="exo-res" id="e5r"></div>
@@ -1087,38 +1152,38 @@ Gini_split = (nL/n)·Gini(tL) + (nR/n)·Gini(tR)</div>
 <!-- S21 EXERCICES CLASSIFICATION -->
 <section id="exo-cls" class="section">
   <div class="section-label">Section 21</div>
-  <h2>Exercices — Classification</h2>
+  <h2>Exercices - Classification</h2>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 6 — Calcul de la sigmoïde</div>
+    <div class="exo-title">Exercice 6 - Calcul de la sigmoïde</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">θ₀ = −5, θ₁ = 2, x = 3. Calculez z puis σ(z) (arrondi à 4 décimales).</p>
     <div class="exo-row"><label>σ(z) =</label><input type="number" id="e6a" step="0.0001" placeholder="ex: 0.7311"><button class="btn-primary" onclick="cE(6)">Vérifier</button></div>
     <div class="exo-res" id="e6r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 7 — Métriques depuis la matrice</div>
+    <div class="exo-title">Exercice 7 - Métriques depuis la matrice</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Matrice : TP=85, TN=90, FP=15, FN=10. Calculez le F1-Score (arrondi à 4 décimales).</p>
     <div class="exo-row"><label>F1-Score =</label><input type="number" id="e7a" step="0.0001" placeholder="ex: 0.8750"><button class="btn-primary" onclick="cE(7)">Vérifier</button></div>
     <div class="exo-res" id="e7r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 8 — Indice de Gini</div>
+    <div class="exo-title">Exercice 8 - Indice de Gini</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Un nœud contient 12 exemples : 9 de classe 0 et 3 de classe 1. Calculez Gini(t).</p>
     <div class="exo-row"><label>Gini =</label><input type="number" id="e8a" step="0.0001" placeholder="ex: 0.3750"><button class="btn-primary" onclick="cE(8)">Vérifier</button></div>
     <div class="exo-res" id="e8r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 9 — Régression logistique complète</div>
+    <div class="exo-title">Exercice 9 - Régression logistique complète</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">θ₀=−6, θ₁=3, θ₂=0.5. Exemple : x₁=1.5 (glycémie), x₂=28 (IMC). Calculez z.</p>
     <div class="exo-row"><label>z =</label><input type="number" id="e9a" step="0.01" placeholder="ex: 2.50"><button class="btn-primary" onclick="cE(9)">Vérifier</button></div>
     <div class="exo-res" id="e9r"></div>
   </div>
 
   <div class="exo-block fade-up">
-    <div class="exo-title">Exercice 10 — Choisir un modèle</div>
+    <div class="exo-title">Exercice 10 - Choisir un modèle</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Deux modèles : Modèle A (Accuracy=0.92, AUC=0.71) · Modèle B (Accuracy=0.85, AUC=0.93). Pour un problème de détection de fraude bancaire, lequel choisir ? Entrez 1 pour A ou 2 pour B.</p>
     <div class="exo-row"><label>Réponse (1 ou 2)</label><input type="number" id="e10a" step="1" min="1" max="2" placeholder="1 ou 2"><button class="btn-primary" onclick="cE(10)">Vérifier</button></div>
     <div class="exo-res" id="e10r"></div>
@@ -1142,9 +1207,648 @@ Boosting       fm(x) = fm−1(x) + η·hm(x)</div>
   </div>
 </section>
 
+
+
+<!-- ══════ CHAPITRE IV - NON SUPERVISÉ ══════ -->
+<div class="chb chb4 fade-up fu" style="padding:2.5rem 3.5rem 1.5rem">
+  <div class="chnum" style="font-family:var(--serif);font-size:4rem;font-weight:300;opacity:.15;color:var(--teal)">IV</div>
+  <div class="chinfo">
+    <div class="chtag" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);color:var(--teal);margin-bottom:4px">Chapitre Quatre</div>
+    <h2 style="font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--teal);margin:0">Apprentissage Non Supervisé</h2>
+  </div>
+</div>
+
+<!-- ══ CH I BANNER ══ -->
+<div class="chb chb4 fu">
+  <div class="chnum">I</div>
+  <div class="chinfo"><div class="chtag">Introduction</div><h2>Apprentissage Non Supervisé</h2></div>
+</div>
+
+<!-- ══ S01 INTRO ══ -->
+<section id="uns-intro" class="section">
+  <div class="sl">Section 01</div>
+  <h2>Apprentissage non supervisé</h2>
+  <p>Dans l'apprentissage supervisé, chaque exemple (xi, yi) est étiqueté - on connaît la réponse attendue. Dans l'apprentissage <strong>non supervisé</strong>, on ne dispose que des données X, sans labels. La machine doit <em>découvrir par elle-même</em> la structure cachée dans ces données.</p>
+
+  <div class="g2 fu">
+    <div class="card cb">
+      <div class="clbl">Supervisé - (X, y)</div>
+      <div class="csub" style="font-size:14px;margin-top:6px">On connaît les réponses. On apprend une fonction f : X → y.<br><br>Ex : prédire si un email est spam (y = 0 ou 1).</div>
+    </div>
+    <div class="card ct3">
+      <div class="clbl">Non supervisé - (X seulement)</div>
+      <div class="csub" style="font-size:14px;margin-top:6px">Pas de labels. On cherche des patterns, des groupes, des structures.<br><br>Ex : regrouper des clients sans savoir à l'avance combien il y a de types.</div>
+    </div>
+  </div>
+
+  <h3>Deux grandes familles de problèmes</h3>
+  <div class="g2 fu">
+    <div class="card ct3">
+      <div class="clbl">Clustering (regroupement)</div>
+      <p style="font-size:13px;margin:.5rem 0">Trouver des <strong>groupes naturels</strong> dans les données. Les exemples d'un même groupe sont similaires entre eux et différents des autres groupes.</p>
+      <div style="font-size:12px;color:var(--text3)">K-Means · CAH · GMM · DBSCAN</div>
+    </div>
+    <div class="card cpb">
+      <div class="clbl">Réduction de dimensionnalité</div>
+      <p style="font-size:13px;margin:.5rem 0">Compresser les données en <strong>gardant l'essentiel</strong>. Passer de 100 variables à 2 ou 3 sans trop perdre d'information.</p>
+      <div style="font-size:12px;color:var(--text3)">ACP · t-SNE · UMAP · Autoencodeurs</div>
+    </div>
+  </div>
+
+  <h3>Pourquoi c'est difficile - le problème de l'évaluation</h3>
+  <div class="cl cw fu">
+    <span class="clt">Sans labels, comment sait-on si le résultat est bon ?</span>
+    <p>En supervisé, on mesure P sur un jeu de test étiqueté. En non supervisé, il n'y a pas de "bonne réponse". On doit utiliser des critères <strong>internes</strong> (cohésion et séparation des clusters) ou une validation <strong>externe</strong> (expertise métier). C'est la principale difficulté du domaine.</p>
+  </div>
+
+  <h3>Applications réelles</h3>
+  <div class="g3 fu">
+    <div class="card ca"><div class="clbl">Segmentation clients</div><div class="csub" style="margin-top:6px;font-size:13px">Grouper les clients par comportement d'achat pour personnaliser les offres marketing.</div></div>
+    <div class="card ct3"><div class="clbl">Détection d'anomalies</div><div class="csub" style="margin-top:6px;font-size:13px">Identifier les transactions bancaires qui ne ressemblent à aucun groupe connu.</div></div>
+    <div class="card cpb"><div class="clbl">Compression d'images</div><div class="csub" style="margin-top:6px;font-size:13px">Réduire le nombre de couleurs (K-Means) tout en préservant l'essentiel de l'image.</div></div>
+    <div class="card cg"><div class="clbl">Bioinformatique</div><div class="csub" style="margin-top:6px;font-size:13px">Regrouper des gènes à expression similaire pour découvrir des fonctions biologiques.</div></div>
+    <div class="card co2"><div class="clbl">Visualisation</div><div class="csub" style="margin-top:6px;font-size:13px">Projeter 1000 variables en 2D (ACP) pour explorer les données visuellement.</div></div>
+    <div class="card cpk"><div class="clbl">Recommandations</div><div class="csub" style="margin-top:6px;font-size:13px">Trouver les utilisateurs similaires pour recommander des films ou des produits.</div></div>
+  </div>
+</section>
+
+<!-- ══ CH II BANNER ══ -->
+<div class="chb chb4 fu">
+  <div class="chnum">II</div>
+  <div class="chinfo"><div class="chtag">Réduction de dimensionnalité</div><h2>Analyse en Composantes Principales (ACP)</h2></div>
+</div>
+
+<!-- ══ S02 ACP ══ -->
+<section id="pca" class="section">
+  <div class="sl">Section 02</div>
+  <h2>ACP - Analyse en Composantes Principales</h2>
+  <p>L'ACP cherche les <strong>directions de variance maximale</strong> dans les données. Ce sont les directions selon lesquelles les données "s'étalent" le plus. On projette ensuite les données sur ces directions pour obtenir une représentation compressée.</p>
+
+  <div class="cl ci fu">
+    <span class="clt">Intuition fondamentale</span>
+    <p>Imaginez un nuage de points en forme d'ellipse dans un espace 2D. La première composante principale (CP1) est l'axe le long duquel l'ellipse est la plus allongée - c'est la direction de variance maximale. La seconde composante (CP2) est perpendiculaire à CP1. En projetant les données sur CP1 seule, on passe de 2D à 1D en perdant le minimum d'information.</p>
+  </div>
+
+  <h3>Algorithme mathématique</h3>
+  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Centrer les données :</strong> soustraire la moyenne de chaque variable. Résultat : les données sont centrées sur l'origine.</div></div>
+  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Calculer la matrice de covariance :</strong> C = (1/n) · XᵀX. C est une matrice n×n (ou p×p si p variables) qui encode comment les variables varient ensemble.</div></div>
+  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Décomposition propre :</strong> trouver les vecteurs propres (v₁, v₂, …) et valeurs propres (λ₁, λ₂, …) de C. Les vecteurs propres sont les directions des composantes principales. Les valeurs propres mesurent la variance expliquée dans chaque direction.</div></div>
+  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Trier par variance décroissante :</strong> CP1 correspond à λ₁ (valeur propre maximale), CP2 à λ₂, etc.</div></div>
+  <div class="alg-step fu"><div class="an">5</div><div class="ab"><strong>Projeter :</strong> X_réduit = X · [v₁, v₂, …, vₖ]. On choisit k ≤ p composantes.</div></div>
+
+  <div class="fm fu"><span class="lb">Formules clés</span>Matrice de covariance :   <span class="hi">C</span> = (1/n) · <span class="hw">Xᵀ</span><span class="hw">X</span>   (X est centré)
+
+Décomposition :            <span class="hi">C</span> = <span class="hg">V</span> · Λ · <span class="hg">Vᵀ</span>
+   <span class="hg">V</span> = matrice des vecteurs propres (les composantes)
+   Λ = diag(λ₁, λ₂, …) avec λ₁ ≥ λ₂ ≥ …
+
+Variance expliquée par la CPᵢ :
+  <span class="ha">ratio</span> = λᵢ / Σⱼ λⱼ   ← entre 0 et 1
+
+Projection sur k composantes :
+  X_réduit = X · <span class="hg">Vₖ</span>   où Vₖ contient les k premiers vecteurs propres</div>
+
+  <h3>Exemple numérique - notes de 6 étudiants</h3>
+  <p>Cinq étudiants ont deux notes : Mathématiques et Physique. On applique l'ACP pour réduire à une seule dimension.</p>
+
+  <div style="overflow-x:auto" class="fu">
+    <table class="dtable">
+      <thead><tr><th>Étudiant</th><th>Maths xᵢ</th><th>Physique yᵢ</th><th>Maths centré</th><th>Physique centré</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>8</td><td>7</td><td>+2</td><td>+1.5</td></tr>
+        <tr><td>B</td><td>9</td><td>8</td><td>+3</td><td>+2.5</td></tr>
+        <tr><td>C</td><td>6</td><td>5</td><td>0</td><td>−0.5</td></tr>
+        <tr><td>D</td><td>4</td><td>4</td><td>−2</td><td>−1.5</td></tr>
+        <tr><td>E</td><td>5</td><td>6</td><td>−1</td><td>+0.5</td></tr>
+        <tr><td>F</td><td>4</td><td>3</td><td>−2</td><td>−2.5</td></tr>
+      </tbody>
+      <tfoot><tr><td>Moyenne</td><td>6</td><td>5.5</td><td>-</td><td>-</td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="fm fu"><span class="lb">Calcul de la matrice de covariance (2×2)</span>C = (1/6) · Xᵀ · X (avec X centré)
+
+C₁₁ = var(Maths)    = (4+9+0+4+1+4)/6 = <span class="hi">3.67</span>
+C₂₂ = var(Physique) = (2.25+6.25+0.25+2.25+0.25+6.25)/6 = <span class="hi">2.92</span>
+C₁₂ = cov(Maths, Physique) = (2×1.5 + 3×2.5 + 0×(−0.5) + (−2)×(−1.5) + (−1)×0.5 + (−2)×(−2.5))/6
+     = (3 + 7.5 + 0 + 3 − 0.5 + 5)/6 = <span class="hi">3.00</span>
+
+C = | <span class="hi">3.67</span>   <span class="hi">3.00</span> |
+    | <span class="hi">3.00</span>   <span class="hi">2.92</span> |
+
+Valeurs propres : λ₁ ≈ <span class="hg">6.36</span>,  λ₂ ≈ <span class="hr">0.23</span>
+CP1 explique : 6.36/(6.36+0.23) = <span class="hg">96.5 %</span> de la variance !</div>
+
+  <div class="cl co fu">
+    <span class="clt">Interprétation</span>
+    <p>Avec une seule composante (CP1), on capture <strong>96.5 %</strong> de la variance des données. On passe de 2 variables à 1 en perdant seulement 3.5 % d'information. Sur des datasets réels avec 100+ variables, l'ACP permet souvent de réduire à 10-20 composantes en gardant plus de 90 % de la variance.</p>
+  </div>
+
+  <h3>Scree plot - choisir le nombre de composantes</h3>
+  <p>Le scree plot montre la variance expliquée cumulée en fonction du nombre de composantes. On cherche le "coude" : le point à partir duquel ajouter une composante n'apporte plus grand chose.</p>
+  <canvas id="scree-chart" height="220" class="fu"></canvas>
+
+  <h3>Visualisation ACP interactive</h3>
+  <canvas id="pca-chart" height="300" class="fu"></canvas>
+  <div class="ctrl fu"><label>Angle de la CP1 (°)</label><input type="range" id="pca-angle" min="0" max="180" step="5" value="55" oninput="updPCA()"><span class="val" id="pca-angle-v">55°</span></div>
+  <div class="sb" id="pca-var">Variance expliquée par CP1 : -</div>
+
+  <div class="cl cw fu">
+    <span class="clt">Limites de l'ACP</span>
+    <p>L'ACP suppose des relations <strong>linéaires</strong> entre les variables. Si les structures sont non linéaires (courbes, spirales), l'ACP perd de l'information. Dans ce cas, on préférera t-SNE ou UMAP pour la visualisation, ou des auto-encodeurs pour la compression.</p>
+  </div>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz - Comprendre l'ACP</div>
+    <div class="qq">Dans une ACP sur 10 variables, les 3 premières composantes principales expliquent 85 % de la variance. Que signifie cette valeur de 85 % ?</div>
+    <div class="qopts" id="uq1o">
+      <div class="qopt" onclick="ucq('uq1',0,1,'q01f')"><span class="qltr">A</span>85 % des variables sont corrélées entre elles</div>
+      <div class="qopt" onclick="ucq('uq1',1,1,'q01f')"><span class="qltr">B</span>En projetant sur 3 composantes au lieu de 10, on garde 85 % de l'information (variance) des données</div>
+      <div class="qopt" onclick="ucq('uq1',2,1,'q01f')"><span class="qltr">C</span>Le modèle a 85 % de chances d'être correct</div>
+      <div class="qopt" onclick="ucq('uq1',3,1,'q01f')"><span class="qltr">D</span>Il faut utiliser exactement 3 clusters</div>
+    </div>
+    <div class="qfb" id="uq1f"></div>
+  </div>
+</section>
+
+<!-- ══ CH III BANNER ══ -->
+<div class="chb chb4 fu">
+  <div class="chnum">III</div>
+  <div class="chinfo"><div class="chtag">Clustering</div><h2>Méthodes de regroupement</h2></div>
+</div>
+
+<!-- ══ S03 K-MEANS ══ -->
+<section id="kmeans" class="section">
+  <div class="sl">Section 03</div>
+  <h2>K-Means</h2>
+  <p>K-Means est l'algorithme de clustering le plus simple et le plus utilisé. Il partitionne n points en <strong>K groupes</strong> de façon à minimiser la somme des distances au carré de chaque point à son centroïde (centre de son groupe).</p>
+
+  <div class="cl ci fu">
+    <span class="clt">Intuition</span>
+    <p>Imaginez K aimants posés dans l'espace. Chaque point de données est attiré par l'aimant le plus proche. Ensuite, chaque aimant se déplace vers le centre des points qui l'ont choisi. On répète jusqu'à ce que les aimants ne bougent plus.</p>
+  </div>
+
+  <h3>Algorithme de Lloyd</h3>
+  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Initialisation :</strong> placer K centroïdes μ₁, …, μₖ aléatoirement parmi les points de données (ou avec K-Means++ pour une meilleure initialisation).</div></div>
+  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Étape E (attribution) :</strong> assigner chaque point xᵢ au centroïde le plus proche. Cᵢ = argmin_k ||xᵢ − μₖ||²</div></div>
+  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Étape M (mise à jour) :</strong> recalculer chaque centroïde comme la moyenne des points qui lui sont assignés. μₖ = (1/|Cₖ|) · Σᵢ∈Cₖ xᵢ</div></div>
+  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Convergence :</strong> répéter les étapes 2 et 3 jusqu'à ce que les attributions ne changent plus (ou que la variation de l'inertie soit inférieure à ε).</div></div>
+
+  <div class="fm fu"><span class="lb">Objectif - minimiser l'inertie intra-cluster</span>J = Σₖ Σᵢ∈Cₖ <span class="hi">||xᵢ − μₖ||²</span>
+
+μₖ = centroïde du cluster k (moyenne des points assignés)
+|Cₖ| = nombre de points dans le cluster k
+
+L'algorithme <span class="hg">décroît ou conserve J</span> à chaque itération
+→  Il converge toujours  (mais vers un <span class="hr">minimum local</span>, pas forcément global)</div>
+
+  <h3>Exemple numérique - 6 points, K=2</h3>
+  <div style="overflow-x:auto" class="fu">
+    <table class="dtable">
+      <thead><tr><th>Point</th><th>x₁</th><th>x₂</th><th>Dist. μ₁=(1,1)</th><th>Dist. μ₂=(5,7)</th><th>Cluster</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>1</td><td>1</td><td style="color:var(--green)">0.00</td><td>7.21</td><td style="color:var(--blue)">1</td></tr>
+        <tr><td>B</td><td>1.5</td><td>2</td><td style="color:var(--green)">1.12</td><td>6.10</td><td style="color:var(--blue)">1</td></tr>
+        <tr><td>C</td><td>3</td><td>4</td><td>3.61</td><td style="color:var(--green)">3.61</td><td style="color:var(--orange)">2</td></tr>
+        <tr><td>D</td><td>5</td><td>7</td><td style="color:var(--red)">7.21</td><td style="color:var(--green)">0.00</td><td style="color:var(--orange)">2</td></tr>
+        <tr><td>E</td><td>3.5</td><td>5</td><td>4.61</td><td style="color:var(--green)">2.69</td><td style="color:var(--orange)">2</td></tr>
+        <tr><td>F</td><td>4.5</td><td>5</td><td>5.22</td><td style="color:var(--green)">2.06</td><td style="color:var(--orange)">2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fm fu"><span class="lb">Mise à jour des centroïdes après itération 1</span>Cluster 1 = {A, B}  →  μ₁_new = ((1+1.5)/2, (1+2)/2) = (<span class="hg">1.25, 1.50</span>)
+Cluster 2 = {C, D, E, F}  →  μ₂_new = ((3+5+3.5+4.5)/4, (4+7+5+5)/4) = (<span class="hg">4.00, 5.25</span>)
+
+On répète jusqu'à convergence (les attributions ne changent plus).</div>
+
+  <h3>Choisir K - la méthode du coude</h3>
+  <p>K-Means nécessite de choisir K à l'avance. On trace l'inertie J en fonction de K. Elle décroît toujours (plus de clusters = moins de distance). On cherche le <strong>coude</strong> : le point où l'amélioration ralentit brusquement.</p>
+  <canvas id="elbow-chart" height="200" class="fu"></canvas>
+
+  <h3>Simulateur K-Means interactif</h3>
+  <p>Données générées en 3 groupes naturels. Observez les centroïdes (★) converger au fil des itérations.</p>
+  <div class="ctrl fu"><label>Nombre de clusters K</label><input type="range" id="km-k" min="2" max="6" step="1" value="3" oninput="kmReset()"><span class="val" id="km-kv">3</span></div>
+  <div class="br fu">
+    <button class="bpr" onclick="kmStep()">+1 itération</button>
+    <button onclick="kmAuto()">▶ Auto</button>
+    <button class="bda" onclick="kmReset()">Nouveaux points</button>
+  </div>
+  <div class="sb" id="km-stat">Cliquez sur +1 itération pour démarrer.</div>
+  <div class="metrics fu" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><div class="card-label">Itération</div><div class="card-val" id="km-it">0</div></div>
+    <div class="card"><div class="card-label">Inertie J</div><div class="card-val" id="km-inertia">-</div></div>
+    <div class="card"><div class="card-label">Convergé</div><div class="card-val" id="km-conv">-</div></div>
+  </div>
+  <canvas id="km-canvas" width="600" height="360" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border);cursor:crosshair"></canvas>
+
+  <div class="cl cw fu">
+    <span class="clt">Limites de K-Means</span>
+    <p>K-Means suppose des clusters <strong>sphériques et de taille similaire</strong>. Il est sensible aux valeurs initiales des centroïdes (risque de minimum local). Il ne détecte pas les clusters de formes arbitraires et ne gère pas les points aberrants. Solutions : K-Means++ pour l'initialisation, plusieurs relances avec différentes graines.</p>
+  </div>
+</section>
+
+<!-- ══ S04 CAH ══ -->
+<section id="cah" class="section">
+  <div class="sl">Section 04</div>
+  <h2>CAH - Clustering Hiérarchique Agglomératif</h2>
+  <p>La CAH construit une <strong>hiérarchie de clusters</strong> de bas en haut. On commence par traiter chaque point comme son propre cluster, puis on fusionne itérativement les deux clusters les plus proches jusqu'à n'en avoir plus qu'un seul.</p>
+
+  <div class="cl ci fu">
+    <span class="clt">Avantage clé sur K-Means</span>
+    <p>On n'a pas besoin de fixer K à l'avance. On construit l'arbre entier (le <strong>dendrogramme</strong>), puis on "coupe" à la hauteur souhaitée pour obtenir le nombre de clusters voulu. On peut changer K sans refaire le calcul.</p>
+  </div>
+
+  <h3>Algorithme</h3>
+  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Initialisation :</strong> chaque point est son propre cluster. On a n clusters au départ.</div></div>
+  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Calculer les distances :</strong> construire la matrice de distances inter-clusters D (n×n).</div></div>
+  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Fusionner :</strong> trouver les deux clusters i*, j* avec la plus petite distance. Les fusionner en un seul nouveau cluster C_{i*,j*}.</div></div>
+  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Mettre à jour D :</strong> calculer les distances entre le nouveau cluster et tous les autres (selon le critère de linkage choisi).</div></div>
+  <div class="alg-step fu"><div class="an">5</div><div class="ab"><strong>Répéter</strong> les étapes 3-4 jusqu'à avoir un seul cluster. Tracer le dendrogramme.</div></div>
+
+  <h3>Critères de linkage - comment mesurer la distance entre clusters</h3>
+  <div class="g2 fu">
+    <div class="card cb"><div class="clbl">Single linkage (lien minimum)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = min(d(a,b)) pour a∈A, b∈B</div><div class="csub">Distance = deux points les plus proches. Produit des clusters allongés ("chaining effect").</div></div>
+    <div class="card cg"><div class="clbl">Complete linkage (lien maximum)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = max(d(a,b)) pour a∈A, b∈B</div><div class="csub">Distance = deux points les plus éloignés. Produit des clusters compacts et équilibrés.</div></div>
+    <div class="card co2"><div class="clbl">Average linkage</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = (1/|A||B|) Σᵢ∈A Σⱼ∈B d(i,j)</div><div class="csub">Moyenne de toutes les paires. Compromis entre single et complete.</div></div>
+    <div class="card cpb"><div class="clbl">Critère de Ward (recommandé)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">ΔJ = (nAnB)/(nA+nB) · ||μA − μB||²</div><div class="csub">Minimise l'augmentation d'inertie lors de la fusion. Produit les clusters les plus compacts. <strong>Meilleur choix en général.</strong></div></div>
+  </div>
+
+  <h3>Exemple - dendrogramme sur 6 points</h3>
+  <div class="dendro-wrap fu"><svg id="dendro-svg" width="640" height="280" viewBox="0 0 640 280"></svg></div>
+
+  <div class="fm fu"><span class="lb">Lire le dendrogramme</span>La hauteur d'une fusion indique la distance entre les deux clusters fusionnés.
+Pour obtenir K=2 : couper <span class="hg">horizontalement à hauteur 4</span>  →  2 clusters
+Pour obtenir K=3 : couper à hauteur 2.5  →  3 clusters
+Pour obtenir K=5 : couper à hauteur 1    →  5 clusters (presque un par point)
+
+On choisit la coupe là où il y a le <span class="ha">plus grand saut vertical</span> → K naturel des données.</div>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz - CAH vs K-Means</div>
+    <div class="qq">Quel avantage majeur la CAH a-t-elle sur K-Means ?</div>
+    <div class="qopts" id="uq2o">
+      <div class="qopt" onclick="ucq('uq2',0,2,'q02f')"><span class="qltr">A</span>La CAH est toujours plus rapide</div>
+      <div class="qopt" onclick="ucq('uq2',1,2,'q02f')"><span class="qltr">B</span>La CAH ne nécessite pas de choisir K à l'avance et fournit une hiérarchie de groupements</div>
+      <div class="qopt" onclick="ucq('uq2',2,2,'q02f')"><span class="qltr">C</span>La CAH gère toujours mieux les clusters non sphériques</div>
+      <div class="qopt" onclick="ucq('uq2',3,2,'q02f')"><span class="qltr">D</span>La CAH fonctionne sans données</div>
+    </div>
+    <div class="qfb" id="uq2f"></div>
+  </div>
+</section>
+
+<!-- ══ S05 GMM ══ -->
+<section id="gmm" class="section">
+  <div class="sl">Section 05</div>
+  <h2>Mélange de Gaussiennes (GMM)</h2>
+  <p>Le modèle de mélange de Gaussiennes suppose que les données sont <strong>générées par un mélange de K distributions gaussiennes</strong>. Chaque gaussienne représente un cluster potentiel. Contrairement à K-Means (affectations dures), les GMM donnent des <em>probabilités d'appartenance</em> (affectations douces).</p>
+
+  <div class="cl ci fu">
+    <span class="clt">K-Means vs GMM - la différence fondamentale</span>
+    <p>K-Means : chaque point appartient <em>entièrement</em> à un seul cluster (0 ou 1).<br>
+    GMM : chaque point appartient <em>partiellement</em> à tous les clusters (probabilités qui somment à 1).<br>
+    Ex : un point ambigu peut être à 70 % dans le cluster 1 et 30 % dans le cluster 2.</p>
+  </div>
+
+  <div class="fm fu"><span class="lb">Modèle probabiliste</span>P(x) = Σₖ <span class="ha">πₖ</span> · <span class="hi">𝒩(x | μₖ, Σₖ)</span>
+
+<span class="ha">πₖ</span>  = poids du cluster k  (probabilité a priori d'appartenir à k)  Σₖ πₖ = 1
+<span class="hi">μₖ</span>  = moyenne de la gaussienne k
+<span class="hi">Σₖ</span>  = matrice de covariance de la gaussienne k  (forme du cluster)
+
+Chaque point x vient du cluster k avec probabilité πₖ,
+puis est tiré selon la loi 𝒩(μₖ, Σₖ).</div>
+
+  <h3>Algorithme EM (Expectation-Maximization)</h3>
+  <div class="alg-step fu"><div class="an">E</div><div class="ab"><strong>Étape E (Expectation) - calculer les responsabilités :</strong><br>rᵢₖ = P(cluster k | xᵢ) = πₖ · 𝒩(xᵢ | μₖ, Σₖ) / Σⱼ πⱼ · 𝒩(xᵢ | μⱼ, Σⱼ)<br>rᵢₖ est la "responsabilité" du cluster k pour le point i - sa probabilité d'appartenance.</div></div>
+  <div class="alg-step fu"><div class="an">M</div><div class="ab"><strong>Étape M (Maximization) - mettre à jour les paramètres :</strong><br>Nₖ = Σᵢ rᵢₖ  (effectif effectif du cluster k)<br>πₖ = Nₖ / n  |  μₖ = (1/Nₖ) Σᵢ rᵢₖ xᵢ  |  Σₖ = (1/Nₖ) Σᵢ rᵢₖ (xᵢ−μₖ)(xᵢ−μₖ)ᵀ</div></div>
+  <div class="alg-step fu"><div class="an">⟳</div><div class="ab"><strong>Répéter E → M</strong> jusqu'à convergence de la vraisemblance log-L = Σᵢ log P(xᵢ). L'EM garantit que L croît ou reste constante à chaque itération.</div></div>
+
+  <div class="cl co fu">
+    <span class="clt">Choisir K pour les GMM</span>
+    <p>On utilise le <strong>BIC</strong> (Bayesian Information Criterion) ou l'<strong>AIC</strong> (Akaike Information Criterion). Ces critères pénalisent la complexité du modèle pour éviter l'overfitting. On choisit K qui minimise BIC ou AIC.</p>
+  </div>
+
+  <div class="fm fu"><span class="lb">BIC et AIC - critères de sélection de K</span><span class="hg">BIC</span> = −2 · log-L + p · log(n)     ← pénalité plus forte (préfère K plus petit)
+<span class="hi">AIC</span> = −2 · log-L + 2 · p          ← pénalité plus faible (plus de clusters tolérés)
+
+p = nombre de paramètres libres du modèle
+  = K·d (moyennes) + K·d(d+1)/2 (covariances) + K−1 (poids)
+  où d = dimension de l'espace
+
+→  On trace BIC/AIC vs K et on choisit le <span class="ha">coude minimum</span></div>
+
+  <div class="g2 fu">
+    <div class="card cg">
+      <div class="clbl">Avantages des GMM</div>
+      <div class="csub" style="font-size:13px;margin-top:6px">Clusters elliptiques (pas seulement sphériques) · Affectations probabilistes · Modèle génératif · BIC/AIC pour choisir K</div>
+    </div>
+    <div class="card co2">
+      <div class="clbl">Inconvénients des GMM</div>
+      <div class="csub" style="font-size:13px;margin-top:6px">Suppose des données gaussiennes · Sensible aux valeurs initiales · Plus lent que K-Means · Peut diverger (covariances singulières)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S06 DBSCAN ══ -->
+<section id="dbscan" class="section">
+  <div class="sl">Section 06</div>
+  <h2>DBSCAN</h2>
+  <p>DBSCAN (<em>Density-Based Spatial Clustering of Applications with Noise</em>) trouve des clusters basés sur la <strong>densité</strong>, pas sur la distance à un centroïde. Il peut détecter des clusters de forme <em>arbitraire</em> et identifie automatiquement les points aberrants (bruit).</p>
+
+  <div class="cl ci fu">
+    <span class="clt">Intuition - définir un cluster par la densité</span>
+    <p>Un cluster est une zone dense de points, séparée de zones moins denses. Un point isolé au milieu d'une zone vide est du <strong>bruit</strong> (pas dans un cluster). DBSCAN n'a pas besoin de connaître K - il le découvre automatiquement.</p>
+  </div>
+
+  <h3>Deux paramètres clés</h3>
+  <div class="g2 fu">
+    <div class="card ct3">
+      <div class="clbl">ε (epsilon) - rayon de voisinage</div>
+      <div class="csub" style="font-size:14px;margin:.5rem 0">Le voisinage d'un point x est la boule de rayon ε centrée en x. Tous les points à distance ≤ ε de x en font partie.</div>
+    </div>
+    <div class="card cpb">
+      <div class="clbl">minPts - seuil de densité</div>
+      <div class="csub" style="font-size:14px;margin:.5rem 0">Nombre minimum de points requis dans le voisinage ε pour qu'un point soit considéré "dense" (point cœur).</div>
+    </div>
+  </div>
+
+  <h3>Classification des points</h3>
+  <div class="fm fu"><span class="lb">Trois types de points dans DBSCAN</span><span class="hg">Point cœur (core)</span>  :  |N_ε(x)| ≥ minPts
+   Son voisinage ε contient au moins minPts points (lui inclus)
+   → Il est au cœur d'une zone dense
+
+<span class="ha">Point bord (border)</span>  :  |N_ε(x)| &lt; minPts  et  x est dans N_ε(d'un point cœur)
+   Pas assez de voisins pour être cœur, mais est voisin d'un cœur
+   → Il est à la frontière d'un cluster
+
+<span class="hr">Bruit (noise/outlier)</span>  :  ni cœur, ni bord
+   Isolé, pas dans le voisinage d'aucun point cœur
+   → Rejeté comme anomalie  (label = −1)</div>
+
+  <h3>Algorithme</h3>
+  <div class="alg-step fu"><div class="an">1</div><div class="ab">Pour chaque point non visité, calculer son voisinage N_ε(x).</div></div>
+  <div class="alg-step fu"><div class="an">2</div><div class="ab">Si |N_ε(x)| ≥ minPts : créer un nouveau cluster. <strong>Étendre</strong> le cluster en ajoutant récursivement tous les points accessibles par densité depuis x.</div></div>
+  <div class="alg-step fu"><div class="an">3</div><div class="ab">Si |N_ε(x)| &lt; minPts : marquer x comme bruit provisoirement. Il pourra être récupéré comme point bord si un cluster voisin l'atteint.</div></div>
+  <div class="alg-step fu"><div class="an">4</div><div class="ab">Répéter pour tous les points non visités.</div></div>
+
+  <h3>Simulateur DBSCAN interactif</h3>
+  <div class="ctrl fu"><label>Rayon ε</label><input type="range" id="dbs-eps" min="0.2" max="1.5" step="0.05" value="0.6" oninput="runDBSCAN()"><span class="val" id="dbs-epsv">0.60</span></div>
+  <div class="ctrl fu"><label>minPts</label><input type="range" id="dbs-mp" min="2" max="8" step="1" value="3" oninput="runDBSCAN()"><span class="val" id="dbs-mpv">3</span></div>
+  <div class="sb" id="dbs-stat">Ajustez ε et minPts.</div>
+  <canvas id="dbs-canvas" width="600" height="360" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
+
+  <div class="cl cw fu">
+    <span class="clt">Comment choisir ε et minPts ?</span>
+    <p><strong>minPts</strong> : en général, utiliser 2×d (où d est la dimension) ou la règle minPts ≥ ln(n). Une valeur de 4-5 est un bon point de départ en 2D.<br>
+    <strong>ε</strong> : tracer le graphe des distances au k-ème voisin le plus proche (k = minPts). On cherche le coude dans cette courbe - c'est la valeur de ε optimale.</p>
+  </div>
+
+  <div class="g2 fu">
+    <div class="card cg">
+      <div class="clbl">Avantages de DBSCAN</div>
+      <div class="csub" style="font-size:13px;margin-top:6px">K inconnu - découvert automatiquement · Clusters de forme arbitraire · Robuste aux outliers · Pas d'hypothèse de forme</div>
+    </div>
+    <div class="card co2">
+      <div class="clbl">Inconvénients de DBSCAN</div>
+      <div class="csub" style="font-size:13px;margin-top:6px">Sensible à ε et minPts · Difficile sur densités variables · Lent en grande dimension (problème de distance en HD)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S07 COMPARAISON ══ -->
+<section id="compare" class="section">
+  <div class="sl">Section 07</div>
+  <h2>Comparaison des méthodes</h2>
+
+  <div style="overflow-x:auto" class="fu">
+    <table class="dtable">
+      <thead>
+        <tr><th>Critère</th><th style="color:var(--blue)">K-Means</th><th style="color:var(--green)">CAH</th><th style="color:var(--purple)">GMM</th><th style="color:var(--teal)">DBSCAN</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>K à fixer ?</strong></td><td style="color:var(--red)">Oui</td><td style="color:var(--green)">Non (coupe dendo.)</td><td style="color:var(--orange)">Oui (BIC/AIC)</td><td style="color:var(--green)">Non</td></tr>
+        <tr><td><strong>Forme des clusters</strong></td><td>Sphérique</td><td>Flexible</td><td>Elliptique</td><td>Arbitraire</td></tr>
+        <tr><td><strong>Outliers</strong></td><td style="color:var(--red)">Assignés</td><td style="color:var(--red)">Assignés</td><td style="color:var(--orange)">Probabilité faible</td><td style="color:var(--green)">Détectés (label −1)</td></tr>
+        <tr><td><strong>Affectation</strong></td><td>Dure (0/1)</td><td>Dure (0/1)</td><td style="color:var(--green)">Douce (probas)</td><td>Dure (0/1)</td></tr>
+        <tr><td><strong>Complexité</strong></td><td style="color:var(--green)">O(nKt)</td><td>O(n² log n)</td><td>O(nKt)</td><td>O(n log n)</td></tr>
+        <tr><td><strong>Scalabilité</strong></td><td style="color:var(--green)">Excellente</td><td style="color:var(--red)">Faible (n²)</td><td style="color:var(--orange)">Bonne</td><td style="color:var(--orange)">Bonne</td></tr>
+        <tr><td><strong>Hypothèse</strong></td><td>Variances égales</td><td>Aucune</td><td>Données gaussiennes</td><td>Aucune</td></tr>
+        <tr><td><strong>Quand l'utiliser</strong></td><td>Exploration rapide, données volumineuses</td><td>Quand K inconnu, petits datasets</td><td>Modélisation probabiliste</td><td>Anomalies, formes complexes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Visualisation comparative sur 3 jeux de données</h3>
+  <canvas id="compare-canvas" width="700" height="280" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
+  <div style="font-size:12px;color:var(--text3);margin-top:6px;font-family:var(--mono)">Blobs · Lunes · Cercles concentriques - K-Means (col. 1) vs DBSCAN (col. 2)</div>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz - Choisir la bonne méthode</div>
+    <div class="qq">Vous analysez des données GPS de trajets de livraison pour détecter des "zones denses" et identifier les zones sans activité (bruit). Quelle méthode est la plus appropriée ?</div>
+    <div class="qopts" id="uq3o">
+      <div class="qopt" onclick="ucq('uq3',0,3,'q03f')"><span class="qltr">A</span>K-Means avec K=5</div>
+      <div class="qopt" onclick="ucq('uq3',1,3,'q03f')"><span class="qltr">B</span>DBSCAN</div>
+      <div class="qopt" onclick="ucq('uq3',2,3,'q03f')"><span class="qltr">C</span>GMM avec BIC</div>
+      <div class="qopt" onclick="ucq('uq3',3,3,'q03f')"><span class="qltr">D</span>ACP</div>
+    </div>
+    <div class="qfb" id="uq3f"></div>
+  </div>
+</section>
+
+<!-- ══ S08 ÉVALUATION ══ -->
+<section id="eval-uns" class="section">
+  <div class="sl">Section 08</div>
+  <h2>Évaluer un clustering sans labels</h2>
+  <p>Sans vérité terrain (labels), l'évaluation repose sur des <strong>critères internes</strong> qui mesurent la qualité de la structure découverte : cohésion intra-cluster et séparation inter-clusters.</p>
+
+  <div class="g3 fu">
+    <div class="card ct3">
+      <div class="clbl">Inertie intra-cluster (WCSS)</div>
+      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">J = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||²</div>
+      <div class="csub">Somme des distances au carré au centroïde. Mesure la cohésion. Plus petit = mieux. Utilisé pour la méthode du coude.</div>
+    </div>
+    <div class="card cpb">
+      <div class="clbl">Score de silhouette</div>
+      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:11px">s(i) = (b(i)−a(i)) / max(a(i),b(i))</div>
+      <div class="csub">a(i) = distance moyenne intra-cluster · b(i) = distance moyenne au cluster voisin le plus proche. s ∈ [−1, 1], proche de 1 = bien groupé.</div>
+    </div>
+    <div class="card co2">
+      <div class="clbl">Indice de Davies-Bouldin</div>
+      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:11px">DB = (1/K)Σₖ max_{j≠k}(σₖ+σⱼ)/d(μₖ,μⱼ)</div>
+      <div class="csub">σₖ = dispersion du cluster k. d(μₖ,μⱼ) = distance entre centroïdes. Plus petit = mieux (0 est parfait).</div>
+    </div>
+  </div>
+
+  <div class="fm fu"><span class="lb">Interprétation du score de silhouette</span>s(i) proche de <span class="hg">+1</span>  →  le point est bien placé dans son cluster, loin des autres
+s(i) proche de <span class="ha">0</span>   →  le point est à la frontière entre deux clusters
+s(i) proche de <span class="hr">−1</span>  →  le point est probablement dans le mauvais cluster
+
+Silhouette moyenne sur tous les points  →  qualité globale du clustering
+On trace le silhouette plot (un bar par point, trié) pour diagnostiquer la qualité.</div>
+
+  <canvas id="sil-chart" height="220" class="fu"></canvas>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz - Score de silhouette</div>
+    <div class="qq">Après K-Means avec K=3, le score de silhouette moyen est −0.15. Que cela indique-t-il ?</div>
+    <div class="qopts" id="uq4o">
+      <div class="qopt" onclick="ucq('uq4',0,4,'q04f')"><span class="qltr">A</span>Excellent clustering, les 3 groupes sont très bien séparés</div>
+      <div class="qopt" onclick="ucq('uq4',1,4,'q04f')"><span class="qltr">B</span>Les clusters sont mal formés : beaucoup de points sont dans le mauvais groupe. Essayer K=2 ou K=4</div>
+      <div class="qopt" onclick="ucq('uq4',2,4,'q04f')"><span class="qltr">C</span>Il manque des données</div>
+      <div class="qopt" onclick="ucq('uq4',3,4,'q04f')"><span class="qltr">D</span>L'algorithme n'a pas convergé</div>
+    </div>
+    <div class="qfb" id="uq4f"></div>
+  </div>
+</section>
+
+<!-- ══ S09 QUIZ ══ -->
+<section id="quiz-uns" class="section">
+  <div class="sl">Section 09</div>
+  <h2>Quiz - Bilan du chapitre</h2>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz 5 - ACP et réduction</div>
+    <div class="qq">Après une ACP, les composantes principales sont toujours :</div>
+    <div class="qopts" id="uq5o">
+      <div class="qopt" onclick="ucq('uq5',0,5,'q05f')"><span class="qltr">A</span>Corrélées entre elles</div>
+      <div class="qopt" onclick="ucq('uq5',1,5,'q05f')"><span class="qltr">B</span>Orthogonales (non corrélées) entre elles</div>
+      <div class="qopt" onclick="ucq('uq5',2,5,'q05f')"><span class="qltr">C</span>Les mêmes que les variables originales</div>
+      <div class="qopt" onclick="ucq('uq5',3,5,'q05f')"><span class="qltr">D</span>Toujours au nombre de 2</div>
+    </div>
+    <div class="qfb" id="uq5f"></div>
+  </div>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz 6 - K-Means et convergence</div>
+    <div class="qq">K-Means garantit de toujours trouver le clustering optimal (inertie minimale globale). Cette affirmation est :</div>
+    <div class="qopts" id="uq6o">
+      <div class="qopt" onclick="ucq('uq6',0,6,'q06f')"><span class="qltr">A</span>Vraie - l'algorithme converge vers le minimum global</div>
+      <div class="qopt" onclick="ucq('uq6',1,6,'q06f')"><span class="qltr">B</span>Fausse - K-Means converge mais vers un minimum local, qui dépend de l'initialisation</div>
+      <div class="qopt" onclick="ucq('uq6',2,6,'q06f')"><span class="qltr">C</span>Vraie seulement si K=2</div>
+      <div class="qopt" onclick="ucq('uq6',3,6,'q06f')"><span class="qltr">D</span>Vraie seulement en 2D</div>
+    </div>
+    <div class="qfb" id="uq6f"></div>
+  </div>
+
+  <div class="qblk fu">
+    <div class="qtitle">Quiz 7 - DBSCAN</div>
+    <div class="qq">Avec ε=0.5 et minPts=4, un point a 2 voisins dans son ε-voisinage et se trouve dans le ε-voisinage d'un point cœur. Comment est-il classifié ?</div>
+    <div class="qopts" id="uq7o">
+      <div class="qopt" onclick="ucq('uq7',0,7,'q07f')"><span class="qltr">A</span>Point cœur</div>
+      <div class="qopt" onclick="ucq('uq7',1,7,'q07f')"><span class="qltr">B</span>Point bord</div>
+      <div class="qopt" onclick="ucq('uq7',2,7,'q07f')"><span class="qltr">C</span>Bruit (outlier)</div>
+      <div class="qopt" onclick="ucq('uq7',3,7,'q07f')"><span class="qltr">D</span>On ne peut pas le déterminer</div>
+    </div>
+    <div class="qfb" id="uq7f"></div>
+  </div>
+</section>
+
+<!-- ══ S10 EXERCICES ══ -->
+<section id="exo-uns" class="section">
+  <div class="sl">Section 10</div>
+  <h2>Exercices pratiques</h2>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 1 - Variance expliquée ACP</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Une ACP sur 5 variables donne les valeurs propres : λ₁=4.2, λ₂=2.1, λ₃=0.9, λ₄=0.5, λ₅=0.3. Quel est le pourcentage de variance expliqué par les 2 premières composantes ? (Arrondi à 1 décimale)</p>
+    <div class="exrow"><label>Réponse (%)</label><input type="number" id="e1a" step="0.1" placeholder="ex: 78.4"><button class="bpr" onclick="cEx(1)">Vérifier</button></div>
+    <div class="exres" id="e1r"></div>
+  </div>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 2 - Affectation K-Means</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Deux centroïdes : μ₁ = (2, 3) et μ₂ = (8, 6). Quel cluster est le plus proche du point x = (5, 4) ? Calculez les deux distances euclidiennes et indiquez 1 ou 2.</p>
+    <div class="exrow"><label>Cluster (1 ou 2)</label><input type="number" id="e2a" step="1" min="1" max="2" placeholder="1 ou 2"><button class="bpr" onclick="cEx(2)">Vérifier</button></div>
+    <div class="exres" id="e2r"></div>
+  </div>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 3 - Mise à jour de centroïde</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Après l'étape d'attribution, le cluster 1 contient 4 points : (1,2), (3,4), (2,2), (4,4). Quelle est la coordonnée x₁ du nouveau centroïde ?</p>
+    <div class="exrow"><label>x₁ du centroïde</label><input type="number" id="e3a" step="0.1" placeholder="ex: 2.5"><button class="bpr" onclick="cEx(3)">Vérifier</button></div>
+    <div class="exres" id="e3r"></div>
+  </div>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 4 - Classification DBSCAN</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Avec ε=1.5 et minPts=3, un point a exactement 3 voisins dans son ε-voisinage (lui-même inclus ou exclu selon la convention - ici inclus). Est-il point cœur, bord ou bruit ? Entrez 1=cœur, 2=bord, 3=bruit.</p>
+    <div class="exrow"><label>Type (1/2/3)</label><input type="number" id="e4a" step="1" min="1" max="3" placeholder="1, 2 ou 3"><button class="bpr" onclick="cEx(4)">Vérifier</button></div>
+    <div class="exres" id="e4r"></div>
+  </div>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 5 - Inertie K-Means</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Un clustering a 2 clusters. Cluster 1 : centroïde (1,1), points (2,1) et (0,1). Cluster 2 : centroïde (5,5), point (5,6). Calculez l'inertie totale J.</p>
+    <div class="exrow"><label>J =</label><input type="number" id="e5a" step="0.1" placeholder="ex: 3.0"><button class="bpr" onclick="cEx(5)">Vérifier</button></div>
+    <div class="exres" id="e5r"></div>
+  </div>
+
+  <div class="exob fu">
+    <div class="extitle">Exercice 6 - Score de silhouette</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Pour un point i : distance intra-cluster a(i) = 0.5, distance au cluster voisin le plus proche b(i) = 2.0. Calculez s(i) (arrondi à 2 décimales).</p>
+    <div class="exrow"><label>s(i) =</label><input type="number" id="e6a" step="0.01" placeholder="ex: 0.75"><button class="bpr" onclick="cEx(6)">Vérifier</button></div>
+    <div class="exres" id="e6r"></div>
+  </div>
+</section>
+
+<!-- ══ S11 TP ══ -->
+<section id="tp-uns" class="section">
+  <div class="sl">Section 11 - Travaux Pratiques</div>
+  <h2>TP Python - Segmentation de clients</h2>
+
+  <p>Ce TP applique toutes les méthodes vues en cours sur un dataset réaliste de <strong>200 clients</strong> d'un centre commercial. L'objectif est de découvrir des segments de clientèle distincts pour personnaliser les offres marketing.</p>
+
+  <h3>Contexte du dataset</h3>
+  <div class="g3 fu">
+    <div class="card ct3"><div class="clbl">200 clients</div><div class="csub" style="font-size:13.5px;margin-top:6px">Sondage réalisé à l'entrée d'un mall. Données anonymisées.</div></div>
+    <div class="card cpb"><div class="clbl">3 variables</div><div class="csub" style="font-size:13.5px;margin-top:6px">Âge · Revenu annuel (k$) · Score de dépense (1-100)</div></div>
+    <div class="card ca"><div class="clbl">Objectif</div><div class="csub" style="font-size:13.5px;margin-top:6px">Trouver les segments naturels pour adapter les campagnes</div></div>
+  </div>
+
+  <div class="fm fu"><span class="lb">Plan du TP - 6 parties</span>Partie 1 : Chargement et exploration des données (EDA)
+Partie 2 : Standardisation et ACP (réduction à 2D pour visualisation)
+Partie 3 : K-Means - méthode du coude et score de silhouette
+Partie 4 : DBSCAN - détection d'anomalies
+Partie 5 : GMM - affectations probabilistes et BIC
+Partie 6 : Comparaison, interprétation et recommandations marketing</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:1.5rem 0" class="fu">
+    <div style="font-family:var(--serif);font-size:1rem;color:var(--teal);margin-bottom:.9rem">Télécharger le TP</div>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Les notebooks Jupyter (.ipynb) sont disponibles ci-dessous. Ouvrez-les dans Google Colab :</p>
+    <div style="font-family:var(--mono);font-size:13px;color:var(--text2)">
+      Fichier → Importer un notebook → Parcourir → sélectionner le .ipynb
+    </div>
+  </div>
+
+  <!-- Récapitulatif final -->
+  <hr class="divider" style="margin-top:2rem">
+  <h3>Récapitulatif - ce qu'il faut retenir</h3>
+  <div class="fm fu"><span class="lb">Les algorithmes non supervisés essentiels</span>ACP      Réduire la dimension tout en maximisant la variance conservée
+          Composantes = vecteurs propres de la matrice de covariance
+
+K-Means  J = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||²   →  minimiser l'inertie
+          Méthode du coude + silhouette pour choisir K
+
+CAH      Dendrogramme ascendant   ·  Critère de Ward recommandé
+          Couper le plus grand saut du dendrogramme
+
+GMM      P(x) = Σₖ πₖ · 𝒩(x|μₖ,Σₖ)  ·  Algorithme EM
+          Affectations douces  ·  BIC pour choisir K
+
+DBSCAN   Paramètres ε et minPts  ·  Points cœur / bord / bruit
+          Pas besoin de K  ·  Détecte les outliers automatiquement
+
+Évaluation  Silhouette s ∈ [−1,1]  (proche de 1 = bon)
+            Davies-Bouldin DB (proche de 0 = bon)
+            Inertie J (méthode du coude)</div>
+</section>
+
+
 </main>
+
 <script>
-// ── DONNÉES ──────────────────────────────────────────────────────────────────
+
+
 const DATA=[{x:40,y:130},{x:50,y:155},{x:60,y:162},{x:70,y:185},{x:80,y:200},{x:90,y:218},{x:100,y:240},{x:110,y:260},{x:120,y:270},{x:130,y:295}];
 const M=DATA.length;
 const mx=DATA.reduce((s,d)=>s+d.x,0)/M, my=DATA.reduce((s,d)=>s+d.y,0)/M;
@@ -1156,11 +1860,11 @@ function gW(w,b){return DATA.reduce((s,d)=>s+(w*d.x+b-d.y)*d.x,0)/M;}
 function gB(w,b){return DATA.reduce((s,d)=>s+(w*d.x+b-d.y),0)/M;}
 function r2(w,b){const sr=DATA.reduce((s,d)=>s+(d.y-(w*d.x+b))**2,0);const st=DATA.reduce((s,d)=>s+(d.y-my)**2,0);return 1-sr/st;}
 
-// ── CHART DEFAULTS ────────────────────────────────────────────────────────────
+
 const CH={responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.045)'}},y:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.045)'}}}};
 function mkO(xl,yl){const o=JSON.parse(JSON.stringify(CH));o.scales.x.title={display:true,text:xl,color:'#5e5c55',font:{size:11}};o.scales.y.title={display:true,text:yl,color:'#5e5c55',font:{size:11}};return o;}
 
-// ── PROGRESS + SCROLL ANIMATIONS ──────────────────────────────────────────────
+
 window.addEventListener('scroll',()=>{
   const h=document.documentElement;
   const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
@@ -1168,12 +1872,12 @@ window.addEventListener('scroll',()=>{
   const sf=document.getElementById('sp-fill');if(sf)sf.style.width=p+'%';
   const sp=document.getElementById('sp-pct');if(sp)sp.textContent=Math.round(p)+'%';
 });
-const fobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.fade-up').forEach(el=>fobs.observe(el));
-const sobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id;document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#'+id));}});},{threshold:0.2});
+const fobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.classList.add('vis');}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.fade-up,.fu').forEach(el=>fobs.observe(el));
+const sobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id;document.querySelectorAll('.nav-item,.ni').forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#'+id));}});},{threshold:0.2});
 document.querySelectorAll('section[id]').forEach(s=>sobs.observe(s));
 
-// ── TAB HELPER ────────────────────────────────────────────────────────────────
+
 function showTab(gid,pid,btn){
   const g=document.getElementById(gid);
   g.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('visible'));
@@ -1182,9 +1886,9 @@ function showTab(gid,pid,btn){
   btn.classList.add('active');
 }
 
-// ── QUIZ SYSTEM ───────────────────────────────────────────────────────────────
+
 const QDB={
-  1:{c:1,e:'Correct. P mesure la performance sur de nouvelles données jamais vues — c\'est le taux de victoire sur de nouvelles parties, pas le nombre de parties jouées (E).'},
+  1:{c:1,e:'Correct. P mesure la performance sur de nouvelles données jamais vues - c\'est le taux de victoire sur de nouvelles parties, pas le nombre de parties jouées (E).'},
   2:{c:2,e:'Correct ! ŷ = 1.5×100 + 30 = 150 + 30 = 180 k€.'},
   3:{c:1,e:'Correct. R² = 1 − SS_res/SS_tot = 0.82 signifie que le modèle explique 82 % de la variance des prix. Les 18 % restants ne sont pas expliqués par les variables choisies.'},
   4:{c:2,e:'Correct. En médecine, un faux négatif (rater un cancer) est catastrophique. On maximise le Rappel = TP/(TP+FN). La précision est secondaire ici.'},
@@ -1204,7 +1908,7 @@ function cq(id,chosen,num,fbid){
   fb.className='qfb show '+(chosen===q.c?'ok':'bad');
 }
 
-// ── S02 DATA TABLE ─────────────────────────────────────────────────────────────
+
 (function(){
   const tb=document.getElementById('data-tbody');if(!tb)return;
   tb.innerHTML=DATA.map((d,i)=>{const yh=+(W_OPT*d.x+B_OPT).toFixed(1);const e=+(yh-d.y).toFixed(1);return`<tr><td>${i+1}</td><td>${d.x}</td><td>${d.y}</td><td>${yh}</td><td style="color:${Math.abs(e)<12?'#5ba87a':'#d9845b'}">${e>0?'+':''}${e}</td></tr>`;}).join('');
@@ -1213,7 +1917,7 @@ function cq(id,chosen,num,fbid){
   document.getElementById('data-stats').innerHTML=`<div class="card card-gold"><div class="card-label">w optimal</div><div class="card-val">${W_OPT.toFixed(4)}</div></div><div class="card card-gold"><div class="card-label">b optimal</div><div class="card-val">${B_OPT.toFixed(2)}</div></div><div class="card card-green"><div class="card-label">R²</div><div class="card-val">${rv.toFixed(4)}</div></div>`;
 })();
 
-// ── S02 MODEL CHART ────────────────────────────────────────────────────────────
+
 let cMod=null;
 (function(){
   const ctx=document.getElementById('chart-model');if(!ctx)return;
@@ -1234,7 +1938,7 @@ function updateMod(){
 document.getElementById('w-slider').oninput=updateMod;
 document.getElementById('b-slider').oninput=updateMod;
 
-// ── S03 PARABOLA ───────────────────────────────────────────────────────────────
+
 (function(){
   const ctx=document.getElementById('chart-parab');if(!ctx)return;
   const pts=[];for(let w=-1;w<=5;w+=0.1)pts.push({x:+w.toFixed(2),y:+cost(w,B_OPT).toFixed(2)});
@@ -1244,27 +1948,27 @@ document.getElementById('b-slider').oninput=updateMod;
   ]},options:mkO('w','J(w, b = B_OPT)')});
 })();
 
-// ── S04 GRADIENT NUMERIC ──────────────────────────────────────────────────────
+
 (function(){
   const el=document.getElementById('grad-numeric');if(!el)return;
   const w=0,b=0,gw=gW(w,b),gb=gB(w,b),j=cost(w,b);
   const lines=DATA.map(d=>`  i=${DATA.indexOf(d)+1}: (0×${d.x}+0−${d.y})×${d.x} = ${(-d.y)*d.x}`).join('\n');
-  el.innerHTML=`<span class="lbl">Calcul numérique — w=0, b=0</span>∂J/∂w = (1/${M}) × Σᵢ(0·xᵢ+0−yᵢ)·xᵢ\n${lines}\n       = (1/${M}) × ${(gw*M).toFixed(0)} = <span class="hr">${gw.toFixed(4)}</span>\n\n∂J/∂b = (1/${M}) × ${(gb*M).toFixed(0)} = <span class="hr">${gb.toFixed(4)}</span>\n\nJ(0,0) = <span class="hw">${j.toFixed(2)}</span>  →  gradient négatif  →  il faut <span class="hg">augmenter</span> w et b`;
+  el.innerHTML=`<span class="lbl">Calcul numérique - w=0, b=0</span>∂J/∂w = (1/${M}) × Σᵢ(0·xᵢ+0−yᵢ)·xᵢ\n${lines}\n       = (1/${M}) × ${(gw*M).toFixed(0)} = <span class="hr">${gw.toFixed(4)}</span>\n\n∂J/∂b = (1/${M}) × ${(gb*M).toFixed(0)} = <span class="hr">${gb.toFixed(4)}</span>\n\nJ(0,0) = <span class="hw">${j.toFixed(2)}</span>  →  gradient négatif  →  il faut <span class="hg">augmenter</span> w et b`;
 })();
 
-// ── S05 MANUAL STEPS ──────────────────────────────────────────────────────────
+
 (function(){
   const el=document.getElementById('manual-steps');if(!el)return;
   let w=0,b=0,html='';
   for(let t=0;t<3;t++){
     const j=cost(w,b),gw=gW(w,b),gb=gB(w,b),nw=w-0.0032*gw,nb=b-0.0032*gb;
-    html+=`<div class="formula" style="margin:.75rem 0"><span class="lbl">Itération ${t+1} — w=${w.toFixed(4)}, b=${b.toFixed(2)}</span>J = <span class="hw">${j.toFixed(2)}</span>  |  ∂J/∂w = <span class="hi">${gw.toFixed(4)}</span>  |  ∂J/∂b = <span class="hi">${gb.toFixed(4)}</span>\nw_new = ${w.toFixed(4)} − 0.0032 × ${gw.toFixed(4)} = <span class="hg">${nw.toFixed(4)}</span>\nb_new = ${b.toFixed(2)} − 0.0032 × ${gb.toFixed(4)} = <span class="hg">${nb.toFixed(4)}</span></div>`;
+    html+=`<div class="formula" style="margin:.75rem 0"><span class="lbl">Itération ${t+1} - w=${w.toFixed(4)}, b=${b.toFixed(2)}</span>J = <span class="hw">${j.toFixed(2)}</span>  |  ∂J/∂w = <span class="hi">${gw.toFixed(4)}</span>  |  ∂J/∂b = <span class="hi">${gb.toFixed(4)}</span>\nw_new = ${w.toFixed(4)} − 0.0032 × ${gw.toFixed(4)} = <span class="hg">${nw.toFixed(4)}</span>\nb_new = ${b.toFixed(2)} − 0.0032 × ${gb.toFixed(4)} = <span class="hg">${nb.toFixed(4)}</span></div>`;
     w=nw;b=nb;
   }
   el.innerHTML=html;
 })();
 
-// ── S08 EVAL METRICS ──────────────────────────────────────────────────────────
+
 (function(){
   const el=document.getElementById('eval-metrics');if(!el)return;
   const mse=DATA.reduce((s,d)=>s+(d.y-(W_OPT*d.x+B_OPT))**2,0)/M;
@@ -1272,7 +1976,7 @@ document.getElementById('b-slider').oninput=updateMod;
   el.innerHTML=`<div class="card card-blue"><div class="card-label">MSE</div><div class="card-val">${mse.toFixed(2)}</div><div class="card-sub">(k€)²</div></div><div class="card card-green"><div class="card-label">RMSE</div><div class="card-val">${rmse.toFixed(2)}</div><div class="card-sub">k€ d'erreur moyenne</div></div><div class="card card-gold"><div class="card-label">R²</div><div class="card-val">${rv.toFixed(4)}</div><div class="card-sub">${(rv*100).toFixed(1)} % variance expliquée</div></div>`;
 })();
 
-// ── S06 MULTIPLE REGRESSION SIMULATOR ────────────────────────────────────────
+
 const MDATA=[{x1:50,x2:1,y:155},{x1:70,x2:2,y:190},{x1:90,x2:2,y:220},{x1:100,x2:3,y:260},{x1:110,x2:3,y:275},{x1:130,x2:4,y:310}];
 const MM=MDATA.length;
 function mP(t0,t1,t2,d){return t0+t1*d.x1+t2*d.x2;}
@@ -1294,9 +1998,9 @@ function multUI(){
   document.getElementById('m-t0').textContent=mu.t0.toFixed(3);document.getElementById('m-t1').textContent=mu.t1.toFixed(4);document.getElementById('m-t2').textContent=mu.t2.toFixed(4);
   document.getElementById('m-iter').textContent=mu.it;document.getElementById('m-j').textContent=isFinite(j)?j.toFixed(1):'∞';
   const sb=document.getElementById('mult-status');
-  if(multDiv()){sb.textContent='Divergence — réduisez α.';sb.className='status-bar warn';}
-  else if(multCon()){sb.textContent=`Convergé en ${mu.it} itérations — θ₀≈${mu.t0.toFixed(1)}, θ₁≈${mu.t1.toFixed(3)}, θ₂≈${mu.t2.toFixed(3)} (cibles: 40, 1.85, 10)`;sb.className='status-bar ok';}
-  else{sb.textContent=mu.it===0?'Prêt.':`Itération ${mu.it} — J=${j.toFixed(1)}`;sb.className='status-bar';}
+  if(multDiv()){sb.textContent='Divergence - réduisez α.';sb.className='status-bar warn';}
+  else if(multCon()){sb.textContent=`Convergé en ${mu.it} itérations - θ₀≈${mu.t0.toFixed(1)}, θ₁≈${mu.t1.toFixed(3)}, θ₂≈${mu.t2.toFixed(3)} (cibles: 40, 1.85, 10)`;sb.className='status-bar ok';}
+  else{sb.textContent=mu.it===0?'Prêt.':`Itération ${mu.it} - J=${j.toFixed(1)}`;sb.className='status-bar';}
   if(mChart){mChart.data.datasets[0].data=mu.hist.map(h=>({x:h.i,y:+h.j.toFixed(1)}));mChart.update('none');}
   const log=document.getElementById('mult-log');
   const rows=mu.hist.slice(-6).reverse();
@@ -1310,7 +2014,7 @@ setTimeout(()=>{
   multReset();multUI();
 },300);
 
-// ── S09 REGRESSION SIMULATOR ──────────────────────────────────────────────────
+
 let sim={w:0,b:0,it:0,hist:[],run:false,timer:null};let sc={};
 function sAlpha(){return Math.pow(10,+document.getElementById('sim-alpha').value);}
 function sW0(){return +document.getElementById('sim-w0').value;}
@@ -1328,9 +2032,9 @@ function simUI(){
   const j=cost(sim.w,sim.b);
   document.getElementById('sim-iter').textContent=sim.it;document.getElementById('sim-w').textContent=isFinite(sim.w)?sim.w.toFixed(4):'∞';document.getElementById('sim-b').textContent=isFinite(sim.b)?sim.b.toFixed(2):'∞';document.getElementById('sim-j').textContent=isFinite(j)?j.toFixed(2):'∞';
   const sb=document.getElementById('sim-status');
-  if(simDiv()){sb.textContent='Divergence ! α est trop grand — réinitialisez.';sb.className='status-bar warn';}
-  else if(simCon()){sb.textContent=`Convergé en ${sim.it} itérations — w≈${sim.w.toFixed(4)}, b≈${sim.b.toFixed(2)} (optimal: w=${W_OPT.toFixed(4)}, b=${B_OPT.toFixed(2)})`;sb.className='status-bar ok';}
-  else{sb.textContent=sim.it===0?'Configurez α et lancez.':`Itération ${sim.it} — J=${j.toFixed(2)}`;sb.className='status-bar';}
+  if(simDiv()){sb.textContent='Divergence ! α est trop grand - réinitialisez.';sb.className='status-bar warn';}
+  else if(simCon()){sb.textContent=`Convergé en ${sim.it} itérations - w≈${sim.w.toFixed(4)}, b≈${sim.b.toFixed(2)} (optimal: w=${W_OPT.toFixed(4)}, b=${B_OPT.toFixed(2)})`;sb.className='status-bar ok';}
+  else{sb.textContent=sim.it===0?'Configurez α et lancez.':`Itération ${sim.it} - J=${j.toFixed(2)}`;sb.className='status-bar';}
   const log=document.getElementById('sim-log');
   const rows=sim.hist.slice(-8).reverse();
   let h='<div style="display:grid;grid-template-columns:36px 1fr 1fr 1fr 1fr;gap:5px;color:var(--text3);font-size:11.5px;border-bottom:1px solid var(--border);padding-bottom:3px;margin-bottom:3px"><span>iter</span><span>w</span><span>b</span><span style="color:#d9845b">∂J/∂w</span><span>J</span></div>';
@@ -1348,7 +2052,7 @@ function initSC(){
   sc.par=new Chart(document.getElementById('sim-cpar'),{data:{datasets:[{type:'line',data:pp,borderColor:'#9d7fd4',borderWidth:2,pointRadius:0,tension:0.3},{type:'scatter',data:[{x:0,y:cost(0,B_OPT)}],backgroundColor:'#c8a96e',pointRadius:9}]},options:mkO('w','J(w)')});
 }
 
-// ── S12 SIGMOID ───────────────────────────────────────────────────────────────
+
 (function(){
   const zv=[-5,-3,-1,0,1,3,5];const cls=['sig-low','sig-low','sig-low','sig-mid','sig-high','sig-high','sig-high'];
   const tb=document.getElementById('sig-table');if(tb)tb.innerHTML=zv.map((z,i)=>`<div class="sig-cell ${cls[i]}"><div class="zv">z=${z}</div><div class="arr">↓</div><div class="pv">${sig(z).toFixed(3)}</div></div>`).join('');
@@ -1363,7 +2067,7 @@ function updSig(){
   document.getElementById('sig-res').innerHTML=`σ(${z.toFixed(2)}) = 1/(1+e⁻${z.toFixed(2)}) = <span style="color:${c};font-size:17px;font-weight:700">${s.toFixed(4)}</span>\nhθ = ${s.toFixed(4)} ${s>=0.5?'≥':'&lt;'} 0.5  →  ŷ = <span style="color:${c}">${s>=0.5?'1 (positif)':'0 (négatif)'}</span>`;
 }
 
-// ── S13 BOUNDARY ─────────────────────────────────────────────────────────────
+
 let bdC=null;
 (function(){
   const ctx=document.getElementById('bd-chart');if(!ctx)return;
@@ -1384,7 +2088,7 @@ function updBD(){
   bdC.data.datasets[2].data=bd;bdC.update('none');
 }
 
-// ── S15 CONFUSION METRICS ─────────────────────────────────────────────────────
+
 function calcMetrics(){
   const tp=+document.getElementById('cm-tp').value||0,tn=+document.getElementById('cm-tn').value||0,fp=+document.getElementById('cm-fp').value||0,fn=+document.getElementById('cm-fn').value||0;
   const tot=tp+tn+fp+fn;if(!tot)return;
@@ -1394,14 +2098,14 @@ function calcMetrics(){
   document.getElementById('mp-acc').textContent=pct(acc);document.getElementById('mp-prec').textContent=pct(prec);document.getElementById('mp-rec').textContent=pct(rec);document.getElementById('mp-f1').textContent=pct(f1);
 }
 
-// ── S15 ROC CHART ─────────────────────────────────────────────────────────────
+
 (function(){
   const ctx=document.getElementById('roc-chart');if(!ctx)return;
   const good=Array.from({length:21},(_,i)=>{const t=i/20;return{x:t,y:Math.min(1,Math.sqrt(t)*1.18)};});
-  new Chart(ctx,{data:{datasets:[{type:'line',data:good,borderColor:'#5b8dd9',borderWidth:2.5,pointRadius:0,fill:{target:1,above:'rgba(91,141,217,0.07)'},label:'Bon modèle (AUC≈0.87)'},{type:'line',data:[{x:0,y:0},{x:1,y:1}],borderColor:'#5e5c55',borderWidth:1.5,borderDash:[6,4],pointRadius:0,label:'Aléatoire (AUC=0.5)'}]},options:{...mkO('FPR — Faux Positifs','TPR — Rappel'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{x:{...mkO('FPR','TPR').scales.x,min:0,max:1},y:{...mkO('FPR','TPR').scales.y,min:0,max:1}}}});
+  new Chart(ctx,{data:{datasets:[{type:'line',data:good,borderColor:'#5b8dd9',borderWidth:2.5,pointRadius:0,fill:{target:1,above:'rgba(91,141,217,0.07)'},label:'Bon modèle (AUC≈0.87)'},{type:'line',data:[{x:0,y:0},{x:1,y:1}],borderColor:'#5e5c55',borderWidth:1.5,borderDash:[6,4],pointRadius:0,label:'Aléatoire (AUC=0.5)'}]},options:{...mkO('FPR - Faux Positifs','TPR - Rappel'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{x:{...mkO('FPR','TPR').scales.x,min:0,max:1},y:{...mkO('FPR','TPR').scales.y,min:0,max:1}}}});
 })();
 
-// ── S17 DECISION TREE SVG ─────────────────────────────────────────────────────
+
 (function(){
   const svg=document.getElementById('tree-svg');if(!svg)return;
   const ns='http://www.w3.org/2000/svg';
@@ -1431,7 +2135,7 @@ function calcMetrics(){
   svg.appendChild(nd(580,258,'Diabétique','Gini=0','rgba(217,91,91,0.15)','#d95b5b'));
 })();
 
-// ── S19 LOGISTIC SIMULATOR ───────────────────────────────────────────────────
+
 const LGD=(()=>{const d=[];for(let i=0;i<30;i++){const x1=-1.5+Math.random()*2.5,x2=-1.5+Math.random()*2.5;d.push({x1,x2,y:x1+x2>0.5?1:0});}return d;})();
 const lgm=LGD.length;
 function lgC(t0,t1){return-LGD.reduce((s,d)=>{const h=sig(t0+t1*d.x1);return s+(d.y?Math.log(h+1e-10):Math.log(1-h+1e-10));},0)/lgm;}
@@ -1449,8 +2153,8 @@ function lgUI(){
   const j=lgC(lg.t0,lg.t1);
   document.getElementById('lg-it').textContent=lg.it;document.getElementById('lg-t0').textContent=lg.t0.toFixed(3);document.getElementById('lg-t1').textContent=lg.t1.toFixed(3);document.getElementById('lg-j').textContent=isFinite(j)?j.toFixed(4):'∞';
   const sb=document.getElementById('lg-stat');
-  if(lgCon()){sb.textContent=`Convergé en ${lg.it} itérations — Log Loss = ${j.toFixed(4)}`;sb.className='status-bar ok';}
-  else{sb.textContent=lg.it===0?'Configurez α et lancez.':`Itération ${lg.it} — J = ${j.toFixed(4)}`;sb.className='status-bar';}
+  if(lgCon()){sb.textContent=`Convergé en ${lg.it} itérations - Log Loss = ${j.toFixed(4)}`;sb.className='status-bar ok';}
+  else{sb.textContent=lg.it===0?'Configurez α et lancez.':`Itération ${lg.it} - J = ${j.toFixed(4)}`;sb.className='status-bar';}
   const log=document.getElementById('lg-log');
   const rows=lg.hist.slice(-6).reverse();
   let h='<div style="display:grid;grid-template-columns:36px 1fr 1fr 1fr;gap:7px;color:var(--text3);font-size:11.5px;border-bottom:1px solid var(--border);padding-bottom:3px;margin-bottom:3px"><span>iter</span><span>θ₀</span><span>θ₁</span><span>J</span></div>';
@@ -1472,7 +2176,7 @@ function initLC(){
   lgReset();lgUI();
 }
 
-// ── EXERCISES ─────────────────────────────────────────────────────────────────
+
 function showExo(id,html,ok){const el=document.getElementById(id);el.className='exo-res show '+(ok?'ok':'bad');el.innerHTML=html;}
 function ap(a,b,t=0.05){return Math.abs(a-b)<=t;}
 
@@ -1491,12 +2195,375 @@ function cE(n){
   }
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+
 setTimeout(()=>{
-  updateMod();updSig();calcMetrics();
   initSC();simReset();simUI();
   initLC();
 },400);
+
+
+
+function rand(a,b){return a+Math.random()*(b-a);}
+function clamp(v,a,b){return Math.min(b,Math.max(a,v));}
+function dist2(a,b){return (a[0]-b[0])**2+(a[1]-b[1])**2;}
+function dist(a,b){return Math.sqrt(dist2(a,b));}
+
+
+const UQANS={
+  1:{c:1,e:'Correct. Les 3 premières composantes capturent 85 % de la variance totale des 10 variables. On passe de 10D à 3D en conservant 85 % de l\'information. Les 15 % restants sont perdus.'},
+  2:{c:1,e:'Correct. La CAH construit un dendrogramme complet sans fixer K. On choisit K après coup en coupant le dendrogramme à la hauteur souhaitée.'},
+  3:{c:1,e:'Correct. DBSCAN est idéal ici : il découvre les zones denses sans fixer K, détecte les outliers (zones sans activité = bruit) et gère les formes arbitraires des zones urbaines.'},
+  4:{c:1,e:'Correct. Un score de silhouette de −0.15 signifie que beaucoup de points sont en moyenne plus proches d\'un autre cluster que du leur. Le clustering est mauvais pour K=3. Testez K=2 ou K=4.'},
+  5:{c:1,e:'Correct. Les composantes principales sont construites pour être orthogonales (non corrélées) par définition. C\'est l\'une des propriétés fondamentales de l\'ACP.'},
+  6:{c:1,e:'Correct. K-Means ne converge que vers un minimum local qui dépend de l\'initialisation des centroïdes. On relance l\'algorithme plusieurs fois avec différentes initialisations (paramètre n_init en sklearn) et on garde le meilleur résultat.'},
+  7:{c:1,e:'Correct. Ce point a seulement 3 voisins (< minPts=4) donc ce n\'est pas un point cœur. Mais il se trouve dans le ε-voisinage d\'un point cœur → c\'est un point bord. Il appartient au cluster de son point cœur.'}
+};
+function ucq(id,chosen,num,fbid){
+  const opts=document.getElementById(id+'o');if(opts.dataset.done)return;opts.dataset.done='1';
+  const q=UQANS[num];
+  opts.querySelectorAll('.qopt').forEach((o,i)=>{if(i===q.c)o.classList.add('correct');else if(i===chosen&&chosen!==q.c)o.classList.add('wrong');});
+  const fb=document.getElementById(fbid);
+  fb.innerHTML=(chosen===q.c?'':('Pas tout à fait. '))+q.e;
+  fb.className='qfb show '+(chosen===q.c?'ok':'bad');
+}
+
+
+(function(){
+  const ctx=document.getElementById('scree-chart');if(!ctx)return;
+  const lambdas=[4.2,2.1,0.9,0.5,0.3];
+  const total=lambdas.reduce((s,v)=>s+v,0);
+  let cumul=0;
+  const cumPct=lambdas.map(l=>{cumul+=l/total*100;return+cumul.toFixed(1);});
+  const indiv=lambdas.map(l=>+(l/total*100).toFixed(1));
+  new Chart(ctx,{data:{datasets:[
+    {type:'bar',data:indiv.map((v,i)=>({x:`CP${i+1}`,y:v})),backgroundColor:'rgba(91,200,200,0.4)',borderColor:'#5bc8c8',borderWidth:1.5,label:'Var. expliquée (%)'},
+    {type:'line',data:cumPct.map((v,i)=>({x:`CP${i+1}`,y:v})),borderColor:'#c8a96e',borderWidth:2,pointRadius:5,pointBackgroundColor:'#c8a96e',label:'Cumulé (%)'}
+  ]},options:{...mkO('Composante','Variance (%)'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{...mkO('CP','%').scales,y:{...mkO('CP','%').scales.y,min:0,max:110}}}});
+})();
+
+// S02 ACP - Visualisation interactive let pcaChart=null;
+const PCA_DATA=(()=>{
+  const d=[];for(let i=0;i<40;i++){
+    const t=rand(-3,3);d.push({x:t+rand(-.5,.5),y:t*.8+rand(-.4,.4)});
+  }
+  return d;
+})();
+(function(){
+  const ctx=document.getElementById('pca-chart');if(!ctx)return;
+  const ang=55*Math.PI/180;
+  const v1=[Math.cos(ang),Math.sin(ang)];
+  const projections=PCA_DATA.map(p=>{const t=p.x*v1[0]+p.y*v1[1];return{x:t*v1[0],y:t*v1[1]};});
+  pcaChart=new Chart(ctx,{data:{datasets:[
+    {type:'scatter',data:PCA_DATA,backgroundColor:'rgba(91,200,200,0.7)',pointRadius:5,label:'Données'},
+    {type:'scatter',data:projections,backgroundColor:'rgba(200,169,110,0.5)',pointRadius:4,label:'Projection CP1'},
+    {type:'line',data:[{x:-4*v1[0],y:-4*v1[1]},{x:4*v1[0],y:4*v1[1]}],borderColor:'#c8a96e',borderWidth:2.5,pointRadius:0,label:'CP1'}
+  ]},options:{...mkO('x₁','x₂'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{x:{...mkO('x₁','x₂').scales.x,min:-5,max:5},y:{...mkO('x₁','x₂').scales.y,min:-5,max:5}}}});
+  document.getElementById('pca-var').textContent='Utilisez le slider pour faire pivoter CP1 et observer la variance projetée';
+})();
+function updPCA(){
+  const deg=+document.getElementById('pca-angle').value;
+  document.getElementById('pca-angle-v').textContent=deg+'°';
+  if(!pcaChart)return;
+  const ang=deg*Math.PI/180;
+  const v1=[Math.cos(ang),Math.sin(ang)];
+  const projs=PCA_DATA.map(p=>{const t=p.x*v1[0]+p.y*v1[1];return{x:t*v1[0],y:t*v1[1]};});
+  const projVar=PCA_DATA.reduce((s,p)=>{const t=p.x*v1[0]+p.y*v1[1];return s+t*t;},0)/PCA_DATA.length;
+  const totalVar=PCA_DATA.reduce((s,p)=>s+p.x*p.x+p.y*p.y,0)/PCA_DATA.length;
+  pcaChart.data.datasets[1].data=projs;
+  pcaChart.data.datasets[2].data=[{x:-4*v1[0],y:-4*v1[1]},{x:4*v1[0],y:4*v1[1]}];
+  pcaChart.update('none');
+  const pct=(projVar/totalVar*100).toFixed(1);
+  document.getElementById('pca-var').textContent=`Variance expliquée par CP1 : ${pct} %  (optimal ≈ 66 % à ~55°)`;
+}
+
+
+(function(){
+  const ctx=document.getElementById('elbow-chart');if(!ctx)return;
+  const pts=[];for(let i=0;i<120;i++){
+    const c=Math.floor(i/40);pts.push([c*4+rand(-.8,.8),c%2*3+rand(-.8,.8)]);
+  }
+  function kmInertia(k){
+    const cents=pts.slice(0,k).map(p=>[...p]);
+    for(let t=0;t<30;t++){
+      const assign=pts.map(p=>cents.reduce((bi,c,i)=>dist2(p,c)<dist2(p,cents[bi])?i:bi,0));
+      const newc=cents.map((_,k)=>{const cp=pts.filter((_,i)=>assign[i]===k);if(!cp.length)return [...cents[k]];return[cp.reduce((s,p)=>s+p[0],0)/cp.length,cp.reduce((s,p)=>s+p[1],0)/cp.length];});
+      cents.forEach((c,i)=>{c[0]=newc[i][0];c[1]=newc[i][1];});
+    }
+    const assign=pts.map(p=>cents.reduce((bi,c,i)=>dist2(p,c)<dist2(p,cents[bi])?i:bi,0));
+    return pts.reduce((s,p,i)=>s+dist2(p,cents[assign[i]]),0);
+  }
+  const ks=[1,2,3,4,5,6,7];
+  const inertias=ks.map(k=>+kmInertia(k).toFixed(1));
+  new Chart(ctx,{data:{datasets:[
+    {type:'line',data:ks.map((k,i)=>({x:k,y:inertias[i]})),borderColor:'#5bc8c8',borderWidth:2.5,pointRadius:6,pointBackgroundColor:(ctx,val)=>val.dataIndex===2?'#c8a96e':'#5bc8c8',tension:0.2,fill:{target:'origin',above:'rgba(91,200,200,0.05)'}}
+  ]},options:{...mkO('K (nombre de clusters)','Inertie J'),scales:{...mkO('K','J').scales,x:{...mkO('K','J').scales.x,ticks:{color:'#5e5c55',stepSize:1}}}}});
+})();
+
+
+const COLORS=['#5b8dd9','#5ba87a','#d9845b','#9d7fd4','#5bc8c8','#d95b5b'];
+let kmData=[],kmCents=[],kmAssign=[],kmIter=0,kmDone=false,kmTimer=null;
+
+function genKMData(K){
+  kmData=[];
+  const seeds=Array.from({length:K},(_,k)=>[rand(50,550),rand(30,330)]);
+  for(let k=0;k<K;k++){for(let i=0;i<40;i++){kmData.push({x:seeds[k][0]+rand(-60,60),y:seeds[k][1]+rand(-55,55),c:-1});}}
+  kmCents=kmData.slice(0,K).map(p=>({x:p.x+rand(-20,20),y:p.y+rand(-20,20)}));
+  kmAssign=kmData.map(()=>-1);kmIter=0;kmDone=false;
+  drawKM();
+}
+function kmGetK(){return +document.getElementById('km-k').value;}
+function kmReset(){if(kmTimer)clearInterval(kmTimer);kmTimer=null;genKMData(kmGetK());document.getElementById('km-stat').textContent='Cliquez sur +1 itération pour démarrer.';document.getElementById('km-stat').className='sb';}
+function kmStep(){
+  if(kmDone)return;
+  const KN=kmGetK();
+  // Assign
+  const prev=kmAssign.map(v=>v);
+  kmData.forEach((p,i)=>{let best=0,bd=Infinity;kmCents.forEach((c,k)=>{const d=(p.x-c.x)**2+(p.y-c.y)**2;if(d<bd){bd=d;best=k;}});kmAssign[i]=best;});
+  // Update centroids
+  kmCents.forEach((c,k)=>{const pts=kmData.filter((_,i)=>kmAssign[i]===k);if(pts.length){c.x=pts.reduce((s,p)=>s+p.x,0)/pts.length;c.y=pts.reduce((s,p)=>s+p.y,0)/pts.length;}});
+  kmIter++;
+  const inertia=kmData.reduce((s,p,i)=>{const c=kmCents[kmAssign[i]];return s+(p.x-c.x)**2+(p.y-c.y)**2;},0);
+  const changed=prev.some((v,i)=>v!==kmAssign[i]);
+  kmDone=!changed&&kmIter>1;
+  document.getElementById('km-it').textContent=kmIter;
+  document.getElementById('km-inertia').textContent=Math.round(inertia);
+  document.getElementById('km-conv').textContent=kmDone?'Oui':'Non';
+  const sb=document.getElementById('km-stat');
+  if(kmDone){sb.textContent=`Convergé en ${kmIter} itérations. Inertie finale = ${Math.round(inertia)}`;sb.className='sb ok';}
+  else{sb.textContent=`Itération ${kmIter} - inertie = ${Math.round(inertia)} - ${changed?'assignations changées':'convergence proche'}`;sb.className='sb';}
+  drawKM();
+}
+function kmAuto(){if(kmTimer){clearInterval(kmTimer);kmTimer=null;return;}kmTimer=setInterval(()=>{if(kmDone){clearInterval(kmTimer);kmTimer=null;return;}kmStep();},400);}
+function drawKM(){
+  const canvas=document.getElementById('km-canvas');if(!canvas)return;
+  const ctx2=canvas.getContext('2d');
+  ctx2.clearRect(0,0,canvas.width,canvas.height);
+  const KN=kmGetK();
+  // Draw points
+  kmData.forEach((p,i)=>{
+    const c=kmAssign[i]>=0?COLORS[kmAssign[i]]:'#5e5c55';
+    ctx2.beginPath();ctx2.arc(p.x,p.y,4.5,0,Math.PI*2);
+    ctx2.fillStyle=c+'bb';ctx2.fill();
+    ctx2.strokeStyle=c;ctx2.lineWidth=1;ctx2.stroke();
+  });
+  // Draw centroids as stars
+  kmCents.forEach((c,k)=>{
+    drawStar(ctx2,c.x,c.y,12,5,COLORS[k]);
+  });
+}
+function drawStar(ctx2,cx,cy,r,n,color){
+  ctx2.save();ctx2.translate(cx,cy);ctx2.rotate(-Math.PI/2);
+  ctx2.beginPath();
+  for(let i=0;i<2*n;i++){const ri=i%2===0?r:r/2.5;const a=(Math.PI*i)/n;ctx2.lineTo(Math.cos(a)*ri,Math.sin(a)*ri);}
+  ctx2.closePath();ctx2.fillStyle=color;ctx2.fill();ctx2.strokeStyle='white';ctx2.lineWidth=1.5;ctx2.stroke();
+  ctx2.restore();
+}
+
+(function(){
+  const svg=document.getElementById('dendro-svg');if(!svg)return;
+  const ns='http://www.w3.org/2000/svg';
+  // 6 points: A,B,C,D,E,F at positions 60,140,220,300,400,520
+  const pts=[{l:'A',x:60},{l:'B',x:140},{l:'C',x:220},{l:'D',x:320},{l:'E',x:420},{l:'F',x:520}];
+  const BOTTOM=250,SCALE=30;
+  // Fusions: (A,B,h=1), (E,F,h=1.2), (C,D,h=1.5), (AB,C-D,h=3), (ABCd,EF,h=4.5)
+  const merges=[
+    {left:60,right:140,h:1,col:'#5b8dd9'},
+    {left:420,right:520,h:1.2,col:'#5ba87a'},
+    {left:220,right:320,h:1.5,col:'#9d7fd4'},
+    {left:100,right:270,h:3,col:'#d9845b'},
+    {left:185,right:470,h:4.5,col:'#5bc8c8'}
+  ];
+  function y(h){return BOTTOM-h*SCALE;}
+  // Labels
+  pts.forEach(p=>{const t=document.createElementNS(ns,'text');t.setAttribute('x',p.x);t.setAttribute('y',270);t.setAttribute('text-anchor','middle');t.setAttribute('fill','#9e9b91');t.setAttribute('font-size',13);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=p.l;svg.appendChild(t);});
+  // Horizontal height axis
+  for(let h=0;h<=5;h++){
+    const l=document.createElementNS(ns,'line');l.setAttribute('x1',20);l.setAttribute('y1',y(h));l.setAttribute('x2',30);l.setAttribute('y2',y(h));l.setAttribute('stroke','#5e5c55');l.setAttribute('stroke-width',1);svg.appendChild(l);
+    const t=document.createElementNS(ns,'text');t.setAttribute('x',18);t.setAttribute('y',y(h)+4);t.setAttribute('text-anchor','end');t.setAttribute('fill','#5e5c55');t.setAttribute('font-size',10);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=h;svg.appendChild(t);
+  }
+  const ax=document.createElementNS(ns,'line');ax.setAttribute('x1',30);ax.setAttribute('y1',10);ax.setAttribute('x2',30);ax.setAttribute('y2',255);ax.setAttribute('stroke','#5e5c55');ax.setAttribute('stroke-width',1);svg.appendChild(ax);
+  // Vertical stems
+  pts.forEach(p=>{const l=document.createElementNS(ns,'line');l.setAttribute('x1',p.x);l.setAttribute('y1',BOTTOM);l.setAttribute('x2',p.x);l.setAttribute('y2',y(0));l.setAttribute('stroke','#2e2e38');l.setAttribute('stroke-width',1.5);l.setAttribute('stroke-dasharray','3 3');svg.appendChild(l);});
+  // Merge brackets
+  merges.forEach(m=>{
+    const yh=y(m.h);
+    // Left vert
+    const lv=document.createElementNS(ns,'line');lv.setAttribute('x1',m.left);lv.setAttribute('y1',yh+20);lv.setAttribute('x2',m.left);lv.setAttribute('y2',yh);lv.setAttribute('stroke',m.col);lv.setAttribute('stroke-width',2.5);svg.appendChild(lv);
+    // Right vert
+    const rv=document.createElementNS(ns,'line');rv.setAttribute('x1',m.right);rv.setAttribute('y1',yh+20);rv.setAttribute('x2',m.right);rv.setAttribute('y2',yh);rv.setAttribute('stroke',m.col);rv.setAttribute('stroke-width',2.5);svg.appendChild(rv);
+    // Horizontal bar
+    const hb=document.createElementNS(ns,'line');hb.setAttribute('x1',m.left);hb.setAttribute('y1',yh);hb.setAttribute('x2',m.right);hb.setAttribute('y2',yh);hb.setAttribute('stroke',m.col);hb.setAttribute('stroke-width',2.5);svg.appendChild(hb);
+    // Height label
+    const t=document.createElementNS(ns,'text');t.setAttribute('x',(m.left+m.right)/2);t.setAttribute('y',yh-5);t.setAttribute('text-anchor','middle');t.setAttribute('fill',m.col);t.setAttribute('font-size',11);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=m.h.toFixed(1);svg.appendChild(t);
+  });
+  // Cut line at K=2
+  const cut=document.createElementNS(ns,'line');cut.setAttribute('x1',35);cut.setAttribute('y1',y(4));cut.setAttribute('x2',580);cut.setAttribute('y2',y(4));cut.setAttribute('stroke','#c8a96e');cut.setAttribute('stroke-width',1.5);cut.setAttribute('stroke-dasharray','8 4');svg.appendChild(cut);
+  const ct=document.createElementNS(ns,'text');ct.setAttribute('x',585);ct.setAttribute('y',y(4)+4);ct.setAttribute('fill','#c8a96e');ct.setAttribute('font-size',11);ct.setAttribute('font-family','JetBrains Mono,monospace');ct.textContent='K=2';svg.appendChild(ct);
+})();
+
+
+const DBS_DATA=(()=>{
+  const d=[];
+  // Cluster 1: small dense blob
+  for(let i=0;i<22;i++)d.push([1.5+rand(-.5,.5),1.5+rand(-.5,.5)]);
+  // Cluster 2: crescent shape
+  for(let i=0;i<25;i++){const a=rand(0,Math.PI);d.push([3.5+Math.cos(a)*1.2+rand(-.15,.15),2+Math.sin(a)*.8+rand(-.15,.15)]);}
+  // Outliers
+  d.push([0.3,3.8],[4.8,0.5],[2.8,0.2],[0.1,0.8]);
+  return d;
+})();
+
+function runDBSCAN(){
+  const eps=+document.getElementById('dbs-eps').value;
+  const mp=+document.getElementById('dbs-mp').value;
+  document.getElementById('dbs-epsv').textContent=eps.toFixed(2);
+  document.getElementById('dbs-mpv').textContent=mp;
+  // Classify
+  const n=DBS_DATA.length;
+  const labels=new Array(n).fill(-1); // -1=unvisited, -2=noise
+  const isCore=DBS_DATA.map((_,i)=>{const nb=DBS_DATA.filter((_,j)=>dist(DBS_DATA[i],DBS_DATA[j])<=eps).length;return nb>=mp;});
+  let clusterID=0;
+  const visited=new Array(n).fill(false);
+  function expand(i,cid){
+    const queue=[i];
+    while(queue.length){
+      const p=queue.shift();if(visited[p])continue;
+      visited[p]=true;labels[p]=cid;
+      if(isCore[p]){DBS_DATA.forEach((_,j)=>{if(!visited[j]&&dist(DBS_DATA[p],DBS_DATA[j])<=eps)queue.push(j);});}
+    }
+  }
+  DBS_DATA.forEach((_,i)=>{if(visited[i])return;if(isCore[i]){expand(i,clusterID);clusterID++;}});
+  DBS_DATA.forEach((_,i)=>{if(!visited[i]){const nb=DBS_DATA.some((q,j)=>j!==i&&isCore[j]&&dist(DBS_DATA[i],DBS_DATA[j])<=eps);if(nb){const ci=DBS_DATA.findIndex((_,j)=>isCore[j]&&dist(DBS_DATA[i],DBS_DATA[j])<=eps);if(ci>=0){labels[i]=labels[ci];visited[i]=true;}}}});
+  // Draw
+  const canvas=document.getElementById('dbs-canvas');if(!canvas)return;
+  const ctx2=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height,PAD=40;
+  const scx=x=>(x/(5)*(W-2*PAD)+PAD);
+  const scy=y=>(H-PAD-(y/(4.2)*(H-2*PAD)));
+  ctx2.clearRect(0,0,W,H);
+  const cmap=[COLORS[0],COLORS[1],COLORS[2],COLORS[3],COLORS[4]];
+  const noiseC='#5e5c55';
+  DBS_DATA.forEach((p,i)=>{
+    const x=scx(p[0]),y=scy(p[1]);
+    const lbl=labels[i];
+    const c=lbl<0?noiseC:cmap[lbl%cmap.length];
+    if(isCore[i]){ctx2.beginPath();ctx2.arc(x,y,7,0,Math.PI*2);ctx2.fillStyle=c+'88';ctx2.fill();ctx2.strokeStyle=c;ctx2.lineWidth=2;ctx2.stroke();}
+    ctx2.beginPath();ctx2.arc(x,y,lbl<0?3.5:5,0,Math.PI*2);
+    ctx2.fillStyle=lbl<0?noiseC:c;ctx2.fill();
+    if(lbl<0){ctx2.strokeStyle='#888';ctx2.lineWidth=1;ctx2.stroke();}
+  });
+  // Counts
+  const nclusters=Math.max(0,...labels)+1;
+  const nnoise=labels.filter(l=>l<0).length;
+  const ncore=isCore.filter(Boolean).length;
+  document.getElementById('dbs-stat').textContent=`Clusters: ${nclusters}  |  Points cœur: ${ncore}  |  Bruit (outliers): ${nnoise}`;
+  document.getElementById('dbs-stat').className='sb '+(nclusters>1&&nnoise<15?'ok':'');
+}
+
+
+(function(){
+  const canvas=document.getElementById('compare-canvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  function blob(cx,cy,n,r){return Array.from({length:n},()=>[cx+rand(-r,r),cy+rand(-r,r)]);}
+  function moons(n){const d=[];for(let i=0;i<n;i++){const a=Math.random()*Math.PI;d.push([Math.cos(a)+rand(-.08,.08),Math.sin(a)+rand(-.08,.08)]);}for(let i=0;i<n;i++){const a=Math.random()*Math.PI+Math.PI;d.push([Math.cos(a)+.8+rand(-.08,.08),-Math.sin(a)+0.3+rand(-.08,.08)]);}return d;}
+  function circles(n){const d=[];for(let i=0;i<n;i++){const a=rand(0,2*Math.PI);const r1=0.4+rand(-.05,.05);d.push([Math.cos(a)*r1,Math.sin(a)*r1]);}for(let i=0;i<n;i++){const a=rand(0,2*Math.PI);const r2=1+rand(-.05,.05);d.push([Math.cos(a)*r2,Math.sin(a)*r2]);}return d;}
+  function scaleToRect(pts,x0,y0,w,h){const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);return pts.map(p=>[(p[0]-minX)/(maxX-minX)*w+x0,(p[1]-minY)/(maxY-minY)*h+y0]);}
+  function drawPts(pts,colors,r=3.5){pts.forEach((p,i)=>{ctx.beginPath();ctx.arc(p[0],p[1],r,0,Math.PI*2);ctx.fillStyle=colors[i];ctx.fill();});}
+  // 6 panels: row1=blobs, row2=moons, row3=circles; col1=K-Means, col2=DBSCAN
+  const PAD=10,PW=W/2-PAD*3,PH=H/3-PAD*2;
+  const titles=['Blobs - K-Means','Blobs - DBSCAN','Lunes - K-Means','Lunes - DBSCAN','Cercles - K-Means','Cercles - DBSCAN'];
+  const goodKM=[true,false,false];
+  const goodDB=[false,true,true];
+  const datasets=[blob(1,1,50,.4).concat(blob(3,1,50,.4)).concat(blob(2,3,50,.4)),moons(40),circles(50)];
+  ctx.fillStyle='#1e1e24';ctx.fillRect(0,0,W,H);
+  datasets.forEach((raw,row)=>{
+    [0,1].forEach(col=>{
+      const x0=col*(PW+PAD*2)+PAD,y0=row*(PH+PAD*2)+PAD;
+      const scaled=scaleToRect(raw,x0+5,y0+5,PW-10,PH-10);
+      // Background
+      ctx.fillStyle='#16161a';ctx.beginPath();ctx.roundRect(x0,y0,PW,PH,6);ctx.fill();
+      // Color points
+      let colors;
+      if(col===0){// K-Means coloring
+        const KN=3,cents=scaled.slice(0,KN).map(p=>[...p]);
+        for(let t=0;t<20;t++){const ass=scaled.map(p=>cents.reduce((bi,c,i)=>(p[0]-c[0])**2+(p[1]-c[1])**2<(p[0]-cents[bi][0])**2+(p[1]-cents[bi][1])**2?i:bi,0));cents.forEach((c,k)=>{const ps=scaled.filter((_,i)=>ass[i]===k);if(ps.length){c[0]=ps.reduce((s,p)=>s+p[0],0)/ps.length;c[1]=ps.reduce((s,p)=>s+p[1],0)/ps.length;}});}
+        const ass=scaled.map(p=>cents.reduce((bi,c,i)=>(p[0]-c[0])**2+(p[1]-c[1])**2<(p[0]-cents[bi][0])**2+(p[1]-cents[bi][1])**2?i:bi,0));
+        colors=ass.map(k=>[COLORS[0],COLORS[1],COLORS[2]][k]+'cc');
+      } else {// DBSCAN-like (rough coloring by row)
+        if(row===0)colors=scaled.map(p=>p[0]<x0+PW*.35?COLORS[0]+'cc':p[0]>x0+PW*.65?COLORS[2]+'cc':COLORS[1]+'cc');
+        else if(row===1)colors=scaled.map((_,i)=>i<raw.length/2?COLORS[0]+'cc':COLORS[1]+'cc');
+        else colors=scaled.map((_,i)=>i<raw.length/2?COLORS[0]+'cc':COLORS[1]+'cc');
+      }
+      drawPts(scaled,colors);
+      // Label
+      ctx.fillStyle=goodKM[row]&&col===0||goodDB[row]&&col===1?'#7ec99a':'#9e9b91';
+      ctx.font='11px JetBrains Mono';ctx.fillText(titles[row*2+col],x0+5,y0+PH-5);
+    });
+  });
+})();
+
+
+(function(){
+  const ctx=document.getElementById('sil-chart');if(!ctx)return;
+  const scores=Array.from({length:30},(_,i)=>{
+    const c=Math.floor(i/10);const offset=[0.7,0.5,-0.2][c];return+(offset+rand(-.2,.2)).toFixed(2);
+  }).sort((a,b)=>b-a);
+  const colors=scores.map(v=>v>0.4?'rgba(91,168,122,0.7)':v>0?'rgba(200,169,110,0.7)':'rgba(217,91,91,0.7)');
+  new Chart(ctx,{data:{datasets:[{type:'bar',data:scores.map((v,i)=>({x:i,y:v})),backgroundColor:colors,borderColor:'transparent'}]},options:{...mkO('Points (triés par silhouette)','Score s(i)'),scales:{...mkO('points','s(i)').scales,y:{...mkO('p','s').scales.y,min:-0.5,max:1.1}},plugins:{legend:{display:false},annotation:{}}}});
+})();
+
+
+function showEx(id,html,ok){const el=document.getElementById(id);el.className='exres show '+(ok?'ok':'bad');el.innerHTML=html;}
+
+function cEx(n){
+  switch(n){
+    case 1:{
+      const a=+document.getElementById('e1a').value;
+      const lam=[4.2,2.1,0.9,0.5,0.3],tot=lam.reduce((s,v)=>s+v,0);
+      const res=(lam[0]+lam[1])/tot*100;
+      showEx('e1r',ap(a,res,0.2)?`Correct ! (4.2 + 2.1) / (4.2+2.1+0.9+0.5+0.3) = 6.3 / 8.0 = ${res.toFixed(1)} %. Les 2 premières composantes suffisent à capturer ${res.toFixed(1)} % de la variance.`:`Réessayez. Somme totale = 4.2+2.1+0.9+0.5+0.3 = 8.0. Les 2 premières = 4.2+2.1 = 6.3. Ratio = ${res.toFixed(1)} %.`,ap(a,res,0.2));
+      break;
+    }
+    case 2:{
+      const a=+document.getElementById('e2a').value;
+      const d1=Math.sqrt((5-2)**2+(4-3)**2),d2=Math.sqrt((5-8)**2+(4-6)**2);
+      const res=d1<d2?1:2;
+      showEx('e2r',ap(a,res,0.1)?`Correct ! d(x,μ₁) = √((5-2)²+(4-3)²) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √((5-8)²+(4-6)²) = √(9+4) = ${d2.toFixed(3)}. Le cluster ${res} est le plus proche.`:`Réessayez. d(x,μ₁) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √(9+4) = ${d2.toFixed(3)}. Le cluster le plus proche est le ${res}.`,ap(a,res,0.1));
+      break;
+    }
+    case 3:{
+      const a=+document.getElementById('e3a').value;
+      const res=(1+3+2+4)/4;
+      showEx('e3r',ap(a,res,0.05)?`Correct ! x̄ = (1+3+2+4)/4 = ${res}. Le centroïde est (${res}, ${(2+4+2+4)/4}).`:`Réessayez. x̄ = (1+3+2+4)/4 = ${res}.`,ap(a,res,0.05));
+      break;
+    }
+    case 4:{
+      const a=+document.getElementById('e4a').value;
+      showEx('e4r',a===1?`Correct ! Le point a 3 voisins dans son ε-voisinage (lui inclus) et minPts=3. Donc 3 ≥ 3 → c'est un point cœur. Il peut étendre un cluster vers ses voisins.`:`Réessayez. Un point est cœur si |N_ε(x)| ≥ minPts. Ici 3 ≥ 3. C'est un point cœur (réponse = 1).`,a===1);
+      break;
+    }
+    case 5:{
+      const a=+document.getElementById('e5a').value;
+      const j=((2-1)**2+(1-1)**2)+((0-1)**2+(1-1)**2)+((5-5)**2+(6-5)**2);
+      showEx('e5r',ap(a,j,0.1)?`Correct ! Cluster 1 : (2-1)²+(1-1)² = 1. (0-1)²+(1-1)² = 1. Cluster 2 : (5-5)²+(6-5)² = 1. Total J = ${j}.`:`Réessayez. J = Σ dist² au centroïde = 1 + 1 + 1 = ${j}.`,ap(a,j,0.1));
+      break;
+    }
+    case 6:{
+      const a=+document.getElementById('e6a').value;
+      const s=(2.0-0.5)/Math.max(0.5,2.0);
+      showEx('e6r',ap(a,s,0.01)?`Correct ! s(i) = (b-a)/max(a,b) = (2.0-0.5)/max(0.5,2.0) = 1.5/2.0 = ${s.toFixed(2)}. Valeur proche de 1 → point bien placé dans son cluster.`:`Réessayez. s(i) = (b(i)−a(i)) / max(a(i),b(i)) = (2.0−0.5)/2.0 = ${s.toFixed(2)}.`,ap(a,s,0.01));
+      break;
+    }
+  }
+}
+
+
+setTimeout(()=>{
+  runDBSCAN();
+  updPCA();
+},400);
+
 </script>
 </body>
 </html>
