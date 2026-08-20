@@ -10,7 +10,7 @@
 :root{
   --bg:#0f0f11;--bg2:#16161a;--bg3:#1e1e24;--bg4:#26262e;--bg5:#2e2e38;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
-  --text:#e8e6df;--text2:#9e9b91;--text3:#5e5c55;
+  --text:#e8e6df;--text2:#9e9b91;--text3:#87837a;
   --accent:#c8a96e;--accent2:#8b6f3e;
   --blue:#5b8dd9;--blue-bg:rgba(91,141,217,0.1);--blue-bd:rgba(91,141,217,0.25);
   --green:#5ba87a;--green-bg:rgba(91,168,122,0.1);--green-bd:rgba(91,168,122,0.25);
@@ -138,12 +138,20 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 .chbanner-1::before{background:radial-gradient(circle,rgba(91,141,217,.06) 0%,transparent 70%);}
 .chbanner-2::before{background:radial-gradient(circle,rgba(91,168,122,.06) 0%,transparent 70%);}
 .chbanner-3::before{background:radial-gradient(circle,rgba(217,132,91,.06) 0%,transparent 70%);}
+.chbanner-4::before{background:radial-gradient(circle,rgba(91,200,200,.06) 0%,transparent 70%);}
 .chbanner .ch-num{font-family:var(--serif);font-size:4rem;font-weight:300;line-height:1;flex-shrink:0;opacity:.15;}
 .chbanner .ch-info .ch-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);margin-bottom:4px;}
 .chbanner .ch-info h2{font-family:var(--serif);font-size:1.6rem;font-weight:300;margin:0;letter-spacing:-.02em;}
 .chbanner-1 .ch-tag,.chbanner-1 h2{color:var(--blue);}
 .chbanner-2 .ch-tag,.chbanner-2 h2{color:var(--green);}
 .chbanner-3 .ch-tag,.chbanner-3 h2{color:var(--orange);}
+.chbanner-4 .ch-tag,.chbanner-4 h2{color:var(--teal);}
+
+/* SUBDIVIDER - lightweight wayfinding marker for a chapter's internal parts (distinct from a full chapter banner) */
+.subdivider{display:flex;align-items:baseline;gap:14px;padding:2.75rem 3.5rem .25rem;flex-wrap:wrap;}
+.subdivider .sd-num{font-family:var(--mono);font-size:12px;color:var(--teal);border:1px solid var(--teal-bd);background:var(--teal-bg);border-radius:20px;padding:2px 11px;flex-shrink:0;}
+.subdivider .sd-tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);color:var(--text3);margin-right:2px;}
+.subdivider h3{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--text);margin:0;border:none;padding:0;display:inline;}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:4rem 3.5rem;position:relative;overflow:hidden;}
@@ -243,62 +251,43 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 /* Tree SVG */
 .tree-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow-x:auto;padding:1rem;margin:1rem 0;}
 
+/* Chapter IV shares the same nav-item component, with a teal (instead of gold) active/hover accent */
+.nav-item-teal.active{color:var(--teal);border-left-color:var(--teal);background:rgba(91,200,200,0.06);}
+.nav-item-teal:not(.active):hover{color:var(--teal);}
+.btn-teal{background:rgba(91,200,200,.12);color:var(--teal);border-color:rgba(91,200,200,.3);}
+.btn-teal:hover{background:rgba(91,200,200,.2);}
+.card-pink{border-left:3px solid var(--pink);}
+
+/* SIDEBAR TOGGLE - mobile */
+#sidebar-toggle{display:none;position:fixed;top:14px;left:14px;z-index:150;width:38px;height:38px;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);align-items:center;justify-content:center;cursor:pointer;}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;}
+
 @media(max-width:900px){
-  #sidebar{display:none;}
+  #sidebar-toggle{display:flex;}
+  #sidebar{transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px rgba(0,0,0,.4);}
+  #sidebar.open{transform:translateX(0);}
+  #sidebar.open ~ #sidebar-overlay{display:block;}
   #main{margin-left:0;max-width:100%;}
-  .section{padding:2.5rem 1.5rem 3rem;}
-  .chbanner{padding:2rem 1.5rem 1rem;}
-  .hero{padding:2.5rem 1.5rem;}
+  .section{padding:4.5rem 1.5rem 3rem;}
+  .chbanner,.subdivider{padding-left:1.5rem;padding-right:1.5rem;}
+  .hero{padding:4.5rem 1.5rem 2.5rem;}
   .grid-2,.roc-wrap{grid-template-columns:1fr;}
   .grid-3,.grid-4,.metrics,.metric-pills{grid-template-columns:1fr 1fr;}
 }
-
-.ni{display:flex;align-items:center;gap:8px;padding:6px 1.25rem;font-size:12.5px;color:var(--text2);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer;}
-.ni:hover{color:var(--text);background:rgba(255,255,255,0.03);}
-.ni.active{color:var(--teal);border-left-color:var(--teal);background:rgba(91,200,200,0.06);}
-.ni .num{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:22px;}
-/* CHAPTER IV - Non supervisé */
-.chb{padding:2.5rem 3.5rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.5rem;position:relative;overflow:hidden;}
-.chb::before{content:'';position:absolute;right:-50px;top:50%;transform:translateY(-50%);width:200px;height:200px;border-radius:50%;pointer-events:none;}
-.chb4::before{background:radial-gradient(circle,rgba(91,200,200,.06) 0%,transparent 70%);}
-.chb .chnum{font-family:var(--serif);font-size:4rem;font-weight:300;line-height:1;flex-shrink:0;opacity:.15;}
-.chb .chinfo .chtag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);margin-bottom:4px;}
-.chb .chinfo h2{font-family:var(--serif);font-size:1.6rem;font-weight:300;margin:0;}
-.chb4 .chtag,.chb4 h2{color:var(--teal);}
-.exob{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:2rem 0;}
-.extitle{font-family:var(--serif);font-size:1rem;color:var(--teal);margin-bottom:1.1rem;}
-.exrow{display:flex;align-items:center;gap:12px;margin:.5rem 0;}
-.exrow label{font-size:13px;color:var(--text2);min-width:130px;}
-.exrow input[type=number]{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 12px;color:var(--text);font-family:var(--mono);font-size:13px;width:100px;outline:none;}
-.exrow input:focus{border-color:var(--teal);}
-.exres{background:var(--bg3);border-radius:7px;padding:.9rem 1.1rem;margin-top:1rem;font-family:var(--mono);font-size:13px;line-height:2;color:var(--text2);display:none;white-space:pre-line;}
-.exres.show{display:block;}
-.exres.ok{background:var(--green-bg);border:1px solid var(--green-bd);color:var(--green);}
-.exres.bad{background:var(--red-bg);border:1px solid var(--red-bd);color:#e88888;}
-.alg-step{display:flex;gap:14px;margin:10px 0;align-items:flex-start;}
-.alg-step .an{width:28px;height:28px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);font-size:12px;font-family:var(--mono);color:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
-.alg-step .ab{font-size:14px;line-height:1.7;flex:1;color:var(--text2);}
-.alg-step .ab strong{color:var(--text);}
-.dendro-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow-x:auto;padding:1rem;margin:1rem 0;}
-.ct3{border-left:3px solid var(--teal);}
-.cpk{border-left:3px solid var(--pink,#d97ab5);}
-.hpk{color:var(--pink,#d97ab5);}
-.bpr{background:rgba(91,200,200,.12);color:var(--teal);border-color:rgba(91,200,200,.3);}
-.bpr:hover{background:rgba(91,200,200,.2);}
-.bpb{background:rgba(91,141,217,.12);color:var(--blue);border-color:rgba(91,141,217,.3);}
-.clbl{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:5px;}
-.csub{font-size:12px;color:var(--text3);margin-top:4px;line-height:1.5;}
-.cb{border-left:3px solid var(--blue);}.cg{border-left:3px solid var(--green);}
-.co2{border-left:3px solid var(--orange);}.cpb{border-left:3px solid var(--purple);}
-.ca{border-left:3px solid var(--accent);}
-.fu{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s;}
-.fu.vis{opacity:1;transform:translateY(0);}
+@media(max-width:520px){
+  .grid-3,.grid-4,.metrics,.metric-pills{grid-template-columns:1fr;}
+  .hero-stats{grid-template-columns:1fr;}
+  .toc-list{columns:1 !important;}
+}
 
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
+
+<button id="sidebar-toggle" aria-label="Ouvrir le sommaire" aria-controls="sidebar" aria-expanded="false" onclick="toggleSidebar()">☰</button>
+<div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
 <nav id="sidebar">
@@ -339,17 +328,17 @@ canvas{border-radius:8px;max-width:100%;display:block;}
   <a class="nav-item" href="#exo-cls"><span class="num">21</span>Exercices classif.</a>
 
   <div class="nav-section">Ch. IV - Non Supervisé</div>
-  <a class="ni" href="#uns-intro"><span class="num">22</span>Introduction</a>
-  <a class="ni" href="#pca"><span class="num">23</span>ACP</a>
-  <a class="ni" href="#kmeans"><span class="num">24</span>K-Means</a>
-  <a class="ni" href="#cah"><span class="num">25</span>CAH</a>
-  <a class="ni" href="#gmm"><span class="num">26</span>GMM</a>
-  <a class="ni" href="#dbscan"><span class="num">27</span>DBSCAN</a>
-  <a class="ni" href="#compare"><span class="num">28</span>Comparaison</a>
-  <a class="ni" href="#eval-uns"><span class="num">29</span>Évaluation clusters</a>
-  <a class="ni" href="#quiz-uns"><span class="num">30</span>Quiz</a>
-  <a class="ni" href="#exo-uns"><span class="num">31</span>Exercices</a>
-  <a class="ni" href="#tp-uns"><span class="num">32</span>TP Segmentation</a>
+  <a class="nav-item nav-item-teal" href="#uns-intro"><span class="num">22</span>Introduction</a>
+  <a class="nav-item nav-item-teal" href="#pca"><span class="num">23</span>ACP</a>
+  <a class="nav-item nav-item-teal" href="#kmeans"><span class="num">24</span>K-Means</a>
+  <a class="nav-item nav-item-teal" href="#cah"><span class="num">25</span>CAH</a>
+  <a class="nav-item nav-item-teal" href="#gmm"><span class="num">26</span>GMM</a>
+  <a class="nav-item nav-item-teal" href="#dbscan"><span class="num">27</span>DBSCAN</a>
+  <a class="nav-item nav-item-teal" href="#compare"><span class="num">28</span>Comparaison</a>
+  <a class="nav-item nav-item-teal" href="#eval-uns"><span class="num">29</span>Évaluation clusters</a>
+  <a class="nav-item nav-item-teal" href="#quiz-uns"><span class="num">30</span>Quiz</a>
+  <a class="nav-item nav-item-teal" href="#exo-uns"><span class="num">31</span>Exercices</a>
+  <a class="nav-item nav-item-teal" href="#tp-uns"><span class="num">32</span>TP Segmentation</a>
 </nav>
 
 <!-- ═══ MAIN ═══ -->
@@ -1210,93 +1199,95 @@ Boosting       fm(x) = fm−1(x) + η·hm(x)</div>
 
 
 <!-- ══════ CHAPITRE IV - NON SUPERVISÉ ══════ -->
-<div class="chb chb4 fade-up fu" style="padding:2.5rem 3.5rem 1.5rem">
-  <div class="chnum" style="font-family:var(--serif);font-size:4rem;font-weight:300;opacity:.15;color:var(--teal)">IV</div>
-  <div class="chinfo">
-    <div class="chtag" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);color:var(--teal);margin-bottom:4px">Chapitre Quatre</div>
-    <h2 style="font-family:var(--serif);font-size:1.6rem;font-weight:300;color:var(--teal);margin:0">Apprentissage Non Supervisé</h2>
+<div class="chbanner chbanner-4 fade-up">
+  <div class="ch-num">IV</div>
+  <div class="ch-info">
+    <div class="ch-tag">Chapitre Quatre</div>
+    <h2>Apprentissage Non Supervisé</h2>
   </div>
 </div>
 
-<!-- ══ CH I BANNER ══ -->
-<div class="chb chb4 fu">
-  <div class="chnum">I</div>
-  <div class="chinfo"><div class="chtag">Introduction</div><h2>Apprentissage Non Supervisé</h2></div>
+<!-- ══ SUBDIVIDER I - INTRODUCTION ══ -->
+<div class="subdivider fade-up">
+  <span class="sd-num">I</span>
+  <span class="sd-tag">Introduction</span>
+  <h3>Principes de l'apprentissage non supervisé</h3>
 </div>
 
 <!-- ══ S01 INTRO ══ -->
 <section id="uns-intro" class="section">
-  <div class="sl">Section 01</div>
+  <div class="section-label">Section 01</div>
   <h2>Apprentissage non supervisé</h2>
   <p>Dans l'apprentissage supervisé, chaque exemple (xi, yi) est étiqueté - on connaît la réponse attendue. Dans l'apprentissage <strong>non supervisé</strong>, on ne dispose que des données X, sans labels. La machine doit <em>découvrir par elle-même</em> la structure cachée dans ces données.</p>
 
-  <div class="g2 fu">
-    <div class="card cb">
-      <div class="clbl">Supervisé - (X, y)</div>
-      <div class="csub" style="font-size:14px;margin-top:6px">On connaît les réponses. On apprend une fonction f : X → y.<br><br>Ex : prédire si un email est spam (y = 0 ou 1).</div>
+  <div class="grid-2 fade-up">
+    <div class="card card-blue">
+      <div class="card-label">Supervisé - (X, y)</div>
+      <div class="card-sub" style="font-size:14px;margin-top:6px">On connaît les réponses. On apprend une fonction f : X → y.<br><br>Ex : prédire si un email est spam (y = 0 ou 1).</div>
     </div>
-    <div class="card ct3">
-      <div class="clbl">Non supervisé - (X seulement)</div>
-      <div class="csub" style="font-size:14px;margin-top:6px">Pas de labels. On cherche des patterns, des groupes, des structures.<br><br>Ex : regrouper des clients sans savoir à l'avance combien il y a de types.</div>
+    <div class="card card-teal">
+      <div class="card-label">Non supervisé - (X seulement)</div>
+      <div class="card-sub" style="font-size:14px;margin-top:6px">Pas de labels. On cherche des patterns, des groupes, des structures.<br><br>Ex : regrouper des clients sans savoir à l'avance combien il y a de types.</div>
     </div>
   </div>
 
   <h3>Deux grandes familles de problèmes</h3>
-  <div class="g2 fu">
-    <div class="card ct3">
-      <div class="clbl">Clustering (regroupement)</div>
+  <div class="grid-2 fade-up">
+    <div class="card card-teal">
+      <div class="card-label">Clustering (regroupement)</div>
       <p style="font-size:13px;margin:.5rem 0">Trouver des <strong>groupes naturels</strong> dans les données. Les exemples d'un même groupe sont similaires entre eux et différents des autres groupes.</p>
       <div style="font-size:12px;color:var(--text3)">K-Means · CAH · GMM · DBSCAN</div>
     </div>
-    <div class="card cpb">
-      <div class="clbl">Réduction de dimensionnalité</div>
+    <div class="card card-purple">
+      <div class="card-label">Réduction de dimensionnalité</div>
       <p style="font-size:13px;margin:.5rem 0">Compresser les données en <strong>gardant l'essentiel</strong>. Passer de 100 variables à 2 ou 3 sans trop perdre d'information.</p>
       <div style="font-size:12px;color:var(--text3)">ACP · t-SNE · UMAP · Autoencodeurs</div>
     </div>
   </div>
 
   <h3>Pourquoi c'est difficile - le problème de l'évaluation</h3>
-  <div class="cl cw fu">
-    <span class="clt">Sans labels, comment sait-on si le résultat est bon ?</span>
+  <div class="callout callout-warn fade-up">
+    <span class="callout-title">Sans labels, comment sait-on si le résultat est bon ?</span>
     <p>En supervisé, on mesure P sur un jeu de test étiqueté. En non supervisé, il n'y a pas de "bonne réponse". On doit utiliser des critères <strong>internes</strong> (cohésion et séparation des clusters) ou une validation <strong>externe</strong> (expertise métier). C'est la principale difficulté du domaine.</p>
   </div>
 
   <h3>Applications réelles</h3>
-  <div class="g3 fu">
-    <div class="card ca"><div class="clbl">Segmentation clients</div><div class="csub" style="margin-top:6px;font-size:13px">Grouper les clients par comportement d'achat pour personnaliser les offres marketing.</div></div>
-    <div class="card ct3"><div class="clbl">Détection d'anomalies</div><div class="csub" style="margin-top:6px;font-size:13px">Identifier les transactions bancaires qui ne ressemblent à aucun groupe connu.</div></div>
-    <div class="card cpb"><div class="clbl">Compression d'images</div><div class="csub" style="margin-top:6px;font-size:13px">Réduire le nombre de couleurs (K-Means) tout en préservant l'essentiel de l'image.</div></div>
-    <div class="card cg"><div class="clbl">Bioinformatique</div><div class="csub" style="margin-top:6px;font-size:13px">Regrouper des gènes à expression similaire pour découvrir des fonctions biologiques.</div></div>
-    <div class="card co2"><div class="clbl">Visualisation</div><div class="csub" style="margin-top:6px;font-size:13px">Projeter 1000 variables en 2D (ACP) pour explorer les données visuellement.</div></div>
-    <div class="card cpk"><div class="clbl">Recommandations</div><div class="csub" style="margin-top:6px;font-size:13px">Trouver les utilisateurs similaires pour recommander des films ou des produits.</div></div>
+  <div class="grid-3 fade-up">
+    <div class="card card-gold"><div class="card-label">Segmentation clients</div><div class="card-sub" style="margin-top:6px;font-size:13px">Grouper les clients par comportement d'achat pour personnaliser les offres marketing.</div></div>
+    <div class="card card-teal"><div class="card-label">Détection d'anomalies</div><div class="card-sub" style="margin-top:6px;font-size:13px">Identifier les transactions bancaires qui ne ressemblent à aucun groupe connu.</div></div>
+    <div class="card card-purple"><div class="card-label">Compression d'images</div><div class="card-sub" style="margin-top:6px;font-size:13px">Réduire le nombre de couleurs (K-Means) tout en préservant l'essentiel de l'image.</div></div>
+    <div class="card card-green"><div class="card-label">Bioinformatique</div><div class="card-sub" style="margin-top:6px;font-size:13px">Regrouper des gènes à expression similaire pour découvrir des fonctions biologiques.</div></div>
+    <div class="card card-orange"><div class="card-label">Visualisation</div><div class="card-sub" style="margin-top:6px;font-size:13px">Projeter 1000 variables en 2D (ACP) pour explorer les données visuellement.</div></div>
+    <div class="card card-pink"><div class="card-label">Recommandations</div><div class="card-sub" style="margin-top:6px;font-size:13px">Trouver les utilisateurs similaires pour recommander des films ou des produits.</div></div>
   </div>
 </section>
 
-<!-- ══ CH II BANNER ══ -->
-<div class="chb chb4 fu">
-  <div class="chnum">II</div>
-  <div class="chinfo"><div class="chtag">Réduction de dimensionnalité</div><h2>Analyse en Composantes Principales (ACP)</h2></div>
+<!-- ══ SUBDIVIDER II - RÉDUCTION DE DIMENSIONNALITÉ ══ -->
+<div class="subdivider fade-up">
+  <span class="sd-num">II</span>
+  <span class="sd-tag">Réduction de dimensionnalité</span>
+  <h3>Analyse en Composantes Principales (ACP)</h3>
 </div>
 
 <!-- ══ S02 ACP ══ -->
 <section id="pca" class="section">
-  <div class="sl">Section 02</div>
+  <div class="section-label">Section 02</div>
   <h2>ACP - Analyse en Composantes Principales</h2>
   <p>L'ACP cherche les <strong>directions de variance maximale</strong> dans les données. Ce sont les directions selon lesquelles les données "s'étalent" le plus. On projette ensuite les données sur ces directions pour obtenir une représentation compressée.</p>
 
-  <div class="cl ci fu">
-    <span class="clt">Intuition fondamentale</span>
+  <div class="callout callout-info fade-up">
+    <span class="callout-title">Intuition fondamentale</span>
     <p>Imaginez un nuage de points en forme d'ellipse dans un espace 2D. La première composante principale (CP1) est l'axe le long duquel l'ellipse est la plus allongée - c'est la direction de variance maximale. La seconde composante (CP2) est perpendiculaire à CP1. En projetant les données sur CP1 seule, on passe de 2D à 1D en perdant le minimum d'information.</p>
   </div>
 
   <h3>Algorithme mathématique</h3>
-  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Centrer les données :</strong> soustraire la moyenne de chaque variable. Résultat : les données sont centrées sur l'origine.</div></div>
-  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Calculer la matrice de covariance :</strong> C = (1/n) · XᵀX. C est une matrice n×n (ou p×p si p variables) qui encode comment les variables varient ensemble.</div></div>
-  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Décomposition propre :</strong> trouver les vecteurs propres (v₁, v₂, …) et valeurs propres (λ₁, λ₂, …) de C. Les vecteurs propres sont les directions des composantes principales. Les valeurs propres mesurent la variance expliquée dans chaque direction.</div></div>
-  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Trier par variance décroissante :</strong> CP1 correspond à λ₁ (valeur propre maximale), CP2 à λ₂, etc.</div></div>
-  <div class="alg-step fu"><div class="an">5</div><div class="ab"><strong>Projeter :</strong> X_réduit = X · [v₁, v₂, …, vₖ]. On choisit k ≤ p composantes.</div></div>
+  <div class="proof-step fade-up"><div class="n">1</div><div class="body"><strong>Centrer les données :</strong> soustraire la moyenne de chaque variable. Résultat : les données sont centrées sur l'origine.</div></div>
+  <div class="proof-step fade-up"><div class="n">2</div><div class="body"><strong>Calculer la matrice de covariance :</strong> C = (1/n) · XᵀX. C est une matrice n×n (ou p×p si p variables) qui encode comment les variables varient ensemble.</div></div>
+  <div class="proof-step fade-up"><div class="n">3</div><div class="body"><strong>Décomposition propre :</strong> trouver les vecteurs propres (v₁, v₂, …) et valeurs propres (λ₁, λ₂, …) de C. Les vecteurs propres sont les directions des composantes principales. Les valeurs propres mesurent la variance expliquée dans chaque direction.</div></div>
+  <div class="proof-step fade-up"><div class="n">4</div><div class="body"><strong>Trier par variance décroissante :</strong> CP1 correspond à λ₁ (valeur propre maximale), CP2 à λ₂, etc.</div></div>
+  <div class="proof-step fade-up"><div class="n">5</div><div class="body"><strong>Projeter :</strong> X_réduit = X · [v₁, v₂, …, vₖ]. On choisit k ≤ p composantes.</div></div>
 
-  <div class="fm fu"><span class="lb">Formules clés</span>Matrice de covariance :   <span class="hi">C</span> = (1/n) · <span class="hw">Xᵀ</span><span class="hw">X</span>   (X est centré)
+  <div class="formula fade-up"><span class="lbl">Formules clés</span>Matrice de covariance :   <span class="hi">C</span> = (1/n) · <span class="hw">Xᵀ</span><span class="hw">X</span>   (X est centré)
 
 Décomposition :            <span class="hi">C</span> = <span class="hg">V</span> · Λ · <span class="hg">Vᵀ</span>
    <span class="hg">V</span> = matrice des vecteurs propres (les composantes)
@@ -1311,8 +1302,8 @@ Projection sur k composantes :
   <h3>Exemple numérique - notes de 6 étudiants</h3>
   <p>Cinq étudiants ont deux notes : Mathématiques et Physique. On applique l'ACP pour réduire à une seule dimension.</p>
 
-  <div style="overflow-x:auto" class="fu">
-    <table class="dtable">
+  <div style="overflow-x:auto" class="fade-up">
+    <table class="data-table">
       <thead><tr><th>Étudiant</th><th>Maths xᵢ</th><th>Physique yᵢ</th><th>Maths centré</th><th>Physique centré</th></tr></thead>
       <tbody>
         <tr><td>A</td><td>8</td><td>7</td><td>+2</td><td>+1.5</td></tr>
@@ -1326,7 +1317,7 @@ Projection sur k composantes :
     </table>
   </div>
 
-  <div class="fm fu"><span class="lb">Calcul de la matrice de covariance (2×2)</span>C = (1/6) · Xᵀ · X (avec X centré)
+  <div class="formula fade-up"><span class="lbl">Calcul de la matrice de covariance (2×2)</span>C = (1/6) · Xᵀ · X (avec X centré)
 
 C₁₁ = var(Maths)    = (4+9+0+4+1+4)/6 = <span class="hi">3.67</span>
 C₂₂ = var(Physique) = (2.25+6.25+0.25+2.25+0.25+6.25)/6 = <span class="hi">2.92</span>
@@ -1339,62 +1330,63 @@ C = | <span class="hi">3.67</span>   <span class="hi">3.00</span> |
 Valeurs propres : λ₁ ≈ <span class="hg">6.36</span>,  λ₂ ≈ <span class="hr">0.23</span>
 CP1 explique : 6.36/(6.36+0.23) = <span class="hg">96.5 %</span> de la variance !</div>
 
-  <div class="cl co fu">
-    <span class="clt">Interprétation</span>
+  <div class="callout callout-ok fade-up">
+    <span class="callout-title">Interprétation</span>
     <p>Avec une seule composante (CP1), on capture <strong>96.5 %</strong> de la variance des données. On passe de 2 variables à 1 en perdant seulement 3.5 % d'information. Sur des datasets réels avec 100+ variables, l'ACP permet souvent de réduire à 10-20 composantes en gardant plus de 90 % de la variance.</p>
   </div>
 
   <h3>Scree plot - choisir le nombre de composantes</h3>
   <p>Le scree plot montre la variance expliquée cumulée en fonction du nombre de composantes. On cherche le "coude" : le point à partir duquel ajouter une composante n'apporte plus grand chose.</p>
-  <canvas id="scree-chart" height="220" class="fu"></canvas>
+  <canvas id="scree-chart" height="220" class="fade-up"></canvas>
 
   <h3>Visualisation ACP interactive</h3>
-  <canvas id="pca-chart" height="300" class="fu"></canvas>
-  <div class="ctrl fu"><label>Angle de la CP1 (°)</label><input type="range" id="pca-angle" min="0" max="180" step="5" value="55" oninput="updPCA()"><span class="val" id="pca-angle-v">55°</span></div>
-  <div class="sb" id="pca-var">Variance expliquée par CP1 : -</div>
+  <canvas id="pca-chart" height="300" class="fade-up"></canvas>
+  <div class="ctrl fade-up"><label>Angle de la CP1 (°)</label><input type="range" id="pca-angle" min="0" max="180" step="5" value="55" oninput="updPCA()"><span class="val" id="pca-angle-v">55°</span></div>
+  <div class="status-bar" id="pca-var">Variance expliquée par CP1 : -</div>
 
-  <div class="cl cw fu">
-    <span class="clt">Limites de l'ACP</span>
+  <div class="callout callout-warn fade-up">
+    <span class="callout-title">Limites de l'ACP</span>
     <p>L'ACP suppose des relations <strong>linéaires</strong> entre les variables. Si les structures sont non linéaires (courbes, spirales), l'ACP perd de l'information. Dans ce cas, on préférera t-SNE ou UMAP pour la visualisation, ou des auto-encodeurs pour la compression.</p>
   </div>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz - Comprendre l'ACP</div>
-    <div class="qq">Dans une ACP sur 10 variables, les 3 premières composantes principales expliquent 85 % de la variance. Que signifie cette valeur de 85 % ?</div>
-    <div class="qopts" id="uq1o">
-      <div class="qopt" onclick="ucq('uq1',0,1,'q01f')"><span class="qltr">A</span>85 % des variables sont corrélées entre elles</div>
-      <div class="qopt" onclick="ucq('uq1',1,1,'q01f')"><span class="qltr">B</span>En projetant sur 3 composantes au lieu de 10, on garde 85 % de l'information (variance) des données</div>
-      <div class="qopt" onclick="ucq('uq1',2,1,'q01f')"><span class="qltr">C</span>Le modèle a 85 % de chances d'être correct</div>
-      <div class="qopt" onclick="ucq('uq1',3,1,'q01f')"><span class="qltr">D</span>Il faut utiliser exactement 3 clusters</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz - Comprendre l'ACP</div>
+    <div class="quiz-q">Dans une ACP sur 10 variables, les 3 premières composantes principales expliquent 85 % de la variance. Que signifie cette valeur de 85 % ?</div>
+    <div class="quiz-opts" id="uq1o">
+      <div class="qopt" onclick="ucq('uq1',0,1,'q01f')"><span class="qletter">A</span>85 % des variables sont corrélées entre elles</div>
+      <div class="qopt" onclick="ucq('uq1',1,1,'q01f')"><span class="qletter">B</span>En projetant sur 3 composantes au lieu de 10, on garde 85 % de l'information (variance) des données</div>
+      <div class="qopt" onclick="ucq('uq1',2,1,'q01f')"><span class="qletter">C</span>Le modèle a 85 % de chances d'être correct</div>
+      <div class="qopt" onclick="ucq('uq1',3,1,'q01f')"><span class="qletter">D</span>Il faut utiliser exactement 3 clusters</div>
     </div>
     <div class="qfb" id="uq1f"></div>
   </div>
 </section>
 
-<!-- ══ CH III BANNER ══ -->
-<div class="chb chb4 fu">
-  <div class="chnum">III</div>
-  <div class="chinfo"><div class="chtag">Clustering</div><h2>Méthodes de regroupement</h2></div>
+<!-- ══ SUBDIVIDER III - CLUSTERING ══ -->
+<div class="subdivider fade-up">
+  <span class="sd-num">III</span>
+  <span class="sd-tag">Clustering</span>
+  <h3>Méthodes de regroupement</h3>
 </div>
 
 <!-- ══ S03 K-MEANS ══ -->
 <section id="kmeans" class="section">
-  <div class="sl">Section 03</div>
+  <div class="section-label">Section 03</div>
   <h2>K-Means</h2>
   <p>K-Means est l'algorithme de clustering le plus simple et le plus utilisé. Il partitionne n points en <strong>K groupes</strong> de façon à minimiser la somme des distances au carré de chaque point à son centroïde (centre de son groupe).</p>
 
-  <div class="cl ci fu">
-    <span class="clt">Intuition</span>
+  <div class="callout callout-info fade-up">
+    <span class="callout-title">Intuition</span>
     <p>Imaginez K aimants posés dans l'espace. Chaque point de données est attiré par l'aimant le plus proche. Ensuite, chaque aimant se déplace vers le centre des points qui l'ont choisi. On répète jusqu'à ce que les aimants ne bougent plus.</p>
   </div>
 
   <h3>Algorithme de Lloyd</h3>
-  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Initialisation :</strong> placer K centroïdes μ₁, …, μₖ aléatoirement parmi les points de données (ou avec K-Means++ pour une meilleure initialisation).</div></div>
-  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Étape E (attribution) :</strong> assigner chaque point xᵢ au centroïde le plus proche. Cᵢ = argmin_k ||xᵢ − μₖ||²</div></div>
-  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Étape M (mise à jour) :</strong> recalculer chaque centroïde comme la moyenne des points qui lui sont assignés. μₖ = (1/|Cₖ|) · Σᵢ∈Cₖ xᵢ</div></div>
-  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Convergence :</strong> répéter les étapes 2 et 3 jusqu'à ce que les attributions ne changent plus (ou que la variation de l'inertie soit inférieure à ε).</div></div>
+  <div class="proof-step fade-up"><div class="n">1</div><div class="body"><strong>Initialisation :</strong> placer K centroïdes μ₁, …, μₖ aléatoirement parmi les points de données (ou avec K-Means++ pour une meilleure initialisation).</div></div>
+  <div class="proof-step fade-up"><div class="n">2</div><div class="body"><strong>Étape E (attribution) :</strong> assigner chaque point xᵢ au centroïde le plus proche. Cᵢ = argmin_k ||xᵢ − μₖ||²</div></div>
+  <div class="proof-step fade-up"><div class="n">3</div><div class="body"><strong>Étape M (mise à jour) :</strong> recalculer chaque centroïde comme la moyenne des points qui lui sont assignés. μₖ = (1/|Cₖ|) · Σᵢ∈Cₖ xᵢ</div></div>
+  <div class="proof-step fade-up"><div class="n">4</div><div class="body"><strong>Convergence :</strong> répéter les étapes 2 et 3 jusqu'à ce que les attributions ne changent plus (ou que la variation de l'inertie soit inférieure à ε).</div></div>
 
-  <div class="fm fu"><span class="lb">Objectif - minimiser l'inertie intra-cluster</span>J = Σₖ Σᵢ∈Cₖ <span class="hi">||xᵢ − μₖ||²</span>
+  <div class="formula fade-up"><span class="lbl">Objectif - minimiser l'inertie intra-cluster</span>J = Σₖ Σᵢ∈Cₖ <span class="hi">||xᵢ − μₖ||²</span>
 
 μₖ = centroïde du cluster k (moyenne des points assignés)
 |Cₖ| = nombre de points dans le cluster k
@@ -1403,8 +1395,8 @@ L'algorithme <span class="hg">décroît ou conserve J</span> à chaque itératio
 →  Il converge toujours  (mais vers un <span class="hr">minimum local</span>, pas forcément global)</div>
 
   <h3>Exemple numérique - 6 points, K=2</h3>
-  <div style="overflow-x:auto" class="fu">
-    <table class="dtable">
+  <div style="overflow-x:auto" class="fade-up">
+    <table class="data-table">
       <thead><tr><th>Point</th><th>x₁</th><th>x₂</th><th>Dist. μ₁=(1,1)</th><th>Dist. μ₂=(5,7)</th><th>Cluster</th></tr></thead>
       <tbody>
         <tr><td>A</td><td>1</td><td>1</td><td style="color:var(--green)">0.00</td><td>7.21</td><td style="color:var(--blue)">1</td></tr>
@@ -1416,81 +1408,81 @@ L'algorithme <span class="hg">décroît ou conserve J</span> à chaque itératio
       </tbody>
     </table>
   </div>
-  <div class="fm fu"><span class="lb">Mise à jour des centroïdes après itération 1</span>Cluster 1 = {A, B}  →  μ₁_new = ((1+1.5)/2, (1+2)/2) = (<span class="hg">1.25, 1.50</span>)
+  <div class="formula fade-up"><span class="lbl">Mise à jour des centroïdes après itération 1</span>Cluster 1 = {A, B}  →  μ₁_new = ((1+1.5)/2, (1+2)/2) = (<span class="hg">1.25, 1.50</span>)
 Cluster 2 = {C, D, E, F}  →  μ₂_new = ((3+5+3.5+4.5)/4, (4+7+5+5)/4) = (<span class="hg">4.00, 5.25</span>)
 
 On répète jusqu'à convergence (les attributions ne changent plus).</div>
 
   <h3>Choisir K - la méthode du coude</h3>
   <p>K-Means nécessite de choisir K à l'avance. On trace l'inertie J en fonction de K. Elle décroît toujours (plus de clusters = moins de distance). On cherche le <strong>coude</strong> : le point où l'amélioration ralentit brusquement.</p>
-  <canvas id="elbow-chart" height="200" class="fu"></canvas>
+  <canvas id="elbow-chart" height="200" class="fade-up"></canvas>
 
   <h3>Simulateur K-Means interactif</h3>
   <p>Données générées en 3 groupes naturels. Observez les centroïdes (★) converger au fil des itérations.</p>
-  <div class="ctrl fu"><label>Nombre de clusters K</label><input type="range" id="km-k" min="2" max="6" step="1" value="3" oninput="kmReset()"><span class="val" id="km-kv">3</span></div>
-  <div class="br fu">
-    <button class="bpr" onclick="kmStep()">+1 itération</button>
+  <div class="ctrl fade-up"><label>Nombre de clusters K</label><input type="range" id="km-k" min="2" max="6" step="1" value="3" oninput="kmReset()"><span class="val" id="km-kv">3</span></div>
+  <div class="btn-row fade-up">
+    <button class="btn-teal" onclick="kmStep()">+1 itération</button>
     <button onclick="kmAuto()">▶ Auto</button>
-    <button class="bda" onclick="kmReset()">Nouveaux points</button>
+    <button class="btn-danger" onclick="kmReset()">Nouveaux points</button>
   </div>
-  <div class="sb" id="km-stat">Cliquez sur +1 itération pour démarrer.</div>
-  <div class="metrics fu" style="grid-template-columns:1fr 1fr 1fr">
+  <div class="status-bar" id="km-stat">Cliquez sur +1 itération pour démarrer.</div>
+  <div class="metrics fade-up" style="grid-template-columns:1fr 1fr 1fr">
     <div class="card"><div class="card-label">Itération</div><div class="card-val" id="km-it">0</div></div>
     <div class="card"><div class="card-label">Inertie J</div><div class="card-val" id="km-inertia">-</div></div>
     <div class="card"><div class="card-label">Convergé</div><div class="card-val" id="km-conv">-</div></div>
   </div>
-  <canvas id="km-canvas" width="600" height="360" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border);cursor:crosshair"></canvas>
+  <canvas id="km-canvas" width="600" height="360" class="fade-up" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border);cursor:crosshair"></canvas>
 
-  <div class="cl cw fu">
-    <span class="clt">Limites de K-Means</span>
+  <div class="callout callout-warn fade-up">
+    <span class="callout-title">Limites de K-Means</span>
     <p>K-Means suppose des clusters <strong>sphériques et de taille similaire</strong>. Il est sensible aux valeurs initiales des centroïdes (risque de minimum local). Il ne détecte pas les clusters de formes arbitraires et ne gère pas les points aberrants. Solutions : K-Means++ pour l'initialisation, plusieurs relances avec différentes graines.</p>
   </div>
 </section>
 
 <!-- ══ S04 CAH ══ -->
 <section id="cah" class="section">
-  <div class="sl">Section 04</div>
+  <div class="section-label">Section 04</div>
   <h2>CAH - Clustering Hiérarchique Agglomératif</h2>
   <p>La CAH construit une <strong>hiérarchie de clusters</strong> de bas en haut. On commence par traiter chaque point comme son propre cluster, puis on fusionne itérativement les deux clusters les plus proches jusqu'à n'en avoir plus qu'un seul.</p>
 
-  <div class="cl ci fu">
-    <span class="clt">Avantage clé sur K-Means</span>
+  <div class="callout callout-info fade-up">
+    <span class="callout-title">Avantage clé sur K-Means</span>
     <p>On n'a pas besoin de fixer K à l'avance. On construit l'arbre entier (le <strong>dendrogramme</strong>), puis on "coupe" à la hauteur souhaitée pour obtenir le nombre de clusters voulu. On peut changer K sans refaire le calcul.</p>
   </div>
 
   <h3>Algorithme</h3>
-  <div class="alg-step fu"><div class="an">1</div><div class="ab"><strong>Initialisation :</strong> chaque point est son propre cluster. On a n clusters au départ.</div></div>
-  <div class="alg-step fu"><div class="an">2</div><div class="ab"><strong>Calculer les distances :</strong> construire la matrice de distances inter-clusters D (n×n).</div></div>
-  <div class="alg-step fu"><div class="an">3</div><div class="ab"><strong>Fusionner :</strong> trouver les deux clusters i*, j* avec la plus petite distance. Les fusionner en un seul nouveau cluster C_{i*,j*}.</div></div>
-  <div class="alg-step fu"><div class="an">4</div><div class="ab"><strong>Mettre à jour D :</strong> calculer les distances entre le nouveau cluster et tous les autres (selon le critère de linkage choisi).</div></div>
-  <div class="alg-step fu"><div class="an">5</div><div class="ab"><strong>Répéter</strong> les étapes 3-4 jusqu'à avoir un seul cluster. Tracer le dendrogramme.</div></div>
+  <div class="proof-step fade-up"><div class="n">1</div><div class="body"><strong>Initialisation :</strong> chaque point est son propre cluster. On a n clusters au départ.</div></div>
+  <div class="proof-step fade-up"><div class="n">2</div><div class="body"><strong>Calculer les distances :</strong> construire la matrice de distances inter-clusters D (n×n).</div></div>
+  <div class="proof-step fade-up"><div class="n">3</div><div class="body"><strong>Fusionner :</strong> trouver les deux clusters i*, j* avec la plus petite distance. Les fusionner en un seul nouveau cluster C_{i*,j*}.</div></div>
+  <div class="proof-step fade-up"><div class="n">4</div><div class="body"><strong>Mettre à jour D :</strong> calculer les distances entre le nouveau cluster et tous les autres (selon le critère de linkage choisi).</div></div>
+  <div class="proof-step fade-up"><div class="n">5</div><div class="body"><strong>Répéter</strong> les étapes 3-4 jusqu'à avoir un seul cluster. Tracer le dendrogramme.</div></div>
 
   <h3>Critères de linkage - comment mesurer la distance entre clusters</h3>
-  <div class="g2 fu">
-    <div class="card cb"><div class="clbl">Single linkage (lien minimum)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = min(d(a,b)) pour a∈A, b∈B</div><div class="csub">Distance = deux points les plus proches. Produit des clusters allongés ("chaining effect").</div></div>
-    <div class="card cg"><div class="clbl">Complete linkage (lien maximum)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = max(d(a,b)) pour a∈A, b∈B</div><div class="csub">Distance = deux points les plus éloignés. Produit des clusters compacts et équilibrés.</div></div>
-    <div class="card co2"><div class="clbl">Average linkage</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = (1/|A||B|) Σᵢ∈A Σⱼ∈B d(i,j)</div><div class="csub">Moyenne de toutes les paires. Compromis entre single et complete.</div></div>
-    <div class="card cpb"><div class="clbl">Critère de Ward (recommandé)</div><div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">ΔJ = (nAnB)/(nA+nB) · ||μA − μB||²</div><div class="csub">Minimise l'augmentation d'inertie lors de la fusion. Produit les clusters les plus compacts. <strong>Meilleur choix en général.</strong></div></div>
+  <div class="grid-2 fade-up">
+    <div class="card card-blue"><div class="card-label">Single linkage (lien minimum)</div><div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = min(d(a,b)) pour a∈A, b∈B</div><div class="card-sub">Distance = deux points les plus proches. Produit des clusters allongés ("chaining effect").</div></div>
+    <div class="card card-green"><div class="card-label">Complete linkage (lien maximum)</div><div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = max(d(a,b)) pour a∈A, b∈B</div><div class="card-sub">Distance = deux points les plus éloignés. Produit des clusters compacts et équilibrés.</div></div>
+    <div class="card card-orange"><div class="card-label">Average linkage</div><div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:12px">d(A,B) = (1/|A||B|) Σᵢ∈A Σⱼ∈B d(i,j)</div><div class="card-sub">Moyenne de toutes les paires. Compromis entre single et complete.</div></div>
+    <div class="card card-purple"><div class="card-label">Critère de Ward (recommandé)</div><div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:12px">ΔJ = (nAnB)/(nA+nB) · ||μA − μB||²</div><div class="card-sub">Minimise l'augmentation d'inertie lors de la fusion. Produit les clusters les plus compacts. <strong>Meilleur choix en général.</strong></div></div>
   </div>
 
   <h3>Exemple - dendrogramme sur 6 points</h3>
-  <div class="dendro-wrap fu"><svg id="dendro-svg" width="640" height="280" viewBox="0 0 640 280"></svg></div>
+  <div class="tree-wrap fade-up"><svg id="dendro-svg" width="640" height="280" viewBox="0 0 640 280"></svg></div>
 
-  <div class="fm fu"><span class="lb">Lire le dendrogramme</span>La hauteur d'une fusion indique la distance entre les deux clusters fusionnés.
+  <div class="formula fade-up"><span class="lbl">Lire le dendrogramme</span>La hauteur d'une fusion indique la distance entre les deux clusters fusionnés.
 Pour obtenir K=2 : couper <span class="hg">horizontalement à hauteur 4</span>  →  2 clusters
 Pour obtenir K=3 : couper à hauteur 2.5  →  3 clusters
 Pour obtenir K=5 : couper à hauteur 1    →  5 clusters (presque un par point)
 
 On choisit la coupe là où il y a le <span class="ha">plus grand saut vertical</span> → K naturel des données.</div>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz - CAH vs K-Means</div>
-    <div class="qq">Quel avantage majeur la CAH a-t-elle sur K-Means ?</div>
-    <div class="qopts" id="uq2o">
-      <div class="qopt" onclick="ucq('uq2',0,2,'q02f')"><span class="qltr">A</span>La CAH est toujours plus rapide</div>
-      <div class="qopt" onclick="ucq('uq2',1,2,'q02f')"><span class="qltr">B</span>La CAH ne nécessite pas de choisir K à l'avance et fournit une hiérarchie de groupements</div>
-      <div class="qopt" onclick="ucq('uq2',2,2,'q02f')"><span class="qltr">C</span>La CAH gère toujours mieux les clusters non sphériques</div>
-      <div class="qopt" onclick="ucq('uq2',3,2,'q02f')"><span class="qltr">D</span>La CAH fonctionne sans données</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz - CAH vs K-Means</div>
+    <div class="quiz-q">Quel avantage majeur la CAH a-t-elle sur K-Means ?</div>
+    <div class="quiz-opts" id="uq2o">
+      <div class="qopt" onclick="ucq('uq2',0,2,'q02f')"><span class="qletter">A</span>La CAH est toujours plus rapide</div>
+      <div class="qopt" onclick="ucq('uq2',1,2,'q02f')"><span class="qletter">B</span>La CAH ne nécessite pas de choisir K à l'avance et fournit une hiérarchie de groupements</div>
+      <div class="qopt" onclick="ucq('uq2',2,2,'q02f')"><span class="qletter">C</span>La CAH gère toujours mieux les clusters non sphériques</div>
+      <div class="qopt" onclick="ucq('uq2',3,2,'q02f')"><span class="qletter">D</span>La CAH fonctionne sans données</div>
     </div>
     <div class="qfb" id="uq2f"></div>
   </div>
@@ -1498,18 +1490,18 @@ On choisit la coupe là où il y a le <span class="ha">plus grand saut vertical<
 
 <!-- ══ S05 GMM ══ -->
 <section id="gmm" class="section">
-  <div class="sl">Section 05</div>
+  <div class="section-label">Section 05</div>
   <h2>Mélange de Gaussiennes (GMM)</h2>
   <p>Le modèle de mélange de Gaussiennes suppose que les données sont <strong>générées par un mélange de K distributions gaussiennes</strong>. Chaque gaussienne représente un cluster potentiel. Contrairement à K-Means (affectations dures), les GMM donnent des <em>probabilités d'appartenance</em> (affectations douces).</p>
 
-  <div class="cl ci fu">
-    <span class="clt">K-Means vs GMM - la différence fondamentale</span>
+  <div class="callout callout-info fade-up">
+    <span class="callout-title">K-Means vs GMM - la différence fondamentale</span>
     <p>K-Means : chaque point appartient <em>entièrement</em> à un seul cluster (0 ou 1).<br>
     GMM : chaque point appartient <em>partiellement</em> à tous les clusters (probabilités qui somment à 1).<br>
     Ex : un point ambigu peut être à 70 % dans le cluster 1 et 30 % dans le cluster 2.</p>
   </div>
 
-  <div class="fm fu"><span class="lb">Modèle probabiliste</span>P(x) = Σₖ <span class="ha">πₖ</span> · <span class="hi">𝒩(x | μₖ, Σₖ)</span>
+  <div class="formula fade-up"><span class="lbl">Modèle probabiliste</span>P(x) = Σₖ <span class="ha">πₖ</span> · <span class="hi">𝒩(x | μₖ, Σₖ)</span>
 
 <span class="ha">πₖ</span>  = poids du cluster k  (probabilité a priori d'appartenir à k)  Σₖ πₖ = 1
 <span class="hi">μₖ</span>  = moyenne de la gaussienne k
@@ -1519,16 +1511,16 @@ Chaque point x vient du cluster k avec probabilité πₖ,
 puis est tiré selon la loi 𝒩(μₖ, Σₖ).</div>
 
   <h3>Algorithme EM (Expectation-Maximization)</h3>
-  <div class="alg-step fu"><div class="an">E</div><div class="ab"><strong>Étape E (Expectation) - calculer les responsabilités :</strong><br>rᵢₖ = P(cluster k | xᵢ) = πₖ · 𝒩(xᵢ | μₖ, Σₖ) / Σⱼ πⱼ · 𝒩(xᵢ | μⱼ, Σⱼ)<br>rᵢₖ est la "responsabilité" du cluster k pour le point i - sa probabilité d'appartenance.</div></div>
-  <div class="alg-step fu"><div class="an">M</div><div class="ab"><strong>Étape M (Maximization) - mettre à jour les paramètres :</strong><br>Nₖ = Σᵢ rᵢₖ  (effectif effectif du cluster k)<br>πₖ = Nₖ / n  |  μₖ = (1/Nₖ) Σᵢ rᵢₖ xᵢ  |  Σₖ = (1/Nₖ) Σᵢ rᵢₖ (xᵢ−μₖ)(xᵢ−μₖ)ᵀ</div></div>
-  <div class="alg-step fu"><div class="an">⟳</div><div class="ab"><strong>Répéter E → M</strong> jusqu'à convergence de la vraisemblance log-L = Σᵢ log P(xᵢ). L'EM garantit que L croît ou reste constante à chaque itération.</div></div>
+  <div class="proof-step fade-up"><div class="n">E</div><div class="body"><strong>Étape E (Expectation) - calculer les responsabilités :</strong><br>rᵢₖ = P(cluster k | xᵢ) = πₖ · 𝒩(xᵢ | μₖ, Σₖ) / Σⱼ πⱼ · 𝒩(xᵢ | μⱼ, Σⱼ)<br>rᵢₖ est la "responsabilité" du cluster k pour le point i - sa probabilité d'appartenance.</div></div>
+  <div class="proof-step fade-up"><div class="n">M</div><div class="body"><strong>Étape M (Maximization) - mettre à jour les paramètres :</strong><br>Nₖ = Σᵢ rᵢₖ  (effectif effectif du cluster k)<br>πₖ = Nₖ / n  |  μₖ = (1/Nₖ) Σᵢ rᵢₖ xᵢ  |  Σₖ = (1/Nₖ) Σᵢ rᵢₖ (xᵢ−μₖ)(xᵢ−μₖ)ᵀ</div></div>
+  <div class="proof-step fade-up"><div class="n">⟳</div><div class="body"><strong>Répéter E → M</strong> jusqu'à convergence de la vraisemblance log-L = Σᵢ log P(xᵢ). L'EM garantit que L croît ou reste constante à chaque itération.</div></div>
 
-  <div class="cl co fu">
-    <span class="clt">Choisir K pour les GMM</span>
+  <div class="callout callout-ok fade-up">
+    <span class="callout-title">Choisir K pour les GMM</span>
     <p>On utilise le <strong>BIC</strong> (Bayesian Information Criterion) ou l'<strong>AIC</strong> (Akaike Information Criterion). Ces critères pénalisent la complexité du modèle pour éviter l'overfitting. On choisit K qui minimise BIC ou AIC.</p>
   </div>
 
-  <div class="fm fu"><span class="lb">BIC et AIC - critères de sélection de K</span><span class="hg">BIC</span> = −2 · log-L + p · log(n)     ← pénalité plus forte (préfère K plus petit)
+  <div class="formula fade-up"><span class="lbl">BIC et AIC - critères de sélection de K</span><span class="hg">BIC</span> = −2 · log-L + p · log(n)     ← pénalité plus forte (préfère K plus petit)
 <span class="hi">AIC</span> = −2 · log-L + 2 · p          ← pénalité plus faible (plus de clusters tolérés)
 
 p = nombre de paramètres libres du modèle
@@ -1537,43 +1529,43 @@ p = nombre de paramètres libres du modèle
 
 →  On trace BIC/AIC vs K et on choisit le <span class="ha">coude minimum</span></div>
 
-  <div class="g2 fu">
-    <div class="card cg">
-      <div class="clbl">Avantages des GMM</div>
-      <div class="csub" style="font-size:13px;margin-top:6px">Clusters elliptiques (pas seulement sphériques) · Affectations probabilistes · Modèle génératif · BIC/AIC pour choisir K</div>
+  <div class="grid-2 fade-up">
+    <div class="card card-green">
+      <div class="card-label">Avantages des GMM</div>
+      <div class="card-sub" style="font-size:13px;margin-top:6px">Clusters elliptiques (pas seulement sphériques) · Affectations probabilistes · Modèle génératif · BIC/AIC pour choisir K</div>
     </div>
-    <div class="card co2">
-      <div class="clbl">Inconvénients des GMM</div>
-      <div class="csub" style="font-size:13px;margin-top:6px">Suppose des données gaussiennes · Sensible aux valeurs initiales · Plus lent que K-Means · Peut diverger (covariances singulières)</div>
+    <div class="card card-orange">
+      <div class="card-label">Inconvénients des GMM</div>
+      <div class="card-sub" style="font-size:13px;margin-top:6px">Suppose des données gaussiennes · Sensible aux valeurs initiales · Plus lent que K-Means · Peut diverger (covariances singulières)</div>
     </div>
   </div>
 </section>
 
 <!-- ══ S06 DBSCAN ══ -->
 <section id="dbscan" class="section">
-  <div class="sl">Section 06</div>
+  <div class="section-label">Section 06</div>
   <h2>DBSCAN</h2>
   <p>DBSCAN (<em>Density-Based Spatial Clustering of Applications with Noise</em>) trouve des clusters basés sur la <strong>densité</strong>, pas sur la distance à un centroïde. Il peut détecter des clusters de forme <em>arbitraire</em> et identifie automatiquement les points aberrants (bruit).</p>
 
-  <div class="cl ci fu">
-    <span class="clt">Intuition - définir un cluster par la densité</span>
+  <div class="callout callout-info fade-up">
+    <span class="callout-title">Intuition - définir un cluster par la densité</span>
     <p>Un cluster est une zone dense de points, séparée de zones moins denses. Un point isolé au milieu d'une zone vide est du <strong>bruit</strong> (pas dans un cluster). DBSCAN n'a pas besoin de connaître K - il le découvre automatiquement.</p>
   </div>
 
   <h3>Deux paramètres clés</h3>
-  <div class="g2 fu">
-    <div class="card ct3">
-      <div class="clbl">ε (epsilon) - rayon de voisinage</div>
-      <div class="csub" style="font-size:14px;margin:.5rem 0">Le voisinage d'un point x est la boule de rayon ε centrée en x. Tous les points à distance ≤ ε de x en font partie.</div>
+  <div class="grid-2 fade-up">
+    <div class="card card-teal">
+      <div class="card-label">ε (epsilon) - rayon de voisinage</div>
+      <div class="card-sub" style="font-size:14px;margin:.5rem 0">Le voisinage d'un point x est la boule de rayon ε centrée en x. Tous les points à distance ≤ ε de x en font partie.</div>
     </div>
-    <div class="card cpb">
-      <div class="clbl">minPts - seuil de densité</div>
-      <div class="csub" style="font-size:14px;margin:.5rem 0">Nombre minimum de points requis dans le voisinage ε pour qu'un point soit considéré "dense" (point cœur).</div>
+    <div class="card card-purple">
+      <div class="card-label">minPts - seuil de densité</div>
+      <div class="card-sub" style="font-size:14px;margin:.5rem 0">Nombre minimum de points requis dans le voisinage ε pour qu'un point soit considéré "dense" (point cœur).</div>
     </div>
   </div>
 
   <h3>Classification des points</h3>
-  <div class="fm fu"><span class="lb">Trois types de points dans DBSCAN</span><span class="hg">Point cœur (core)</span>  :  |N_ε(x)| ≥ minPts
+  <div class="formula fade-up"><span class="lbl">Trois types de points dans DBSCAN</span><span class="hg">Point cœur (core)</span>  :  |N_ε(x)| ≥ minPts
    Son voisinage ε contient au moins minPts points (lui inclus)
    → Il est au cœur d'une zone dense
 
@@ -1586,42 +1578,42 @@ p = nombre de paramètres libres du modèle
    → Rejeté comme anomalie  (label = −1)</div>
 
   <h3>Algorithme</h3>
-  <div class="alg-step fu"><div class="an">1</div><div class="ab">Pour chaque point non visité, calculer son voisinage N_ε(x).</div></div>
-  <div class="alg-step fu"><div class="an">2</div><div class="ab">Si |N_ε(x)| ≥ minPts : créer un nouveau cluster. <strong>Étendre</strong> le cluster en ajoutant récursivement tous les points accessibles par densité depuis x.</div></div>
-  <div class="alg-step fu"><div class="an">3</div><div class="ab">Si |N_ε(x)| &lt; minPts : marquer x comme bruit provisoirement. Il pourra être récupéré comme point bord si un cluster voisin l'atteint.</div></div>
-  <div class="alg-step fu"><div class="an">4</div><div class="ab">Répéter pour tous les points non visités.</div></div>
+  <div class="proof-step fade-up"><div class="n">1</div><div class="body">Pour chaque point non visité, calculer son voisinage N_ε(x).</div></div>
+  <div class="proof-step fade-up"><div class="n">2</div><div class="body">Si |N_ε(x)| ≥ minPts : créer un nouveau cluster. <strong>Étendre</strong> le cluster en ajoutant récursivement tous les points accessibles par densité depuis x.</div></div>
+  <div class="proof-step fade-up"><div class="n">3</div><div class="body">Si |N_ε(x)| &lt; minPts : marquer x comme bruit provisoirement. Il pourra être récupéré comme point bord si un cluster voisin l'atteint.</div></div>
+  <div class="proof-step fade-up"><div class="n">4</div><div class="body">Répéter pour tous les points non visités.</div></div>
 
   <h3>Simulateur DBSCAN interactif</h3>
-  <div class="ctrl fu"><label>Rayon ε</label><input type="range" id="dbs-eps" min="0.2" max="1.5" step="0.05" value="0.6" oninput="runDBSCAN()"><span class="val" id="dbs-epsv">0.60</span></div>
-  <div class="ctrl fu"><label>minPts</label><input type="range" id="dbs-mp" min="2" max="8" step="1" value="3" oninput="runDBSCAN()"><span class="val" id="dbs-mpv">3</span></div>
-  <div class="sb" id="dbs-stat">Ajustez ε et minPts.</div>
-  <canvas id="dbs-canvas" width="600" height="360" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
+  <div class="ctrl fade-up"><label>Rayon ε</label><input type="range" id="dbs-eps" min="0.2" max="1.5" step="0.05" value="0.6" oninput="runDBSCAN()"><span class="val" id="dbs-epsv">0.60</span></div>
+  <div class="ctrl fade-up"><label>minPts</label><input type="range" id="dbs-mp" min="2" max="8" step="1" value="3" oninput="runDBSCAN()"><span class="val" id="dbs-mpv">3</span></div>
+  <div class="status-bar" id="dbs-stat">Ajustez ε et minPts.</div>
+  <canvas id="dbs-canvas" width="600" height="360" class="fade-up" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
 
-  <div class="cl cw fu">
-    <span class="clt">Comment choisir ε et minPts ?</span>
+  <div class="callout callout-warn fade-up">
+    <span class="callout-title">Comment choisir ε et minPts ?</span>
     <p><strong>minPts</strong> : en général, utiliser 2×d (où d est la dimension) ou la règle minPts ≥ ln(n). Une valeur de 4-5 est un bon point de départ en 2D.<br>
     <strong>ε</strong> : tracer le graphe des distances au k-ème voisin le plus proche (k = minPts). On cherche le coude dans cette courbe - c'est la valeur de ε optimale.</p>
   </div>
 
-  <div class="g2 fu">
-    <div class="card cg">
-      <div class="clbl">Avantages de DBSCAN</div>
-      <div class="csub" style="font-size:13px;margin-top:6px">K inconnu - découvert automatiquement · Clusters de forme arbitraire · Robuste aux outliers · Pas d'hypothèse de forme</div>
+  <div class="grid-2 fade-up">
+    <div class="card card-green">
+      <div class="card-label">Avantages de DBSCAN</div>
+      <div class="card-sub" style="font-size:13px;margin-top:6px">K inconnu - découvert automatiquement · Clusters de forme arbitraire · Robuste aux outliers · Pas d'hypothèse de forme</div>
     </div>
-    <div class="card co2">
-      <div class="clbl">Inconvénients de DBSCAN</div>
-      <div class="csub" style="font-size:13px;margin-top:6px">Sensible à ε et minPts · Difficile sur densités variables · Lent en grande dimension (problème de distance en HD)</div>
+    <div class="card card-orange">
+      <div class="card-label">Inconvénients de DBSCAN</div>
+      <div class="card-sub" style="font-size:13px;margin-top:6px">Sensible à ε et minPts · Difficile sur densités variables · Lent en grande dimension (problème de distance en HD)</div>
     </div>
   </div>
 </section>
 
 <!-- ══ S07 COMPARAISON ══ -->
 <section id="compare" class="section">
-  <div class="sl">Section 07</div>
+  <div class="section-label">Section 07</div>
   <h2>Comparaison des méthodes</h2>
 
-  <div style="overflow-x:auto" class="fu">
-    <table class="dtable">
+  <div style="overflow-x:auto" class="fade-up">
+    <table class="data-table">
       <thead>
         <tr><th>Critère</th><th style="color:var(--blue)">K-Means</th><th style="color:var(--green)">CAH</th><th style="color:var(--purple)">GMM</th><th style="color:var(--teal)">DBSCAN</th></tr>
       </thead>
@@ -1639,17 +1631,17 @@ p = nombre de paramètres libres du modèle
   </div>
 
   <h3>Visualisation comparative sur 3 jeux de données</h3>
-  <canvas id="compare-canvas" width="700" height="280" class="fu" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
+  <canvas id="compare-canvas" width="700" height="280" class="fade-up" style="background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></canvas>
   <div style="font-size:12px;color:var(--text3);margin-top:6px;font-family:var(--mono)">Blobs · Lunes · Cercles concentriques - K-Means (col. 1) vs DBSCAN (col. 2)</div>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz - Choisir la bonne méthode</div>
-    <div class="qq">Vous analysez des données GPS de trajets de livraison pour détecter des "zones denses" et identifier les zones sans activité (bruit). Quelle méthode est la plus appropriée ?</div>
-    <div class="qopts" id="uq3o">
-      <div class="qopt" onclick="ucq('uq3',0,3,'q03f')"><span class="qltr">A</span>K-Means avec K=5</div>
-      <div class="qopt" onclick="ucq('uq3',1,3,'q03f')"><span class="qltr">B</span>DBSCAN</div>
-      <div class="qopt" onclick="ucq('uq3',2,3,'q03f')"><span class="qltr">C</span>GMM avec BIC</div>
-      <div class="qopt" onclick="ucq('uq3',3,3,'q03f')"><span class="qltr">D</span>ACP</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz - Choisir la bonne méthode</div>
+    <div class="quiz-q">Vous analysez des données GPS de trajets de livraison pour détecter des "zones denses" et identifier les zones sans activité (bruit). Quelle méthode est la plus appropriée ?</div>
+    <div class="quiz-opts" id="uq3o">
+      <div class="qopt" onclick="ucq('uq3',0,3,'q03f')"><span class="qletter">A</span>K-Means avec K=5</div>
+      <div class="qopt" onclick="ucq('uq3',1,3,'q03f')"><span class="qletter">B</span>DBSCAN</div>
+      <div class="qopt" onclick="ucq('uq3',2,3,'q03f')"><span class="qletter">C</span>GMM avec BIC</div>
+      <div class="qopt" onclick="ucq('uq3',3,3,'q03f')"><span class="qletter">D</span>ACP</div>
     </div>
     <div class="qfb" id="uq3f"></div>
   </div>
@@ -1657,45 +1649,45 @@ p = nombre de paramètres libres du modèle
 
 <!-- ══ S08 ÉVALUATION ══ -->
 <section id="eval-uns" class="section">
-  <div class="sl">Section 08</div>
+  <div class="section-label">Section 08</div>
   <h2>Évaluer un clustering sans labels</h2>
   <p>Sans vérité terrain (labels), l'évaluation repose sur des <strong>critères internes</strong> qui mesurent la qualité de la structure découverte : cohésion intra-cluster et séparation inter-clusters.</p>
 
-  <div class="g3 fu">
-    <div class="card ct3">
-      <div class="clbl">Inertie intra-cluster (WCSS)</div>
-      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:12px">J = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||²</div>
-      <div class="csub">Somme des distances au carré au centroïde. Mesure la cohésion. Plus petit = mieux. Utilisé pour la méthode du coude.</div>
+  <div class="grid-3 fade-up">
+    <div class="card card-teal">
+      <div class="card-label">Inertie intra-cluster (WCSS)</div>
+      <div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:12px">J = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||²</div>
+      <div class="card-sub">Somme des distances au carré au centroïde. Mesure la cohésion. Plus petit = mieux. Utilisé pour la méthode du coude.</div>
     </div>
-    <div class="card cpb">
-      <div class="clbl">Score de silhouette</div>
-      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:11px">s(i) = (b(i)−a(i)) / max(a(i),b(i))</div>
-      <div class="csub">a(i) = distance moyenne intra-cluster · b(i) = distance moyenne au cluster voisin le plus proche. s ∈ [−1, 1], proche de 1 = bien groupé.</div>
+    <div class="card card-purple">
+      <div class="card-label">Score de silhouette</div>
+      <div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:11px">s(i) = (b(i)−a(i)) / max(a(i),b(i))</div>
+      <div class="card-sub">a(i) = distance moyenne intra-cluster · b(i) = distance moyenne au cluster voisin le plus proche. s ∈ [−1, 1], proche de 1 = bien groupé.</div>
     </div>
-    <div class="card co2">
-      <div class="clbl">Indice de Davies-Bouldin</div>
-      <div class="fm" style="margin:.5rem 0;padding:8px 12px;font-size:11px">DB = (1/K)Σₖ max_{j≠k}(σₖ+σⱼ)/d(μₖ,μⱼ)</div>
-      <div class="csub">σₖ = dispersion du cluster k. d(μₖ,μⱼ) = distance entre centroïdes. Plus petit = mieux (0 est parfait).</div>
+    <div class="card card-orange">
+      <div class="card-label">Indice de Davies-Bouldin</div>
+      <div class="formula" style="margin:.5rem 0;padding:8px 12px;font-size:11px">DB = (1/K)Σₖ max_{j≠k}(σₖ+σⱼ)/d(μₖ,μⱼ)</div>
+      <div class="card-sub">σₖ = dispersion du cluster k. d(μₖ,μⱼ) = distance entre centroïdes. Plus petit = mieux (0 est parfait).</div>
     </div>
   </div>
 
-  <div class="fm fu"><span class="lb">Interprétation du score de silhouette</span>s(i) proche de <span class="hg">+1</span>  →  le point est bien placé dans son cluster, loin des autres
+  <div class="formula fade-up"><span class="lbl">Interprétation du score de silhouette</span>s(i) proche de <span class="hg">+1</span>  →  le point est bien placé dans son cluster, loin des autres
 s(i) proche de <span class="ha">0</span>   →  le point est à la frontière entre deux clusters
 s(i) proche de <span class="hr">−1</span>  →  le point est probablement dans le mauvais cluster
 
 Silhouette moyenne sur tous les points  →  qualité globale du clustering
 On trace le silhouette plot (un bar par point, trié) pour diagnostiquer la qualité.</div>
 
-  <canvas id="sil-chart" height="220" class="fu"></canvas>
+  <canvas id="sil-chart" height="220" class="fade-up"></canvas>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz - Score de silhouette</div>
-    <div class="qq">Après K-Means avec K=3, le score de silhouette moyen est −0.15. Que cela indique-t-il ?</div>
-    <div class="qopts" id="uq4o">
-      <div class="qopt" onclick="ucq('uq4',0,4,'q04f')"><span class="qltr">A</span>Excellent clustering, les 3 groupes sont très bien séparés</div>
-      <div class="qopt" onclick="ucq('uq4',1,4,'q04f')"><span class="qltr">B</span>Les clusters sont mal formés : beaucoup de points sont dans le mauvais groupe. Essayer K=2 ou K=4</div>
-      <div class="qopt" onclick="ucq('uq4',2,4,'q04f')"><span class="qltr">C</span>Il manque des données</div>
-      <div class="qopt" onclick="ucq('uq4',3,4,'q04f')"><span class="qltr">D</span>L'algorithme n'a pas convergé</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz - Score de silhouette</div>
+    <div class="quiz-q">Après K-Means avec K=3, le score de silhouette moyen est −0.15. Que cela indique-t-il ?</div>
+    <div class="quiz-opts" id="uq4o">
+      <div class="qopt" onclick="ucq('uq4',0,4,'q04f')"><span class="qletter">A</span>Excellent clustering, les 3 groupes sont très bien séparés</div>
+      <div class="qopt" onclick="ucq('uq4',1,4,'q04f')"><span class="qletter">B</span>Les clusters sont mal formés : beaucoup de points sont dans le mauvais groupe. Essayer K=2 ou K=4</div>
+      <div class="qopt" onclick="ucq('uq4',2,4,'q04f')"><span class="qletter">C</span>Il manque des données</div>
+      <div class="qopt" onclick="ucq('uq4',3,4,'q04f')"><span class="qletter">D</span>L'algorithme n'a pas convergé</div>
     </div>
     <div class="qfb" id="uq4f"></div>
   </div>
@@ -1703,41 +1695,41 @@ On trace le silhouette plot (un bar par point, trié) pour diagnostiquer la qual
 
 <!-- ══ S09 QUIZ ══ -->
 <section id="quiz-uns" class="section">
-  <div class="sl">Section 09</div>
+  <div class="section-label">Section 09</div>
   <h2>Quiz - Bilan du chapitre</h2>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz 5 - ACP et réduction</div>
-    <div class="qq">Après une ACP, les composantes principales sont toujours :</div>
-    <div class="qopts" id="uq5o">
-      <div class="qopt" onclick="ucq('uq5',0,5,'q05f')"><span class="qltr">A</span>Corrélées entre elles</div>
-      <div class="qopt" onclick="ucq('uq5',1,5,'q05f')"><span class="qltr">B</span>Orthogonales (non corrélées) entre elles</div>
-      <div class="qopt" onclick="ucq('uq5',2,5,'q05f')"><span class="qltr">C</span>Les mêmes que les variables originales</div>
-      <div class="qopt" onclick="ucq('uq5',3,5,'q05f')"><span class="qltr">D</span>Toujours au nombre de 2</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz 5 - ACP et réduction</div>
+    <div class="quiz-q">Après une ACP, les composantes principales sont toujours :</div>
+    <div class="quiz-opts" id="uq5o">
+      <div class="qopt" onclick="ucq('uq5',0,5,'q05f')"><span class="qletter">A</span>Corrélées entre elles</div>
+      <div class="qopt" onclick="ucq('uq5',1,5,'q05f')"><span class="qletter">B</span>Orthogonales (non corrélées) entre elles</div>
+      <div class="qopt" onclick="ucq('uq5',2,5,'q05f')"><span class="qletter">C</span>Les mêmes que les variables originales</div>
+      <div class="qopt" onclick="ucq('uq5',3,5,'q05f')"><span class="qletter">D</span>Toujours au nombre de 2</div>
     </div>
     <div class="qfb" id="uq5f"></div>
   </div>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz 6 - K-Means et convergence</div>
-    <div class="qq">K-Means garantit de toujours trouver le clustering optimal (inertie minimale globale). Cette affirmation est :</div>
-    <div class="qopts" id="uq6o">
-      <div class="qopt" onclick="ucq('uq6',0,6,'q06f')"><span class="qltr">A</span>Vraie - l'algorithme converge vers le minimum global</div>
-      <div class="qopt" onclick="ucq('uq6',1,6,'q06f')"><span class="qltr">B</span>Fausse - K-Means converge mais vers un minimum local, qui dépend de l'initialisation</div>
-      <div class="qopt" onclick="ucq('uq6',2,6,'q06f')"><span class="qltr">C</span>Vraie seulement si K=2</div>
-      <div class="qopt" onclick="ucq('uq6',3,6,'q06f')"><span class="qltr">D</span>Vraie seulement en 2D</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz 6 - K-Means et convergence</div>
+    <div class="quiz-q">K-Means garantit de toujours trouver le clustering optimal (inertie minimale globale). Cette affirmation est :</div>
+    <div class="quiz-opts" id="uq6o">
+      <div class="qopt" onclick="ucq('uq6',0,6,'q06f')"><span class="qletter">A</span>Vraie - l'algorithme converge vers le minimum global</div>
+      <div class="qopt" onclick="ucq('uq6',1,6,'q06f')"><span class="qletter">B</span>Fausse - K-Means converge mais vers un minimum local, qui dépend de l'initialisation</div>
+      <div class="qopt" onclick="ucq('uq6',2,6,'q06f')"><span class="qletter">C</span>Vraie seulement si K=2</div>
+      <div class="qopt" onclick="ucq('uq6',3,6,'q06f')"><span class="qletter">D</span>Vraie seulement en 2D</div>
     </div>
     <div class="qfb" id="uq6f"></div>
   </div>
 
-  <div class="qblk fu">
-    <div class="qtitle">Quiz 7 - DBSCAN</div>
-    <div class="qq">Avec ε=0.5 et minPts=4, un point a 2 voisins dans son ε-voisinage et se trouve dans le ε-voisinage d'un point cœur. Comment est-il classifié ?</div>
-    <div class="qopts" id="uq7o">
-      <div class="qopt" onclick="ucq('uq7',0,7,'q07f')"><span class="qltr">A</span>Point cœur</div>
-      <div class="qopt" onclick="ucq('uq7',1,7,'q07f')"><span class="qltr">B</span>Point bord</div>
-      <div class="qopt" onclick="ucq('uq7',2,7,'q07f')"><span class="qltr">C</span>Bruit (outlier)</div>
-      <div class="qopt" onclick="ucq('uq7',3,7,'q07f')"><span class="qltr">D</span>On ne peut pas le déterminer</div>
+  <div class="quiz-block fade-up">
+    <div class="quiz-title">Quiz 7 - DBSCAN</div>
+    <div class="quiz-q">Avec ε=0.5 et minPts=4, un point a 2 voisins dans son ε-voisinage et se trouve dans le ε-voisinage d'un point cœur. Comment est-il classifié ?</div>
+    <div class="quiz-opts" id="uq7o">
+      <div class="qopt" onclick="ucq('uq7',0,7,'q07f')"><span class="qletter">A</span>Point cœur</div>
+      <div class="qopt" onclick="ucq('uq7',1,7,'q07f')"><span class="qletter">B</span>Point bord</div>
+      <div class="qopt" onclick="ucq('uq7',2,7,'q07f')"><span class="qletter">C</span>Bruit (outlier)</div>
+      <div class="qopt" onclick="ucq('uq7',3,7,'q07f')"><span class="qletter">D</span>On ne peut pas le déterminer</div>
     </div>
     <div class="qfb" id="uq7f"></div>
   </div>
@@ -1745,74 +1737,74 @@ On trace le silhouette plot (un bar par point, trié) pour diagnostiquer la qual
 
 <!-- ══ S10 EXERCICES ══ -->
 <section id="exo-uns" class="section">
-  <div class="sl">Section 10</div>
+  <div class="section-label">Section 10</div>
   <h2>Exercices pratiques</h2>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 1 - Variance expliquée ACP</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 1 - Variance expliquée ACP</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Une ACP sur 5 variables donne les valeurs propres : λ₁=4.2, λ₂=2.1, λ₃=0.9, λ₄=0.5, λ₅=0.3. Quel est le pourcentage de variance expliqué par les 2 premières composantes ? (Arrondi à 1 décimale)</p>
-    <div class="exrow"><label>Réponse (%)</label><input type="number" id="e1a" step="0.1" placeholder="ex: 78.4"><button class="bpr" onclick="cEx(1)">Vérifier</button></div>
-    <div class="exres" id="e1r"></div>
+    <div class="exo-row"><label>Réponse (%)</label><input type="number" id="u1a" step="0.1" placeholder="ex: 78.4"><button class="btn-teal" onclick="cEx(1)">Vérifier</button></div>
+    <div class="exo-res" id="u1r"></div>
   </div>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 2 - Affectation K-Means</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 2 - Affectation K-Means</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Deux centroïdes : μ₁ = (2, 3) et μ₂ = (8, 6). Quel cluster est le plus proche du point x = (5, 4) ? Calculez les deux distances euclidiennes et indiquez 1 ou 2.</p>
-    <div class="exrow"><label>Cluster (1 ou 2)</label><input type="number" id="e2a" step="1" min="1" max="2" placeholder="1 ou 2"><button class="bpr" onclick="cEx(2)">Vérifier</button></div>
-    <div class="exres" id="e2r"></div>
+    <div class="exo-row"><label>Cluster (1 ou 2)</label><input type="number" id="u2a" step="1" min="1" max="2" placeholder="1 ou 2"><button class="btn-teal" onclick="cEx(2)">Vérifier</button></div>
+    <div class="exo-res" id="u2r"></div>
   </div>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 3 - Mise à jour de centroïde</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 3 - Mise à jour de centroïde</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Après l'étape d'attribution, le cluster 1 contient 4 points : (1,2), (3,4), (2,2), (4,4). Quelle est la coordonnée x₁ du nouveau centroïde ?</p>
-    <div class="exrow"><label>x₁ du centroïde</label><input type="number" id="e3a" step="0.1" placeholder="ex: 2.5"><button class="bpr" onclick="cEx(3)">Vérifier</button></div>
-    <div class="exres" id="e3r"></div>
+    <div class="exo-row"><label>x₁ du centroïde</label><input type="number" id="u3a" step="0.1" placeholder="ex: 2.5"><button class="btn-teal" onclick="cEx(3)">Vérifier</button></div>
+    <div class="exo-res" id="u3r"></div>
   </div>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 4 - Classification DBSCAN</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 4 - Classification DBSCAN</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Avec ε=1.5 et minPts=3, un point a exactement 3 voisins dans son ε-voisinage (lui-même inclus ou exclu selon la convention - ici inclus). Est-il point cœur, bord ou bruit ? Entrez 1=cœur, 2=bord, 3=bruit.</p>
-    <div class="exrow"><label>Type (1/2/3)</label><input type="number" id="e4a" step="1" min="1" max="3" placeholder="1, 2 ou 3"><button class="bpr" onclick="cEx(4)">Vérifier</button></div>
-    <div class="exres" id="e4r"></div>
+    <div class="exo-row"><label>Type (1/2/3)</label><input type="number" id="u4a" step="1" min="1" max="3" placeholder="1, 2 ou 3"><button class="btn-teal" onclick="cEx(4)">Vérifier</button></div>
+    <div class="exo-res" id="u4r"></div>
   </div>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 5 - Inertie K-Means</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 5 - Inertie K-Means</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Un clustering a 2 clusters. Cluster 1 : centroïde (1,1), points (2,1) et (0,1). Cluster 2 : centroïde (5,5), point (5,6). Calculez l'inertie totale J.</p>
-    <div class="exrow"><label>J =</label><input type="number" id="e5a" step="0.1" placeholder="ex: 3.0"><button class="bpr" onclick="cEx(5)">Vérifier</button></div>
-    <div class="exres" id="e5r"></div>
+    <div class="exo-row"><label>J =</label><input type="number" id="u5a" step="0.1" placeholder="ex: 3.0"><button class="btn-teal" onclick="cEx(5)">Vérifier</button></div>
+    <div class="exo-res" id="u5r"></div>
   </div>
 
-  <div class="exob fu">
-    <div class="extitle">Exercice 6 - Score de silhouette</div>
+  <div class="exo-block fade-up">
+    <div class="exo-title">Exercice 6 - Score de silhouette</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Pour un point i : distance intra-cluster a(i) = 0.5, distance au cluster voisin le plus proche b(i) = 2.0. Calculez s(i) (arrondi à 2 décimales).</p>
-    <div class="exrow"><label>s(i) =</label><input type="number" id="e6a" step="0.01" placeholder="ex: 0.75"><button class="bpr" onclick="cEx(6)">Vérifier</button></div>
-    <div class="exres" id="e6r"></div>
+    <div class="exo-row"><label>s(i) =</label><input type="number" id="u6a" step="0.01" placeholder="ex: 0.75"><button class="btn-teal" onclick="cEx(6)">Vérifier</button></div>
+    <div class="exo-res" id="u6r"></div>
   </div>
 </section>
 
 <!-- ══ S11 TP ══ -->
 <section id="tp-uns" class="section">
-  <div class="sl">Section 11 - Travaux Pratiques</div>
+  <div class="section-label">Section 11 - Travaux Pratiques</div>
   <h2>TP Python - Segmentation de clients</h2>
 
   <p>Ce TP applique toutes les méthodes vues en cours sur un dataset réaliste de <strong>200 clients</strong> d'un centre commercial. L'objectif est de découvrir des segments de clientèle distincts pour personnaliser les offres marketing.</p>
 
   <h3>Contexte du dataset</h3>
-  <div class="g3 fu">
-    <div class="card ct3"><div class="clbl">200 clients</div><div class="csub" style="font-size:13.5px;margin-top:6px">Sondage réalisé à l'entrée d'un mall. Données anonymisées.</div></div>
-    <div class="card cpb"><div class="clbl">3 variables</div><div class="csub" style="font-size:13.5px;margin-top:6px">Âge · Revenu annuel (k$) · Score de dépense (1-100)</div></div>
-    <div class="card ca"><div class="clbl">Objectif</div><div class="csub" style="font-size:13.5px;margin-top:6px">Trouver les segments naturels pour adapter les campagnes</div></div>
+  <div class="grid-3 fade-up">
+    <div class="card card-teal"><div class="card-label">200 clients</div><div class="card-sub" style="font-size:13.5px;margin-top:6px">Sondage réalisé à l'entrée d'un mall. Données anonymisées.</div></div>
+    <div class="card card-purple"><div class="card-label">3 variables</div><div class="card-sub" style="font-size:13.5px;margin-top:6px">Âge · Revenu annuel (k$) · Score de dépense (1-100)</div></div>
+    <div class="card card-gold"><div class="card-label">Objectif</div><div class="card-sub" style="font-size:13.5px;margin-top:6px">Trouver les segments naturels pour adapter les campagnes</div></div>
   </div>
 
-  <div class="fm fu"><span class="lb">Plan du TP - 6 parties</span>Partie 1 : Chargement et exploration des données (EDA)
+  <div class="formula fade-up"><span class="lbl">Plan du TP - 6 parties</span>Partie 1 : Chargement et exploration des données (EDA)
 Partie 2 : Standardisation et ACP (réduction à 2D pour visualisation)
 Partie 3 : K-Means - méthode du coude et score de silhouette
 Partie 4 : DBSCAN - détection d'anomalies
 Partie 5 : GMM - affectations probabilistes et BIC
 Partie 6 : Comparaison, interprétation et recommandations marketing</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:1.5rem 0" class="fu">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:1.5rem 0" class="fade-up">
     <div style="font-family:var(--serif);font-size:1rem;color:var(--teal);margin-bottom:.9rem">Télécharger le TP</div>
     <p style="font-size:13.5px;color:var(--text2);margin-bottom:.9rem">Les notebooks Jupyter (.ipynb) sont disponibles ci-dessous. Ouvrez-les dans Google Colab :</p>
     <div style="font-family:var(--mono);font-size:13px;color:var(--text2)">
@@ -1823,7 +1815,7 @@ Partie 6 : Comparaison, interprétation et recommandations marketing</div>
   <!-- Récapitulatif final -->
   <hr class="divider" style="margin-top:2rem">
   <h3>Récapitulatif - ce qu'il faut retenir</h3>
-  <div class="fm fu"><span class="lb">Les algorithmes non supervisés essentiels</span>ACP      Réduire la dimension tout en maximisant la variance conservée
+  <div class="formula fade-up"><span class="lbl">Les algorithmes non supervisés essentiels</span>ACP      Réduire la dimension tout en maximisant la variance conservée
           Composantes = vecteurs propres de la matrice de covariance
 
 K-Means  J = Σₖ Σᵢ∈Cₖ ||xᵢ − μₖ||²   →  minimiser l'inertie
@@ -1861,8 +1853,8 @@ function gB(w,b){return DATA.reduce((s,d)=>s+(w*d.x+b-d.y),0)/M;}
 function r2(w,b){const sr=DATA.reduce((s,d)=>s+(d.y-(w*d.x+b))**2,0);const st=DATA.reduce((s,d)=>s+(d.y-my)**2,0);return 1-sr/st;}
 
 
-const CH={responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.045)'}},y:{ticks:{color:'#5e5c55'},grid:{color:'rgba(255,255,255,0.045)'}}}};
-function mkO(xl,yl){const o=JSON.parse(JSON.stringify(CH));o.scales.x.title={display:true,text:xl,color:'#5e5c55',font:{size:11}};o.scales.y.title={display:true,text:yl,color:'#5e5c55',font:{size:11}};return o;}
+const CH={responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#87837a'},grid:{color:'rgba(255,255,255,0.045)'}},y:{ticks:{color:'#87837a'},grid:{color:'rgba(255,255,255,0.045)'}}}};
+function mkO(xl,yl){const o=JSON.parse(JSON.stringify(CH));o.scales.x.title={display:true,text:xl,color:'#87837a',font:{size:11}};o.scales.y.title={display:true,text:yl,color:'#87837a',font:{size:11}};return o;}
 
 
 window.addEventListener('scroll',()=>{
@@ -1872,10 +1864,19 @@ window.addEventListener('scroll',()=>{
   const sf=document.getElementById('sp-fill');if(sf)sf.style.width=p+'%';
   const sp=document.getElementById('sp-pct');if(sp)sp.textContent=Math.round(p)+'%';
 });
-const fobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.classList.add('vis');}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.fade-up,.fu').forEach(el=>fobs.observe(el));
-const sobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id;document.querySelectorAll('.nav-item,.ni').forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#'+id));}});},{threshold:0.2});
+const fobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.fade-up').forEach(el=>fobs.observe(el));
+const sobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id;document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#'+id));}});},{threshold:0.2});
 document.querySelectorAll('section[id]').forEach(s=>sobs.observe(s));
+
+function toggleSidebar(force){
+  const sb=document.getElementById('sidebar'),btn=document.getElementById('sidebar-toggle');
+  const open=typeof force==='boolean'?force:!sb.classList.contains('open');
+  sb.classList.toggle('open',open);
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  btn.textContent=open?'✕':'☰';
+}
+document.querySelectorAll('.nav-item').forEach(a=>a.addEventListener('click',()=>{if(window.innerWidth<=900)toggleSidebar(false);}));
 
 
 function showTab(gid,pid,btn){
@@ -2102,7 +2103,7 @@ function calcMetrics(){
 (function(){
   const ctx=document.getElementById('roc-chart');if(!ctx)return;
   const good=Array.from({length:21},(_,i)=>{const t=i/20;return{x:t,y:Math.min(1,Math.sqrt(t)*1.18)};});
-  new Chart(ctx,{data:{datasets:[{type:'line',data:good,borderColor:'#5b8dd9',borderWidth:2.5,pointRadius:0,fill:{target:1,above:'rgba(91,141,217,0.07)'},label:'Bon modèle (AUC≈0.87)'},{type:'line',data:[{x:0,y:0},{x:1,y:1}],borderColor:'#5e5c55',borderWidth:1.5,borderDash:[6,4],pointRadius:0,label:'Aléatoire (AUC=0.5)'}]},options:{...mkO('FPR - Faux Positifs','TPR - Rappel'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{x:{...mkO('FPR','TPR').scales.x,min:0,max:1},y:{...mkO('FPR','TPR').scales.y,min:0,max:1}}}});
+  new Chart(ctx,{data:{datasets:[{type:'line',data:good,borderColor:'#5b8dd9',borderWidth:2.5,pointRadius:0,fill:{target:1,above:'rgba(91,141,217,0.07)'},label:'Bon modèle (AUC≈0.87)'},{type:'line',data:[{x:0,y:0},{x:1,y:1}],borderColor:'#87837a',borderWidth:1.5,borderDash:[6,4],pointRadius:0,label:'Aléatoire (AUC=0.5)'}]},options:{...mkO('FPR - Faux Positifs','TPR - Rappel'),plugins:{legend:{display:true,labels:{color:'#9e9b91',boxWidth:10}}},scales:{x:{...mkO('FPR','TPR').scales.x,min:0,max:1},y:{...mkO('FPR','TPR').scales.y,min:0,max:1}}}});
 })();
 
 
@@ -2120,7 +2121,7 @@ function calcMetrics(){
   function ln(x1,y1,x2,y2,lbl){
     const g=document.createElementNS(ns,'g');
     const l=document.createElementNS(ns,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke','#2e2e38');l.setAttribute('stroke-width',2);g.appendChild(l);
-    if(lbl){const t=document.createElementNS(ns,'text');t.setAttribute('x',(x1+x2)/2+8);t.setAttribute('y',(y1+y2)/2);t.setAttribute('fill','#5e5c55');t.setAttribute('font-size',11);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=lbl;g.appendChild(t);}
+    if(lbl){const t=document.createElementNS(ns,'text');t.setAttribute('x',(x1+x2)/2+8);t.setAttribute('y',(y1+y2)/2);t.setAttribute('fill','#87837a');t.setAttribute('font-size',11);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=lbl;g.appendChild(t);}
     return g;
   }
   svg.appendChild(ln(340,47,170,133,'< 1.26'));svg.appendChild(ln(340,47,510,133,'≥ 1.26'));
@@ -2296,7 +2297,7 @@ function updPCA(){
   const inertias=ks.map(k=>+kmInertia(k).toFixed(1));
   new Chart(ctx,{data:{datasets:[
     {type:'line',data:ks.map((k,i)=>({x:k,y:inertias[i]})),borderColor:'#5bc8c8',borderWidth:2.5,pointRadius:6,pointBackgroundColor:(ctx,val)=>val.dataIndex===2?'#c8a96e':'#5bc8c8',tension:0.2,fill:{target:'origin',above:'rgba(91,200,200,0.05)'}}
-  ]},options:{...mkO('K (nombre de clusters)','Inertie J'),scales:{...mkO('K','J').scales,x:{...mkO('K','J').scales.x,ticks:{color:'#5e5c55',stepSize:1}}}}});
+  ]},options:{...mkO('K (nombre de clusters)','Inertie J'),scales:{...mkO('K','J').scales,x:{...mkO('K','J').scales.x,ticks:{color:'#87837a',stepSize:1}}}}});
 })();
 
 
@@ -2341,7 +2342,7 @@ function drawKM(){
   const KN=kmGetK();
   // Draw points
   kmData.forEach((p,i)=>{
-    const c=kmAssign[i]>=0?COLORS[kmAssign[i]]:'#5e5c55';
+    const c=kmAssign[i]>=0?COLORS[kmAssign[i]]:'#87837a';
     ctx2.beginPath();ctx2.arc(p.x,p.y,4.5,0,Math.PI*2);
     ctx2.fillStyle=c+'bb';ctx2.fill();
     ctx2.strokeStyle=c;ctx2.lineWidth=1;ctx2.stroke();
@@ -2378,10 +2379,10 @@ function drawStar(ctx2,cx,cy,r,n,color){
   pts.forEach(p=>{const t=document.createElementNS(ns,'text');t.setAttribute('x',p.x);t.setAttribute('y',270);t.setAttribute('text-anchor','middle');t.setAttribute('fill','#9e9b91');t.setAttribute('font-size',13);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=p.l;svg.appendChild(t);});
   // Horizontal height axis
   for(let h=0;h<=5;h++){
-    const l=document.createElementNS(ns,'line');l.setAttribute('x1',20);l.setAttribute('y1',y(h));l.setAttribute('x2',30);l.setAttribute('y2',y(h));l.setAttribute('stroke','#5e5c55');l.setAttribute('stroke-width',1);svg.appendChild(l);
-    const t=document.createElementNS(ns,'text');t.setAttribute('x',18);t.setAttribute('y',y(h)+4);t.setAttribute('text-anchor','end');t.setAttribute('fill','#5e5c55');t.setAttribute('font-size',10);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=h;svg.appendChild(t);
+    const l=document.createElementNS(ns,'line');l.setAttribute('x1',20);l.setAttribute('y1',y(h));l.setAttribute('x2',30);l.setAttribute('y2',y(h));l.setAttribute('stroke','#87837a');l.setAttribute('stroke-width',1);svg.appendChild(l);
+    const t=document.createElementNS(ns,'text');t.setAttribute('x',18);t.setAttribute('y',y(h)+4);t.setAttribute('text-anchor','end');t.setAttribute('fill','#87837a');t.setAttribute('font-size',10);t.setAttribute('font-family','JetBrains Mono,monospace');t.textContent=h;svg.appendChild(t);
   }
-  const ax=document.createElementNS(ns,'line');ax.setAttribute('x1',30);ax.setAttribute('y1',10);ax.setAttribute('x2',30);ax.setAttribute('y2',255);ax.setAttribute('stroke','#5e5c55');ax.setAttribute('stroke-width',1);svg.appendChild(ax);
+  const ax=document.createElementNS(ns,'line');ax.setAttribute('x1',30);ax.setAttribute('y1',10);ax.setAttribute('x2',30);ax.setAttribute('y2',255);ax.setAttribute('stroke','#87837a');ax.setAttribute('stroke-width',1);svg.appendChild(ax);
   // Vertical stems
   pts.forEach(p=>{const l=document.createElementNS(ns,'line');l.setAttribute('x1',p.x);l.setAttribute('y1',BOTTOM);l.setAttribute('x2',p.x);l.setAttribute('y2',y(0));l.setAttribute('stroke','#2e2e38');l.setAttribute('stroke-width',1.5);l.setAttribute('stroke-dasharray','3 3');svg.appendChild(l);});
   // Merge brackets
@@ -2442,7 +2443,7 @@ function runDBSCAN(){
   const scy=y=>(H-PAD-(y/(4.2)*(H-2*PAD)));
   ctx2.clearRect(0,0,W,H);
   const cmap=[COLORS[0],COLORS[1],COLORS[2],COLORS[3],COLORS[4]];
-  const noiseC='#5e5c55';
+  const noiseC='#87837a';
   DBS_DATA.forEach((p,i)=>{
     const x=scx(p[0]),y=scy(p[1]);
     const lbl=labels[i];
@@ -2519,40 +2520,40 @@ function showEx(id,html,ok){const el=document.getElementById(id);el.className='e
 function cEx(n){
   switch(n){
     case 1:{
-      const a=+document.getElementById('e1a').value;
+      const a=+document.getElementById('u1a').value;
       const lam=[4.2,2.1,0.9,0.5,0.3],tot=lam.reduce((s,v)=>s+v,0);
       const res=(lam[0]+lam[1])/tot*100;
-      showEx('e1r',ap(a,res,0.2)?`Correct ! (4.2 + 2.1) / (4.2+2.1+0.9+0.5+0.3) = 6.3 / 8.0 = ${res.toFixed(1)} %. Les 2 premières composantes suffisent à capturer ${res.toFixed(1)} % de la variance.`:`Réessayez. Somme totale = 4.2+2.1+0.9+0.5+0.3 = 8.0. Les 2 premières = 4.2+2.1 = 6.3. Ratio = ${res.toFixed(1)} %.`,ap(a,res,0.2));
+      showEx('u1r',ap(a,res,0.2)?`Correct ! (4.2 + 2.1) / (4.2+2.1+0.9+0.5+0.3) = 6.3 / 8.0 = ${res.toFixed(1)} %. Les 2 premières composantes suffisent à capturer ${res.toFixed(1)} % de la variance.`:`Réessayez. Somme totale = 4.2+2.1+0.9+0.5+0.3 = 8.0. Les 2 premières = 4.2+2.1 = 6.3. Ratio = ${res.toFixed(1)} %.`,ap(a,res,0.2));
       break;
     }
     case 2:{
-      const a=+document.getElementById('e2a').value;
+      const a=+document.getElementById('u2a').value;
       const d1=Math.sqrt((5-2)**2+(4-3)**2),d2=Math.sqrt((5-8)**2+(4-6)**2);
       const res=d1<d2?1:2;
-      showEx('e2r',ap(a,res,0.1)?`Correct ! d(x,μ₁) = √((5-2)²+(4-3)²) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √((5-8)²+(4-6)²) = √(9+4) = ${d2.toFixed(3)}. Le cluster ${res} est le plus proche.`:`Réessayez. d(x,μ₁) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √(9+4) = ${d2.toFixed(3)}. Le cluster le plus proche est le ${res}.`,ap(a,res,0.1));
+      showEx('u2r',ap(a,res,0.1)?`Correct ! d(x,μ₁) = √((5-2)²+(4-3)²) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √((5-8)²+(4-6)²) = √(9+4) = ${d2.toFixed(3)}. Le cluster ${res} est le plus proche.`:`Réessayez. d(x,μ₁) = √(9+1) = ${d1.toFixed(3)}. d(x,μ₂) = √(9+4) = ${d2.toFixed(3)}. Le cluster le plus proche est le ${res}.`,ap(a,res,0.1));
       break;
     }
     case 3:{
-      const a=+document.getElementById('e3a').value;
+      const a=+document.getElementById('u3a').value;
       const res=(1+3+2+4)/4;
-      showEx('e3r',ap(a,res,0.05)?`Correct ! x̄ = (1+3+2+4)/4 = ${res}. Le centroïde est (${res}, ${(2+4+2+4)/4}).`:`Réessayez. x̄ = (1+3+2+4)/4 = ${res}.`,ap(a,res,0.05));
+      showEx('u3r',ap(a,res,0.05)?`Correct ! x̄ = (1+3+2+4)/4 = ${res}. Le centroïde est (${res}, ${(2+4+2+4)/4}).`:`Réessayez. x̄ = (1+3+2+4)/4 = ${res}.`,ap(a,res,0.05));
       break;
     }
     case 4:{
-      const a=+document.getElementById('e4a').value;
-      showEx('e4r',a===1?`Correct ! Le point a 3 voisins dans son ε-voisinage (lui inclus) et minPts=3. Donc 3 ≥ 3 → c'est un point cœur. Il peut étendre un cluster vers ses voisins.`:`Réessayez. Un point est cœur si |N_ε(x)| ≥ minPts. Ici 3 ≥ 3. C'est un point cœur (réponse = 1).`,a===1);
+      const a=+document.getElementById('u4a').value;
+      showEx('u4r',a===1?`Correct ! Le point a 3 voisins dans son ε-voisinage (lui inclus) et minPts=3. Donc 3 ≥ 3 → c'est un point cœur. Il peut étendre un cluster vers ses voisins.`:`Réessayez. Un point est cœur si |N_ε(x)| ≥ minPts. Ici 3 ≥ 3. C'est un point cœur (réponse = 1).`,a===1);
       break;
     }
     case 5:{
-      const a=+document.getElementById('e5a').value;
+      const a=+document.getElementById('u5a').value;
       const j=((2-1)**2+(1-1)**2)+((0-1)**2+(1-1)**2)+((5-5)**2+(6-5)**2);
-      showEx('e5r',ap(a,j,0.1)?`Correct ! Cluster 1 : (2-1)²+(1-1)² = 1. (0-1)²+(1-1)² = 1. Cluster 2 : (5-5)²+(6-5)² = 1. Total J = ${j}.`:`Réessayez. J = Σ dist² au centroïde = 1 + 1 + 1 = ${j}.`,ap(a,j,0.1));
+      showEx('u5r',ap(a,j,0.1)?`Correct ! Cluster 1 : (2-1)²+(1-1)² = 1. (0-1)²+(1-1)² = 1. Cluster 2 : (5-5)²+(6-5)² = 1. Total J = ${j}.`:`Réessayez. J = Σ dist² au centroïde = 1 + 1 + 1 = ${j}.`,ap(a,j,0.1));
       break;
     }
     case 6:{
-      const a=+document.getElementById('e6a').value;
+      const a=+document.getElementById('u6a').value;
       const s=(2.0-0.5)/Math.max(0.5,2.0);
-      showEx('e6r',ap(a,s,0.01)?`Correct ! s(i) = (b-a)/max(a,b) = (2.0-0.5)/max(0.5,2.0) = 1.5/2.0 = ${s.toFixed(2)}. Valeur proche de 1 → point bien placé dans son cluster.`:`Réessayez. s(i) = (b(i)−a(i)) / max(a(i),b(i)) = (2.0−0.5)/2.0 = ${s.toFixed(2)}.`,ap(a,s,0.01));
+      showEx('u6r',ap(a,s,0.01)?`Correct ! s(i) = (b-a)/max(a,b) = (2.0-0.5)/max(0.5,2.0) = 1.5/2.0 = ${s.toFixed(2)}. Valeur proche de 1 → point bien placé dans son cluster.`:`Réessayez. s(i) = (b(i)−a(i)) / max(a(i),b(i)) = (2.0−0.5)/2.0 = ${s.toFixed(2)}.`,ap(a,s,0.01));
       break;
     }
   }
