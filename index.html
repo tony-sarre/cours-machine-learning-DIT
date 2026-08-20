@@ -40,7 +40,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15
 .sp-bar{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
 .sp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:2px;transition:width .3s;width:0%;}
 .sp-pct{font-size:11px;color:var(--text3);font-family:var(--mono);}
-.nav-section{padding:.7rem 1.25rem .2rem;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:var(--mono);}
+.nav-group-items{overflow:hidden;max-height:600px;opacity:1;transition:max-height .3s ease,opacity .25s ease;}
+.nav-group.collapsed .nav-group-items{max-height:0;opacity:0;transition:max-height .25s ease,opacity .15s ease;}
+.nav-section{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;width:100%;padding:.7rem 1.25rem .5rem;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:var(--mono);cursor:pointer;text-decoration:none;transition:color .15s;}
+.nav-section:hover{color:var(--text2);}
+.nav-section .chev{width:9px;height:9px;flex-shrink:0;opacity:.55;transition:transform .2s ease;}
+.nav-group.collapsed .nav-section .chev{transform:rotate(-90deg);}
 .nav-item{display:flex;align-items:center;gap:8px;padding:6px 1.25rem;font-size:12.5px;color:var(--text2);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer;}
 .nav-item:hover{color:var(--text);background:rgba(15,23,42,0.045);}
 .nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(139,92,246,0.06);}
@@ -170,11 +175,6 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 .hero-author .av{width:40px;height:40px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--accent);}
 .hero-author .info .name{font-size:14px;color:var(--text);}
 .hero-author .info .role{font-size:12px;color:var(--text3);}
-.toc-list{list-style:none;counter-reset:toc;}
-.toc-list li{counter-increment:toc;display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border);}
-.toc-list li::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--accent);min-width:26px;}
-.toc-list a{color:var(--text2);text-decoration:none;font-size:14px;transition:color .15s;}
-.toc-list a:hover{color:var(--text);}
 
 /* EXERCISES */
 .exo-block{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;margin:2rem 0;}
@@ -277,7 +277,6 @@ canvas{border-radius:8px;max-width:100%;display:block;}
 @media(max-width:520px){
   .grid-3,.grid-4,.metrics,.metric-pills{grid-template-columns:1fr;}
   .hero-stats{grid-template-columns:1fr;}
-  .toc-list{columns:1 !important;}
 }
 
 </style>
@@ -299,46 +298,69 @@ canvas{border-radius:8px;max-width:100%;display:block;}
       <span class="sp-pct" id="sp-pct">0%</span>
     </div>
   </div>
-  <div class="nav-section">Accueil</div>
   <a class="nav-item active" href="#intro"><span class="num">00</span>Accueil</a>
-  <div class="nav-section">Chapitre I - Fondements</div>
-  <a class="nav-item" href="#concepts"><span class="num">01</span>Définitions &amp; types</a>
-  <div class="nav-section">Chapitre II - Régression</div>
-  <a class="nav-item" href="#modele"><span class="num">02</span>Modèle ŷ = wx + b</a>
-  <a class="nav-item" href="#cout"><span class="num">03</span>Fonction de coût J</a>
-  <a class="nav-item" href="#derivees"><span class="num">04</span>Dérivées partielles</a>
-  <a class="nav-item" href="#gradient"><span class="num">05</span>Descente de gradient</a>
-  <a class="nav-item" href="#multiple"><span class="num">06</span>Régression multiple</a>
-  <a class="nav-item" href="#scaling"><span class="num">07</span>Feature scaling</a>
-  <a class="nav-item" href="#evaluation"><span class="num">08</span>Métriques MSE / R²</a>
-  <a class="nav-item" href="#simulateur"><span class="num">09</span>Simulateur ✦</a>
-  <div class="nav-section">Chapitre III - Classification</div>
-  <a class="nav-item" href="#cls-intro"><span class="num">10</span>Introduction</a>
-  <a class="nav-item" href="#cls-logistic"><span class="num">11</span>Régression logistique</a>
-  <a class="nav-item" href="#cls-sigmoid"><span class="num">12</span>Sigmoïde</a>
-  <a class="nav-item" href="#cls-boundary"><span class="num">13</span>Frontière de décision</a>
-  <a class="nav-item" href="#cls-logloss"><span class="num">14</span>Log Loss</a>
-  <a class="nav-item" href="#cls-metrics"><span class="num">15</span>Métriques</a>
-  <a class="nav-item" href="#cls-multiclass"><span class="num">16</span>Multi-classes</a>
-  <a class="nav-item" href="#cls-trees"><span class="num">17</span>Arbres de décision</a>
-  <a class="nav-item" href="#cls-ensemble"><span class="num">18</span>Méthodes d'ensemble</a>
-  <a class="nav-item" href="#cls-sim"><span class="num">19</span>Simulateur Log. ✦</a>
-  <div class="nav-section">Exercices</div>
-  <a class="nav-item" href="#exo-reg"><span class="num">20</span>Exercices régression</a>
-  <a class="nav-item" href="#exo-cls"><span class="num">21</span>Exercices classif.</a>
 
-  <div class="nav-section">Ch. IV - Non Supervisé</div>
-  <a class="nav-item nav-item-teal" href="#uns-intro"><span class="num">22</span>Introduction</a>
-  <a class="nav-item nav-item-teal" href="#pca"><span class="num">23</span>ACP</a>
-  <a class="nav-item nav-item-teal" href="#kmeans"><span class="num">24</span>K-Means</a>
-  <a class="nav-item nav-item-teal" href="#cah"><span class="num">25</span>CAH</a>
-  <a class="nav-item nav-item-teal" href="#gmm"><span class="num">26</span>GMM</a>
-  <a class="nav-item nav-item-teal" href="#dbscan"><span class="num">27</span>DBSCAN</a>
-  <a class="nav-item nav-item-teal" href="#compare"><span class="num">28</span>Comparaison</a>
-  <a class="nav-item nav-item-teal" href="#eval-uns"><span class="num">29</span>Évaluation clusters</a>
-  <a class="nav-item nav-item-teal" href="#quiz-uns"><span class="num">30</span>Quiz</a>
-  <a class="nav-item nav-item-teal" href="#exo-uns"><span class="num">31</span>Exercices</a>
-  <a class="nav-item nav-item-teal" href="#tp-uns"><span class="num">32</span>TP Segmentation</a>
+  <div class="nav-group" data-chapter="ch1">
+    <a class="nav-section" href="#concepts">Chapitre I - Fondements<svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="nav-group-items">
+      <a class="nav-item" href="#concepts"><span class="num">01</span>Définitions &amp; types</a>
+    </div>
+  </div>
+
+  <div class="nav-group" data-chapter="ch2">
+    <a class="nav-section" href="#modele">Chapitre II - Régression<svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="nav-group-items">
+      <a class="nav-item" href="#modele"><span class="num">02</span>Modèle ŷ = wx + b</a>
+      <a class="nav-item" href="#cout"><span class="num">03</span>Fonction de coût J</a>
+      <a class="nav-item" href="#derivees"><span class="num">04</span>Dérivées partielles</a>
+      <a class="nav-item" href="#gradient"><span class="num">05</span>Descente de gradient</a>
+      <a class="nav-item" href="#multiple"><span class="num">06</span>Régression multiple</a>
+      <a class="nav-item" href="#scaling"><span class="num">07</span>Feature scaling</a>
+      <a class="nav-item" href="#evaluation"><span class="num">08</span>Métriques MSE / R²</a>
+      <a class="nav-item" href="#simulateur"><span class="num">09</span>Simulateur ✦</a>
+    </div>
+  </div>
+
+  <div class="nav-group" data-chapter="ch3">
+    <a class="nav-section" href="#cls-intro">Chapitre III - Classification<svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="nav-group-items">
+      <a class="nav-item" href="#cls-intro"><span class="num">10</span>Introduction</a>
+      <a class="nav-item" href="#cls-logistic"><span class="num">11</span>Régression logistique</a>
+      <a class="nav-item" href="#cls-sigmoid"><span class="num">12</span>Sigmoïde</a>
+      <a class="nav-item" href="#cls-boundary"><span class="num">13</span>Frontière de décision</a>
+      <a class="nav-item" href="#cls-logloss"><span class="num">14</span>Log Loss</a>
+      <a class="nav-item" href="#cls-metrics"><span class="num">15</span>Métriques</a>
+      <a class="nav-item" href="#cls-multiclass"><span class="num">16</span>Multi-classes</a>
+      <a class="nav-item" href="#cls-trees"><span class="num">17</span>Arbres de décision</a>
+      <a class="nav-item" href="#cls-ensemble"><span class="num">18</span>Méthodes d'ensemble</a>
+      <a class="nav-item" href="#cls-sim"><span class="num">19</span>Simulateur Log. ✦</a>
+    </div>
+  </div>
+
+  <div class="nav-group" data-chapter="exo">
+    <a class="nav-section" href="#exo-reg">Exercices<svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="nav-group-items">
+      <a class="nav-item" href="#exo-reg"><span class="num">20</span>Exercices régression</a>
+      <a class="nav-item" href="#exo-cls"><span class="num">21</span>Exercices classif.</a>
+    </div>
+  </div>
+
+  <div class="nav-group" data-chapter="ch4">
+    <a class="nav-section" href="#uns-intro">Ch. IV - Non Supervisé<svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="nav-group-items">
+      <a class="nav-item nav-item-teal" href="#uns-intro"><span class="num">22</span>Introduction</a>
+      <a class="nav-item nav-item-teal" href="#pca"><span class="num">23</span>ACP</a>
+      <a class="nav-item nav-item-teal" href="#kmeans"><span class="num">24</span>K-Means</a>
+      <a class="nav-item nav-item-teal" href="#cah"><span class="num">25</span>CAH</a>
+      <a class="nav-item nav-item-teal" href="#gmm"><span class="num">26</span>GMM</a>
+      <a class="nav-item nav-item-teal" href="#dbscan"><span class="num">27</span>DBSCAN</a>
+      <a class="nav-item nav-item-teal" href="#compare"><span class="num">28</span>Comparaison</a>
+      <a class="nav-item nav-item-teal" href="#eval-uns"><span class="num">29</span>Évaluation clusters</a>
+      <a class="nav-item nav-item-teal" href="#quiz-uns"><span class="num">30</span>Quiz</a>
+      <a class="nav-item nav-item-teal" href="#exo-uns"><span class="num">31</span>Exercices</a>
+      <a class="nav-item nav-item-teal" href="#tp-uns"><span class="num">32</span>TP Segmentation</a>
+    </div>
+  </div>
 </nav>
 
 <!-- ═══ MAIN ═══ -->
@@ -361,34 +383,7 @@ canvas{border-radius:8px;max-width:100%;display:block;}
       <div class="role">Data Scientist · Doctorante Statistiques &amp; IA · UIDT Thies</div>
     </div>
   </div>
-  <hr class="divider" style="margin-top:2.5rem">
-  <h3 style="border:none;margin-top:1.5rem">Table des matières</h3>
-  <ul class="toc-list" style="columns:2;column-gap:2rem">
-    <li><a href="#concepts">Définition Mitchell · types d'apprentissage</a></li>
-    <li><a href="#modele">Modèle ŷ = wx + b - notation, interprétation</a></li>
-    <li><a href="#cout">Fonction J(w,b) - MSE, convexité</a></li>
-    <li><a href="#derivees">Dérivées ∂J/∂w et ∂J/∂b - chain rule</a></li>
-    <li><a href="#gradient">Descente de gradient - α, critère d'arrêt</a></li>
-    <li><a href="#multiple">Régression multiple - n variables</a></li>
-    <li><a href="#scaling">Feature scaling - normalisation, z-score</a></li>
-    <li><a href="#evaluation">MSE · RMSE · R²</a></li>
-    <li><a href="#cls-logistic">Régression logistique - modèle complet</a></li>
-    <li><a href="#cls-sigmoid">Sigmoïde - propriétés, démo interactive</a></li>
-    <li><a href="#cls-logloss">Log Loss - entropie croisée binaire</a></li>
-    <li><a href="#cls-metrics">Matrice de confusion · Précision · Rappel · AUC</a></li>
-    <li><a href="#cls-trees">Arbres CART - impureté de Gini</a></li>
-    <li><a href="#cls-ensemble">Random Forest · Bagging · Boosting</a></li>
-    <li><a href="#exo-reg">Exercices régression (5 exercices)</a></li>
-    <li><a href="#exo-cls">Exercices classification (5 exercices)</a></li>
-    <li><a href="#uns-intro">Apprentissage non supervisé - principes</a></li>
-    <li><a href="#pca">ACP - composantes, scree plot</a></li>
-    <li><a href="#kmeans">K-Means - Lloyd, inertie, méthode du coude</a></li>
-    <li><a href="#cah">CAH - linkages, dendrogramme</a></li>
-    <li><a href="#gmm">GMM - algorithme EM, BIC</a></li>
-    <li><a href="#dbscan">DBSCAN - cœur, bord, bruit</a></li>
-    <li><a href="#exo-uns">Exercices non supervisé auto-corrigés</a></li>
-    <li><a href="#tp-uns">TP segmentation clients</a></li>
-  </ul>
+  <p style="font-size:12.5px;color:var(--text3);margin-top:2rem">Le sommaire complet du cours se trouve dans le menu latéral, à gauche. Cliquez sur un chapitre pour le déplier et rejoindre directement une section.</p>
 </section>
 
 <!-- CH I BANNER -->
@@ -1866,7 +1861,25 @@ window.addEventListener('scroll',()=>{
 });
 const fobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('.fade-up').forEach(el=>fobs.observe(el));
-const sobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id;document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#'+id));}});},{threshold:0.2});
+function expandGroup(groupEl){
+  if(!groupEl)return;
+  document.querySelectorAll('.nav-group').forEach(g=>g.classList.toggle('collapsed',g!==groupEl));
+}
+document.querySelectorAll('.nav-group').forEach(g=>g.classList.add('collapsed'));
+document.querySelectorAll('.nav-group .nav-item, .nav-section').forEach(a=>a.addEventListener('click',()=>expandGroup(a.closest('.nav-group'))));
+
+function onSectionVisible(e){
+  if(!e.isIntersecting)return;
+  const id=e.target.id;
+  let active=null;
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    const isMatch=n.getAttribute('href')==='#'+id;
+    n.classList.toggle('active',isMatch);
+    if(isMatch)active=n;
+  });
+  if(active)expandGroup(active.closest('.nav-group'));
+}
+const sobs=new IntersectionObserver(entries=>entries.forEach(onSectionVisible),{threshold:0.2});
 document.querySelectorAll('section[id]').forEach(s=>sobs.observe(s));
 
 function toggleSidebar(force){
@@ -1876,7 +1889,7 @@ function toggleSidebar(force){
   btn.setAttribute('aria-expanded',open?'true':'false');
   btn.textContent=open?'✕':'☰';
 }
-document.querySelectorAll('.nav-item').forEach(a=>a.addEventListener('click',()=>{if(window.innerWidth<=900)toggleSidebar(false);}));
+document.querySelectorAll('.nav-item, .nav-section').forEach(a=>a.addEventListener('click',()=>{if(window.innerWidth<=900)toggleSidebar(false);}));
 
 
 function showTab(gid,pid,btn){
